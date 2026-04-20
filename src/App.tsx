@@ -17,7 +17,7 @@ function PlannerPage() {
   const { pageId } = useParams<{ pageId: string }>();
   const navigate = useNavigate();
   const template = pageTemplates.find((p) => p.id === pageId) ?? pageTemplates[0];
-  const [variant, setVariant] = useState<VariantId>("A");
+  const [variant, setVariant] = useState<VariantId>("A" as VariantId);
   const [selectedCourse, setSelectedCourse] = useState<Course | null>(null);
 
   const terms = useMemo<TermPlan[]>(() => {
