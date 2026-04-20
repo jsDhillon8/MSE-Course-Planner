@@ -1,6 +1,6 @@
 export type CurriculumType = "pre-2024" | "post-2024" | "double-degree";
 export type PlanLength = "4-year" | "5-year";
-export type VariantId = "A" | "B" | "C";
+export type VariantId = "8-MONTH CO-OP(yr2-3) + 4-MONTH CO-OP(yr5)" | "B" | "C";
 
 export interface Course {
   id: string;
