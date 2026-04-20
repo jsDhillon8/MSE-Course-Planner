@@ -1,0 +1,18 @@
+[
+  {
+    "sourceCourseId": "chem120",
+    "equivalentCourseId": "chem121",
+    "faculty": "Science",
+    "equivalencyType": "partial",
+    "evidenceSource": "seed-data",
+    "expiry": null
+  },
+  {
+    "sourceCourseId": "bus343",
+    "equivalentCourseId": "buec232",
+    "faculty": "Beedie",
+    "equivalencyType": "full",
+    "evidenceSource": "seed-data",
+    "expiry": null
+  }
+]
