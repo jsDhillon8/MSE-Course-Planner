@@ -1,7 +1,160 @@
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { Navigate, Route, Routes, useNavigate, useParams } from "react-router-dom";
 import { courseById, courseEquivalencies, pageTemplates } from "./data";
 import { Course, PageTemplate, TermPlan, VariantId } from "./types";
+
+// ─── SFU API Types ───────────────────────────────────────────────────────────
+
+interface SfuSection {
+  text: string;
+  value: string;
+  title: string;
+  classType: "e" | "n";
+  sectionCode: string;
+  associatedClass: string;
+}
+
+interface SfuScheduleItem {
+  startTime: string;
+  endTime: string;
+  days: string;
+  sectionCode: string;
+  campus: string;
+  isExam: boolean;
+  startDate: string;
+  endDate: string;
+}
+
+interface SfuInstructor {
+  name: string;
+  firstName: string;
+  lastName: string;
+  email: string;
+  roleCode: string;
+  profileUrl?: string;
+}
+
+interface SfuOutline {
+  title: string;
+  description: string;
+  prerequisites: string;
+  corequisites: string;
+  units: string;
+  term: string;
+  deliveryMethod: string;
+  educationalGoals?: string;
+  courseDetails?: string;
+  instructor?: SfuInstructor[];
+  courseSchedule?: SfuScheduleItem[];
+  grades?: { description: string; weight: string }[];
+  gradingNotes?: string;
+}
+
+// ─── SFU API Hook ─────────────────────────────────────────────────────────────
+
+type LiveStatus = "idle" | "loading" | "success" | "error" | "not-offered";
+
+interface LiveCourseData {
+  status: LiveStatus;
+  outline: SfuOutline | null;
+  sectionName: string | null;
+  errorMsg?: string;
+}
+
+const SFU_BASE = "https://www.sfu.ca/bin/wcm/course-outlines";
+
+function parseCourseCode(code: string): { dept: string; number: string } | null {
+  const match = code.trim().match(/^([A-Za-z]+)\s+(\S+)$/);
+  if (!match) return null;
+  return { dept: match[1].toLowerCase(), number: match[2].toLowerCase() };
+}
+
+async function fetchSectionsForTerm(
+  term: string,
+  dept: string,
+  num: string
+): Promise<SfuSection[] | null> {
+  const res = await fetch(`${SFU_BASE}?${term}/${dept}/${num}`);
+  if (!res.ok) return null;
+  const data = await res.json();
+  // API sometimes returns an error object instead of an array
+  if (!Array.isArray(data)) return null;
+  return data as SfuSection[];
+}
+
+function useLiveCourseData(course: Course | null): LiveCourseData {
+  const [state, setState] = useState<LiveCourseData>({ status: "idle", outline: null, sectionName: null });
+
+  useEffect(() => {
+    if (!course) {
+      setState({ status: "idle", outline: null, sectionName: null });
+      return;
+    }
+
+    const parsed = parseCourseCode(course.code);
+    if (!parsed) {
+      setState({ status: "error", outline: null, sectionName: null, errorMsg: "Could not parse course code." });
+      return;
+    }
+
+    let cancelled = false;
+    setState({ status: "loading", outline: null, sectionName: null });
+
+    async function fetchData() {
+      try {
+        const { dept, number } = parsed!;
+
+        // Try current term first, then registration (upcoming) term
+        let sections: SfuSection[] | null = null;
+        let termSlug = "current/current";
+
+        sections = await fetchSectionsForTerm(`current/current`, dept, number);
+        if (!sections) {
+          sections = await fetchSectionsForTerm(`registration/registration`, dept, number);
+          termSlug = "registration/registration";
+        }
+
+        if (!sections || sections.length === 0) {
+          if (!cancelled) setState({ status: "not-offered", outline: null, sectionName: null });
+          return;
+        }
+
+        // Prefer an enrollment lecture section
+        const enrollSection =
+          sections.find((s) => s.classType === "e" && s.sectionCode === "LEC") ??
+          sections.find((s) => s.classType === "e") ??
+          sections[0];
+
+        if (!enrollSection) {
+          if (!cancelled) setState({ status: "not-offered", outline: null, sectionName: null });
+          return;
+        }
+
+        const outlineRes = await fetch(
+          `${SFU_BASE}?${termSlug}/${dept}/${number}/${enrollSection.value}`
+        );
+        if (!outlineRes.ok) {
+          if (!cancelled) setState({ status: "not-offered", outline: null, sectionName: null });
+          return;
+        }
+
+        const outline = await outlineRes.json();
+        if (!cancelled) setState({ status: "success", outline, sectionName: enrollSection.text });
+      } catch (err) {
+        if (!cancelled) {
+          setState({ status: "error", outline: null, sectionName: null, errorMsg: String(err) });
+        }
+      }
+    }
+
+    fetchData();
+    return () => { cancelled = true; };
+  }, [course?.id]);
+
+  return state;
+}
+
+// ─── App ─────────────────────────────────────────────────────────────────────
 
 function App() {
   return (
@@ -39,15 +192,9 @@ function PlannerPage() {
     }
 
     const termOrder = (label: string): number => {
-      if (label.includes("Fall")) {
-        return 0;
-      }
-      if (label.includes("Spring")) {
-        return 1;
-      }
-      if (label.includes("Summer")) {
-        return 2;
-      }
+      if (label.includes("Fall")) return 0;
+      if (label.includes("Spring")) return 1;
+      if (label.includes("Summer")) return 2;
       return 3;
     };
 
@@ -60,18 +207,14 @@ function PlannerPage() {
   }, [terms]);
 
   const selectedEquivalencies = useMemo(() => {
-    if (!selectedCourse) {
-      return [];
-    }
-
+    if (!selectedCourse) return [];
     return courseEquivalencies
       .filter((item) => item.sourceCourseId === selectedCourse.id)
-      .map((item) => ({
-        ...item,
-        equivalentCourse: courseById[item.equivalentCourseId],
-      }))
+      .map((item) => ({ ...item, equivalentCourse: courseById[item.equivalentCourseId] }))
       .filter((item) => Boolean(item.equivalentCourse));
   }, [selectedCourse]);
+
+  const liveData = useLiveCourseData(selectedCourse);
 
   return (
     <div className="app-shell">
@@ -143,9 +286,12 @@ function PlannerPage() {
                               </div>
                             );
                           }
-
                           return (
-                            <button key={course.id} className="course-card" onClick={() => setSelectedCourse(course)}>
+                            <button
+                              key={course.id}
+                              className={`course-card${selectedCourse?.id === course.id ? " selected" : ""}`}
+                              onClick={() => setSelectedCourse(course)}
+                            >
                               <strong>{course.code}</strong>
                               <span>{course.title}</span>
                             </button>
@@ -165,9 +311,48 @@ function PlannerPage() {
           {selectedCourse ? (
             <>
               <h3>{selectedCourse.code}</h3>
-              <p>{selectedCourse.title}</p>
+              <p className="course-title-text">{selectedCourse.title}</p>
               <p>Credits: {selectedCourse.credits}</p>
-              <p>{selectedCourse.description}</p>
+              <p className="static-description">{selectedCourse.description}</p>
+
+              {/* ── Live SFU Outline ── */}
+              <div className="live-section">
+                <h4 className="live-section-header">
+                  Live SFU Outline
+                  {liveData.status === "loading" && (
+                    <span className="live-badge loading">Fetching…</span>
+                  )}
+                  {liveData.status === "success" && (
+                    <span className="live-badge success">
+                      {liveData.outline?.term ?? "Live"} · {liveData.sectionName}
+                    </span>
+                  )}
+                  {liveData.status === "not-offered" && (
+                    <span className="live-badge warn">Not found this term</span>
+                  )}
+                  {liveData.status === "error" && (
+                    <span className="live-badge error">API error</span>
+                  )}
+                </h4>
+
+                {liveData.status === "loading" && (
+                  <p className="empty-note">Contacting SFU Outlines API…</p>
+                )}
+                {liveData.status === "not-offered" && (
+                  <p className="empty-note">
+                    No section found for the current or upcoming term. The description above still
+                    applies.
+                  </p>
+                )}
+                {liveData.status === "error" && (
+                  <p className="empty-note">Could not reach the SFU Outlines API right now.</p>
+                )}
+                {liveData.status === "success" && liveData.outline && (
+                  <LiveOutlineBlock outline={liveData.outline} />
+                )}
+              </div>
+
+              {/* ── Equivalencies ── */}
               <h4>Equivalent Courses (Other Faculties)</h4>
               {selectedEquivalencies.length ? (
                 <ul>
@@ -195,6 +380,88 @@ function PlannerPage() {
     </div>
   );
 }
+
+// ─── Live Outline Block ───────────────────────────────────────────────────────
+
+function LiveOutlineBlock({ outline }: { outline: SfuOutline }) {
+  return (
+    <div className="live-outline">
+      {outline.deliveryMethod && (
+        <p className="outline-meta">
+          <span className="meta-label">Delivery:</span> {outline.deliveryMethod}
+        </p>
+      )}
+
+      {outline.prerequisites && (
+        <div className="outline-field">
+          <span className="meta-label">Prerequisites:</span> {outline.prerequisites}
+        </div>
+      )}
+
+      {outline.corequisites && (
+        <div className="outline-field">
+          <span className="meta-label">Corequisites:</span> {outline.corequisites}
+        </div>
+      )}
+
+      {outline.instructor && outline.instructor.length > 0 && (
+        <div className="outline-field">
+          <span className="meta-label">Instructor(s):</span>
+          <ul className="inline-list">
+            {outline.instructor.map((inst, i) => (
+              <li key={i}>
+                {inst.name}
+                {inst.email && (
+                  <>
+                    {" · "}
+                    <a href={`mailto:${inst.email}`}>{inst.email}</a>
+                  </>
+                )}
+              </li>
+            ))}
+          </ul>
+        </div>
+      )}
+
+      {outline.courseSchedule && outline.courseSchedule.filter((s) => !s.isExam).length > 0 && (
+        <div className="outline-field">
+          <span className="meta-label">Schedule:</span>
+          <ul className="inline-list">
+            {outline.courseSchedule
+              .filter((s) => !s.isExam)
+              .map((s, i) => (
+                <li key={i}>
+                  {s.days} {s.startTime}–{s.endTime} ({s.sectionCode}, {s.campus})
+                </li>
+              ))}
+          </ul>
+        </div>
+      )}
+
+      {outline.grades && outline.grades.length > 0 && (
+        <div className="outline-field">
+          <span className="meta-label">Grading:</span>
+          <ul className="inline-list">
+            {outline.grades.map((g, i) => (
+              <li key={i}>
+                {g.description}: {g.weight}%
+              </li>
+            ))}
+          </ul>
+        </div>
+      )}
+
+      {outline.educationalGoals && (
+        <details className="outline-goals">
+          <summary>Educational Goals</summary>
+          <p>{outline.educationalGoals}</p>
+        </details>
+      )}
+    </div>
+  );
+}
+
+// ─── Helpers ─────────────────────────────────────────────────────────────────
 
 function formatCurriculum(template: PageTemplate): string {
   switch (template.curriculum) {
