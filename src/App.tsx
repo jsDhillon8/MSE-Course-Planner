@@ -135,7 +135,7 @@ function useLiveCourseData(course: Course | null): LiveCourseData {
 
     async function fetchData() {
       try {
-        const { dept, number } = parsed;
+        const { dept, number } = parsed!;
 
         // Fetch both terms concurrently; each may return sections or null
         const [currentResult, registrationResult] = await Promise.all([
