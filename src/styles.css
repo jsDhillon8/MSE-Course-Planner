@@ -226,6 +226,19 @@ body {
   line-height: 1.5;
 }
 
+.outline-description {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.outline-description-text {
+  margin: 0;
+  color: #475569;
+  font-size: 0.85rem;
+  line-height: 1.55;
+}
+
 .meta-label {
   font-weight: 600;
   color: #334155;
@@ -233,11 +246,66 @@ body {
 
 .inline-list {
   margin: 4px 0 0 0;
-  padding-left: 16px;
+  padding-left: 0;
+  list-style: none;
 }
 
 .inline-list li {
   margin-bottom: 2px;
+}
+
+/* Per-semester grouping */
+.outline-term-group {
+  border-left: 2px solid #e2e8f0;
+  padding-left: 10px;
+}
+
+.outline-term-heading {
+  margin: 0 0 4px;
+  font-weight: 700;
+  color: #1e40af;
+  font-size: 0.82rem;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.outline-section-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px;
+  padding: 3px 0;
+  border-bottom: 1px solid #f1f5f9;
+  font-size: 0.83rem;
+}
+
+.outline-section-row:last-child {
+  border-bottom: none;
+}
+
+.section-tag {
+  font-family: monospace;
+  font-size: 0.78rem;
+  background: #e2e8f0;
+  color: #334155;
+  border-radius: 3px;
+  padding: 1px 5px;
+}
+
+.section-campus {
+  font-weight: 600;
+  color: #0f172a;
+}
+
+.section-instructor {
+  color: #475569;
+  flex: 1;
+}
+
+.section-delivery {
+  font-size: 0.75rem;
+  color: #64748b;
+  font-style: italic;
 }
 
 .outline-goals summary {
