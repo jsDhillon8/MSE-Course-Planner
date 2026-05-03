@@ -53,7 +53,7 @@
 
 ## Feature Set (MVP to V1+)
 
-| Feature | MVP | V1+ | Notes |
+| Feature | V0 | V1+ | Notes |
 | :--- | :--- | :--- | :--- |
 | **Drag/drop planning** | Yes | Batch move + keyboard controls | Must support desktop and touch |
 | **Prereq validation** | Hard/soft rule engine | Explainable conflict traces | Show exactly why course placement fails |
