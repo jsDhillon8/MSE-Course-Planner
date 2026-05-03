@@ -100,5 +100,3 @@
 - **Reliability:** Deterministic validation engine with regression fixtures.
 - **Performance:** Virtualized grid rendering for large custom plans.
 - **Transparency:** Every warning includes remediation steps.
-SFU_MSE_Course_Navigator_README.md
-Displaying SFU_MSE_Course_Navigator_README.md.
