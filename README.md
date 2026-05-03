@@ -51,7 +51,7 @@
 
 ---
 
-## Feature Set (MVP to V1+)
+## Feature Set 
 
 | Feature | V0 | V1+ | Notes |
 | :--- | :--- | :--- | :--- |
