@@ -338,7 +338,10 @@ function PlannerPage() {
             {template.supportsVariants ? (
               <>
                 {" "}
-                | 5-year option: <b>{variant}</b>
+                | 5-year option: 
+                  {variant == "A" && <p>8 Month Co-op (yr2-3) + 4 Month Co-op (yr5)</p>}
+                  {variant == "B" && <p>12 Month Co-op (yr3-4) + 4 Month Co-op(YR5)</p>}
+                  {variant == "C" && <p>8 Month Co-op (yr3-4) + 4 Month Co-op (yr5)</p>}
               </>
             ) : null}
           </p>
@@ -389,12 +392,12 @@ function PlannerPage() {
               <h3>{selectedCourse.code}</h3>
               <p className="course-title-text">{selectedCourse.title}</p>
               <p>Credits: {selectedCourse.credits}</p>
-              <p className="static-description">{selectedCourse.description}</p>
+              {/*<p className="static-description">{selectedCourse.description}</p>*/}
 
               {/* ── Live SFU Outline ── */}
               <div className="live-section">
                 <h4 className="live-section-header">
-                  Live SFU Outline
+                  Outline
                   {liveData.status === "loading" && (
                     <span className="live-badge loading">Fetching…</span>
                   )}
