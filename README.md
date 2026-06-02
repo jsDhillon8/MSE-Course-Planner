@@ -51,9 +51,9 @@
 
 ---
 
-## Feature Set (MVP to V1+)
+## Feature Set 
 
-| Feature | MVP | V1+ | Notes |
+| Feature | V0 | V1+ | Notes |
 | :--- | :--- | :--- | :--- |
 | **Drag/drop planning** | Yes | Batch move + keyboard controls | Must support desktop and touch |
 | **Prereq validation** | Hard/soft rule engine | Explainable conflict traces | Show exactly why course placement fails |
@@ -100,5 +100,3 @@
 - **Reliability:** Deterministic validation engine with regression fixtures.
 - **Performance:** Virtualized grid rendering for large custom plans.
 - **Transparency:** Every warning includes remediation steps.
-SFU_MSE_Course_Navigator_README.md
-Displaying SFU_MSE_Course_Navigator_README.md.
