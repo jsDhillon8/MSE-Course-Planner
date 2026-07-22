@@ -1,7 +1,131 @@
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { Navigate, Route, Routes, useNavigate, useParams } from "react-router-dom";
 import { courseById, courseEquivalencies, pageTemplates } from "./data";
-import { Course, PageTemplate, TermPlan, VariantId } from "./types";
+import {
+  fetchSectionsForTerm,
+  findHistoricalOffering,
+  resolveOfferedSections,
+  termTupleToLabel,
+} from "./sfuOutlines";
+import {
+  Course,
+  OfferedSection,
+  PageTemplate,
+  SharedOutlineFields,
+  TermPlan,
+  VariantId,
+} from "./types";
+
+// ─── SFU API Types (outline panel only) ──────────────────────────────────────
+
+interface LiveOutlineBlockProps {
+  sharedOutline: SharedOutlineFields;
+  sections: OfferedSection[];
+  isHistorical?: boolean;
+  historicalLabel?: string;
+}
+
+type LiveStatus = "idle" | "loading" | "success" | "error" | "not-offered";
+
+interface LiveCourseData {
+  status: LiveStatus;
+  sharedOutline: SharedOutlineFields | null;
+  sections: OfferedSection[];
+  isHistorical?: boolean;
+  historicalLabel?: string;
+  errorMsg?: string;
+}
+
+function parseCourseCode(code: string): { dept: string; number: string } | null {
+  // Only match simple two-token codes like "MSE 102" or "PHYS 141"
+  // Reject placeholders like "COMP ELEC 1", "CO-OP", "MSE 4XX TECH ELEC 1"
+  const match = code.trim().match(/^([A-Za-z]{2,8})\s+([A-Za-z0-9]{1,6})$/);
+  if (!match) return null;
+  return { dept: match[1].toLowerCase(), number: match[2].toLowerCase() };
+}
+
+function useLiveCourseData(course: Course | null): LiveCourseData {
+  const [state, setState] = useState<LiveCourseData>({ status: "idle", sharedOutline: null, sections: [] });
+
+  useEffect(() => {
+    if (!course) {
+      setState({ status: "idle", sharedOutline: null, sections: [] });
+      return;
+    }
+
+    // Parse inside the effect so the closure always has the current course code
+    const parsed = parseCourseCode(course.code);
+    if (!parsed) {
+      setState({ status: "not-offered", sharedOutline: null, sections: [] });
+      return;
+    }
+
+    let cancelled = false;
+    setState({ status: "loading", sharedOutline: null, sections: [] });
+
+    async function fetchData() {
+      try {
+        const { dept, number } = parsed!;
+
+        // Fetch both terms concurrently; each may return sections or null
+        const [currentResult, registrationResult] = await Promise.all([
+          fetchSectionsForTerm("current/current", dept, number),
+          fetchSectionsForTerm("registration/registration", dept, number),
+        ]);
+
+        const currentSections = currentResult?.sections ?? [];
+        const registrationSections = registrationResult?.sections ?? [];
+
+        if (currentSections.length === 0 && registrationSections.length === 0) {
+          const historical = await findHistoricalOffering(dept, number, 6);
+          if (cancelled) return;
+
+          if (historical) {
+            setState({
+              status: "success",
+              sharedOutline: historical.sharedOutline,
+              sections: historical.sections,
+              isHistorical: true,
+              historicalLabel: termTupleToLabel(historical),
+            });
+          } else {
+            setState({ status: "not-offered", sharedOutline: null, sections: [] });
+          }
+          return;
+        }
+
+        const resolved = await resolveOfferedSections(dept, number, [
+          currentResult,
+          registrationResult,
+        ]);
+
+        if (!resolved || resolved.sections.length === 0) {
+          if (!cancelled) setState({ status: "not-offered", sharedOutline: null, sections: [] });
+          return;
+        }
+
+        if (!cancelled) {
+          setState({
+            status: "success",
+            sharedOutline: resolved.sharedOutline,
+            sections: resolved.sections,
+          });
+        }
+      } catch (err) {
+        if (!cancelled) {
+          setState({ status: "error", sharedOutline: null, sections: [], errorMsg: String(err) });
+        }
+      }
+    }
+
+    fetchData();
+    return () => { cancelled = true; };
+  }, [course?.id]);
+
+  return state;
+}
+
+// ─── App ─────────────────────────────────────────────────────────────────────
 
 function App() {
   return (
@@ -39,15 +163,9 @@ function PlannerPage() {
     }
 
     const termOrder = (label: string): number => {
-      if (label.includes("Fall")) {
-        return 0;
-      }
-      if (label.includes("Spring")) {
-        return 1;
-      }
-      if (label.includes("Summer")) {
-        return 2;
-      }
+      if (label.includes("Fall")) return 0;
+      if (label.includes("Spring")) return 1;
+      if (label.includes("Summer")) return 2;
       return 3;
     };
 
@@ -60,18 +178,14 @@ function PlannerPage() {
   }, [terms]);
 
   const selectedEquivalencies = useMemo(() => {
-    if (!selectedCourse) {
-      return [];
-    }
-
+    if (!selectedCourse) return [];
     return courseEquivalencies
       .filter((item) => item.sourceCourseId === selectedCourse.id)
-      .map((item) => ({
-        ...item,
-        equivalentCourse: courseById[item.equivalentCourseId],
-      }))
+      .map((item) => ({ ...item, equivalentCourse: courseById[item.equivalentCourseId] }))
       .filter((item) => Boolean(item.equivalentCourse));
   }, [selectedCourse]);
+
+  const liveData = useLiveCourseData(selectedCourse);
 
   return (
     <div className="app-shell">
@@ -119,7 +233,10 @@ function PlannerPage() {
             {template.supportsVariants ? (
               <>
                 {" "}
-                | 5-year option: <b>{variant}</b>
+                | 5-year option:  
+                  {variant == "A" && <b> 8 Month Co-op (yr2-3) + 4 Month Co-op (yr5)</b>}
+                  {variant == "B" && <b> 12 Month Co-op (yr3-4) + 4 Month Co-op (yr5)</b>}
+                  {variant == "C" && <b> 8 Month Co-op (yr3-4) + 4 Month Co-op (yr5)</b>}
               </>
             ) : null}
           </p>
@@ -143,9 +260,12 @@ function PlannerPage() {
                               </div>
                             );
                           }
-
                           return (
-                            <button key={course.id} className="course-card" onClick={() => setSelectedCourse(course)}>
+                            <button
+                              key={course.id}
+                              className={`course-card${selectedCourse?.id === course.id ? " selected" : ""}`}
+                              onClick={() => setSelectedCourse(course)}
+                            >
                               <strong>{course.code}</strong>
                               <span>{course.title}</span>
                             </button>
@@ -165,9 +285,56 @@ function PlannerPage() {
           {selectedCourse ? (
             <>
               <h3>{selectedCourse.code}</h3>
-              <p>{selectedCourse.title}</p>
+              <p className="course-title-text">{selectedCourse.title}</p>
               <p>Credits: {selectedCourse.credits}</p>
-              <p>{selectedCourse.description}</p>
+              {/*<p className="static-description">{selectedCourse.description}</p>*/}
+
+              {/* ── Live SFU Outline ── */}
+              <div className="live-section">
+                <h4 className="live-section-header">
+                  Outline
+                  {liveData.status === "loading" && (
+                    <span className="live-badge loading">Fetching…</span>
+                  )}
+                  {liveData.status === "success" && liveData.isHistorical && liveData.historicalLabel && (
+                    <span className="live-badge warn">Last offered: {liveData.historicalLabel}</span>
+                  )}
+                  {liveData.status === "success" && !liveData.isHistorical && (
+                    <span className="live-badge success">
+                      {liveData.sections.length} section{liveData.sections.length !== 1 ? "s" : ""} found
+                    </span>
+                  )}
+                  {liveData.status === "not-offered" && (
+                    <span className="live-badge warn">Not found this term</span>
+                  )}
+                  {liveData.status === "error" && (
+                    <span className="live-badge error">API error</span>
+                  )}
+                </h4>
+
+                {liveData.status === "loading" && (
+                  <p className="empty-note">Contacting SFU Outlines API…</p>
+                )}
+                {liveData.status === "not-offered" && (
+                  <p className="empty-note">
+                    No section found for the current or upcoming term. The description above still
+                    applies.
+                  </p>
+                )}
+                {liveData.status === "error" && (
+                  <p className="empty-note">Could not reach the SFU Outlines API right now.</p>
+                )}
+                {liveData.status === "success" && liveData.sharedOutline && (
+                  <LiveOutlineBlock
+                    sharedOutline={liveData.sharedOutline}
+                    sections={liveData.sections}
+                    isHistorical={liveData.isHistorical}
+                    historicalLabel={liveData.historicalLabel}
+                  />
+                )}
+              </div>
+
+              {/* ── Equivalencies ── */}
               <h4>Equivalent Courses (Other Faculties)</h4>
               {selectedEquivalencies.length ? (
                 <ul>
@@ -195,6 +362,94 @@ function PlannerPage() {
     </div>
   );
 }
+
+// ─── Live Outline Block ───────────────────────────────────────────────────────
+
+function LiveOutlineBlock({ sharedOutline, sections, isHistorical, historicalLabel }: LiveOutlineBlockProps) {
+  // Group sections by termLabel so each semester gets its own heading
+  const byTerm = sections.reduce<Record<string, OfferedSection[]>>((acc, sec) => {
+    (acc[sec.termLabel] ??= []).push(sec);
+    return acc;
+  }, {});
+
+  return (
+    <div className="live-outline">
+      {isHistorical && historicalLabel && (
+        <p className="empty-note historical-note">
+          Not offered in the current or upcoming term. Showing the most recent outline from{" "}
+          {historicalLabel}.
+        </p>
+      )}
+
+      {/* Course description from the API */}
+      {sharedOutline.description && (
+        <div className="outline-field outline-description">
+          <span className="meta-label">Description:</span>
+          <p className="outline-description-text">{sharedOutline.description}</p>
+        </div>
+      )}
+
+      {sharedOutline.prerequisites && (
+        <div className="outline-field">
+          <span className="meta-label">Prerequisites:</span> {sharedOutline.prerequisites}
+        </div>
+      )}
+
+      {sharedOutline.corequisites && (
+        <div className="outline-field">
+          <span className="meta-label">Corequisites:</span> {sharedOutline.corequisites}
+        </div>
+      )}
+
+      {/* Per-semester offerings */}
+      {Object.entries(byTerm).map(([termLabel, termSections]) => (
+        <div key={termLabel} className="outline-term-group">
+          <p className="outline-term-heading">{termLabel}</p>
+          <ul className="inline-list">
+            {termSections.map((sec, i) => {
+              const instructorNames =
+                sec.instructors.length > 0
+                  ? sec.instructors.map((inst) => inst.name).join(", ")
+                  : "Instructor TBA";
+              return (
+                <li key={i} className="outline-section-row">
+                  <span className="section-tag">{sec.sectionName}</span>
+                  <span className="section-campus">{sec.campus}</span>
+                  <span className="section-instructor">{instructorNames}</span>
+                  {sec.deliveryMethod && (
+                    <span className="section-delivery">{sec.deliveryMethod}</span>
+                  )}
+                </li>
+              );
+            })}
+          </ul>
+        </div>
+      ))}
+
+      {sharedOutline.grades && sharedOutline.grades.length > 0 && (
+        <div className="outline-field">
+          <span className="meta-label">Grading:</span>
+          <ul className="inline-list">
+            {sharedOutline.grades.map((g, i) => (
+              <li key={i}>
+                {g.description}: {g.weight}%
+              </li>
+            ))}
+          </ul>
+        </div>
+      )}
+
+      {sharedOutline.educationalGoals && (
+        <details className="outline-goals">
+          <summary>Educational Goals</summary>
+          <p>{sharedOutline.educationalGoals}</p>
+        </details>
+      )}
+    </div>
+  );
+}
+
+// ─── Helpers ─────────────────────────────────────────────────────────────────
 
 function formatCurriculum(template: PageTemplate): string {
   switch (template.curriculum) {

@@ -1,6 +1,7 @@
 export type CurriculumType = "pre-2024" | "post-2024" | "double-degree";
 export type PlanLength = "4-year" | "5-year";
-export type VariantId = "8-MONTH CO-OP(yr2-3) + 4-MONTH CO-OP(yr5)" | "B" | "C";
+export type VariantId = "A" | "B" | "C";
+export type TermName = "spring" | "summer" | "fall";
 
 export interface Course {
   id: string;
@@ -34,4 +35,43 @@ export interface CourseEquivalency {
   equivalencyType: "full" | "partial" | "elective-only";
   evidenceSource: string;
   expiry: string | null;
+}
+
+export interface TermTuple {
+  year: number;
+  term: TermName;
+}
+
+export interface OfferedSectionInstructor {
+  name: string;
+  firstName: string;
+  lastName: string;
+  email: string;
+  roleCode: string;
+  profileUrl?: string;
+}
+
+/** One fetched section's worth of offering data shown in the outline panel. */
+export interface OfferedSection {
+  sectionName: string;
+  termLabel: string;
+  campus: string;
+  instructors: OfferedSectionInstructor[];
+  deliveryMethod: string;
+}
+
+export interface SharedOutlineFields {
+  description: string;
+  prerequisites: string;
+  corequisites: string;
+  educationalGoals?: string;
+  grades?: { description: string; weight: string }[];
+}
+
+export interface HistoricalLookupResult {
+  year: number;
+  term: TermName;
+  sections: OfferedSection[];
+  sharedOutline: SharedOutlineFields;
+  isHistorical: true;
 }
