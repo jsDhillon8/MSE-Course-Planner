@@ -1,78 +1,40 @@
 import { useEffect, useMemo, useState } from "react";
 import { Navigate, Route, Routes, useNavigate, useParams } from "react-router-dom";
 import { courseById, courseEquivalencies, pageTemplates } from "./data";
-import { Course, PageTemplate, TermPlan, VariantId } from "./types";
+import {
+  fetchSectionsForTerm,
+  findHistoricalOffering,
+  resolveOfferedSections,
+  termTupleToLabel,
+} from "./sfuOutlines";
+import {
+  Course,
+  OfferedSection,
+  PageTemplate,
+  SharedOutlineFields,
+  TermPlan,
+  VariantId,
+} from "./types";
 
-// ─── SFU API Types ───────────────────────────────────────────────────────────
+// ─── SFU API Types (outline panel only) ──────────────────────────────────────
 
-interface SfuSection {
-  text: string;
-  value: string;
-  title: string;
-  classType: "e" | "n";
-  sectionCode: string;
-  associatedClass: string;
+interface LiveOutlineBlockProps {
+  sharedOutline: SharedOutlineFields;
+  sections: OfferedSection[];
+  isHistorical?: boolean;
+  historicalLabel?: string;
 }
-
-interface SfuScheduleItem {
-  startTime: string;
-  endTime: string;
-  days: string;
-  sectionCode: string;
-  campus: string;
-  isExam: boolean;
-  startDate: string;
-  endDate: string;
-}
-
-interface SfuInstructor {
-  name: string;
-  firstName: string;
-  lastName: string;
-  email: string;
-  roleCode: string;
-  profileUrl?: string;
-}
-
-interface SfuOutline {
-  title: string;
-  description: string;
-  prerequisites: string;
-  corequisites: string;
-  units: string;
-  term: string;
-  deliveryMethod: string;
-  educationalGoals?: string;
-  courseDetails?: string;
-  instructor?: SfuInstructor[];
-  courseSchedule?: SfuScheduleItem[];
-  grades?: { description: string; weight: string }[];
-  gradingNotes?: string;
-}
-
-/** One fetched section's worth of offering data shown in the outline panel. */
-interface OfferedSection {
-  sectionName: string;         // e.g. "D100"
-  termLabel: string;           // e.g. "Spring 2026"
-  campus: string;              // e.g. "Burnaby", "Surrey", "Vancouver"
-  instructors: SfuInstructor[];
-  deliveryMethod: string;
-}
-
-// ─── SFU API Hook ─────────────────────────────────────────────────────────────
 
 type LiveStatus = "idle" | "loading" | "success" | "error" | "not-offered";
 
 interface LiveCourseData {
   status: LiveStatus;
-  /** Shared fields taken from the first outline fetched. */
-  sharedOutline: Pick<SfuOutline, "description" | "prerequisites" | "corequisites" | "educationalGoals" | "grades"> | null;
-  /** All sections found across current + registration terms. */
+  sharedOutline: SharedOutlineFields | null;
   sections: OfferedSection[];
+  isHistorical?: boolean;
+  historicalLabel?: string;
   errorMsg?: string;
 }
-
-const SFU_BASE = "https://www.sfu.ca/bin/wcm/course-outlines";
 
 function parseCourseCode(code: string): { dept: string; number: string } | null {
   // Only match simple two-token codes like "MSE 102" or "PHYS 141"
@@ -80,38 +42,6 @@ function parseCourseCode(code: string): { dept: string; number: string } | null 
   const match = code.trim().match(/^([A-Za-z]{2,8})\s+([A-Za-z0-9]{1,6})$/);
   if (!match) return null;
   return { dept: match[1].toLowerCase(), number: match[2].toLowerCase() };
-}
-
-async function fetchSectionsForTerm(
-  term: string,
-  dept: string,
-  num: string
-): Promise<{ sections: SfuSection[]; termSlug: string } | null> {
-  try {
-    const res = await fetch(`${SFU_BASE}?${term}/${dept}/${num}`);
-    if (!res.ok) return null;
-    const data = await res.json();
-    if (!Array.isArray(data) || data.length === 0) return null;
-    return { sections: data as SfuSection[], termSlug: term };
-  } catch {
-    return null;
-  }
-}
-
-/** Convert SFU's numeric term string (e.g. "1251") into a readable label like "Spring 2025". */
-function termCodeToLabel(termCode: string): string {
-  const match = termCode.match(/^1(\d{2})(\d)$/);
-  if (!match) return termCode;
-  const year = 2000 + parseInt(match[1], 10);
-  const semMap: Record<string, string> = { "1": "Spring", "4": "Summer", "7": "Fall" };
-  const sem = semMap[match[2]] ?? `Term ${match[2]}`;
-  return `${sem} ${year}`;
-}
-
-/** Pick the campus from the first non-exam schedule item, falling back to "Unknown". */
-function campusFromOutline(outline: SfuOutline): string {
-  const item = outline.courseSchedule?.find((s) => !s.isExam);
-  return item?.campus ?? "Unknown";
 }
 
 function useLiveCourseData(course: Course | null): LiveCourseData {
@@ -143,79 +73,44 @@ function useLiveCourseData(course: Course | null): LiveCourseData {
           fetchSectionsForTerm("registration/registration", dept, number),
         ]);
 
+        const currentSections = currentResult?.sections ?? [];
+        const registrationSections = registrationResult?.sections ?? [];
 
-        // Build a de-duplicated list of (termSlug, section) pairs for all LEC enrollment sections.
-        // De-duplicate by section value only — the same section won't appear across both term slugs.
-        const toFetch: { termSlug: string; section: SfuSection }[] = [];
-        const seenValues = new Set<string>();
+        if (currentSections.length === 0 && registrationSections.length === 0) {
+          const historical = await findHistoricalOffering(dept, number, 6);
+          if (cancelled) return;
 
-        for (const result of [currentResult, registrationResult]) {
-          if (!result) continue;
-          // Prefer LEC enrollment sections; fall back to any enrollment section
-          const hasLec = result.sections.some((s) => s.classType === "e" && s.sectionCode === "LEC");
-          const candidates = result.sections.filter(
-            (s) => s.classType === "e" && (hasLec ? s.sectionCode === "LEC" : true)
-          );
-          for (const sec of candidates) {
-            if (!seenValues.has(sec.value)) {
-              seenValues.add(sec.value);
-              toFetch.push({ termSlug: result.termSlug, section: sec });
-            }
+          if (historical) {
+            setState({
+              status: "success",
+              sharedOutline: historical.sharedOutline,
+              sections: historical.sections,
+              isHistorical: true,
+              historicalLabel: termTupleToLabel(historical),
+            });
+          } else {
+            setState({ status: "not-offered", sharedOutline: null, sections: [] });
           }
+          return;
         }
 
-        if (toFetch.length === 0) {
+        const resolved = await resolveOfferedSections(dept, number, [
+          currentResult,
+          registrationResult,
+        ]);
+
+        if (!resolved || resolved.sections.length === 0) {
           if (!cancelled) setState({ status: "not-offered", sharedOutline: null, sections: [] });
           return;
         }
 
-        // Fetch each section's outline concurrently
-        const outlineResults = await Promise.all(
-          toFetch.map(async ({ termSlug, section }) => {
-            try {
-              const res = await fetch(`${SFU_BASE}?${termSlug}/${dept}/${number}/${section.value}`);
-              if (!res.ok) return null;
-              const raw = await res.json();
-              console.log("[SFU] raw outline keys:", Object.keys(raw));
-              // SFU API nests data — try top-level first, then common wrappers
-              const outline: SfuOutline = raw.info ?? raw.courseInfo ?? raw;
-              // Attach schedule/instructor from top level if nested outline doesn't have them
-              if (!outline.courseSchedule && raw.courseSchedule) outline.courseSchedule = raw.courseSchedule;
-              if (!outline.instructor && raw.instructor) outline.instructor = raw.instructor;
-              if (!outline.grades && raw.grades) outline.grades = raw.grades;
-              return { outline, sectionName: section.value };
-            } catch {
-              return null;
-            }
-          })
-        );
-
-        const validResults = outlineResults.filter((r): r is { outline: SfuOutline; sectionName: string } => r !== null);
-        if (validResults.length === 0) {
-          if (!cancelled) setState({ status: "not-offered", sharedOutline: null, sections: [] });
-          return;
+        if (!cancelled) {
+          setState({
+            status: "success",
+            sharedOutline: resolved.sharedOutline,
+            sections: resolved.sections,
+          });
         }
-
-        // Extract shared fields from the first outline
-        const first = validResults[0].outline;
-        const sharedOutline = {
-          description: first.description,
-          prerequisites: first.prerequisites,
-          corequisites: first.corequisites,
-          educationalGoals: first.educationalGoals,
-          grades: first.grades,
-        };
-
-        // Build OfferedSection list, one entry per fetched outline
-        const sections: OfferedSection[] = validResults.map(({ outline, sectionName }) => ({
-          sectionName,
-          termLabel: termCodeToLabel(outline.term),
-          campus: campusFromOutline(outline),
-          instructors: outline.instructor ?? [],
-          deliveryMethod: outline.deliveryMethod,
-        }));
-
-        if (!cancelled) setState({ status: "success", sharedOutline, sections });
       } catch (err) {
         if (!cancelled) {
           setState({ status: "error", sharedOutline: null, sections: [], errorMsg: String(err) });
@@ -338,10 +233,10 @@ function PlannerPage() {
             {template.supportsVariants ? (
               <>
                 {" "}
-                | 5-year option: 
-                  {variant == "A" && <p>8 Month Co-op (yr2-3) + 4 Month Co-op (yr5)</p>}
-                  {variant == "B" && <p>12 Month Co-op (yr3-4) + 4 Month Co-op(YR5)</p>}
-                  {variant == "C" && <p>8 Month Co-op (yr3-4) + 4 Month Co-op (yr5)</p>}
+                | 5-year option:  
+                  {variant == "A" && <b> 8 Month Co-op (yr2-3) + 4 Month Co-op (yr5)</b>}
+                  {variant == "B" && <b> 12 Month Co-op (yr3-4) + 4 Month Co-op (yr5)</b>}
+                  {variant == "C" && <b> 8 Month Co-op (yr3-4) + 4 Month Co-op (yr5)</b>}
               </>
             ) : null}
           </p>
@@ -401,7 +296,10 @@ function PlannerPage() {
                   {liveData.status === "loading" && (
                     <span className="live-badge loading">Fetching…</span>
                   )}
-                  {liveData.status === "success" && (
+                  {liveData.status === "success" && liveData.isHistorical && liveData.historicalLabel && (
+                    <span className="live-badge warn">Last offered: {liveData.historicalLabel}</span>
+                  )}
+                  {liveData.status === "success" && !liveData.isHistorical && (
                     <span className="live-badge success">
                       {liveData.sections.length} section{liveData.sections.length !== 1 ? "s" : ""} found
                     </span>
@@ -427,7 +325,12 @@ function PlannerPage() {
                   <p className="empty-note">Could not reach the SFU Outlines API right now.</p>
                 )}
                 {liveData.status === "success" && liveData.sharedOutline && (
-                  <LiveOutlineBlock sharedOutline={liveData.sharedOutline} sections={liveData.sections} />
+                  <LiveOutlineBlock
+                    sharedOutline={liveData.sharedOutline}
+                    sections={liveData.sections}
+                    isHistorical={liveData.isHistorical}
+                    historicalLabel={liveData.historicalLabel}
+                  />
                 )}
               </div>
 
@@ -462,12 +365,7 @@ function PlannerPage() {
 
 // ─── Live Outline Block ───────────────────────────────────────────────────────
 
-interface LiveOutlineBlockProps {
-  sharedOutline: Pick<SfuOutline, "description" | "prerequisites" | "corequisites" | "educationalGoals" | "grades">;
-  sections: OfferedSection[];
-}
-
-function LiveOutlineBlock({ sharedOutline, sections }: LiveOutlineBlockProps) {
+function LiveOutlineBlock({ sharedOutline, sections, isHistorical, historicalLabel }: LiveOutlineBlockProps) {
   // Group sections by termLabel so each semester gets its own heading
   const byTerm = sections.reduce<Record<string, OfferedSection[]>>((acc, sec) => {
     (acc[sec.termLabel] ??= []).push(sec);
@@ -476,6 +374,13 @@ function LiveOutlineBlock({ sharedOutline, sections }: LiveOutlineBlockProps) {
 
   return (
     <div className="live-outline">
+      {isHistorical && historicalLabel && (
+        <p className="empty-note historical-note">
+          Not offered in the current or upcoming term. Showing the most recent outline from{" "}
+          {historicalLabel}.
+        </p>
+      )}
+
       {/* Course description from the API */}
       {sharedOutline.description && (
         <div className="outline-field outline-description">
