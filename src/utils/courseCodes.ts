@@ -7,7 +7,9 @@ export function normalizeCourseCode(code: string): string {
 export function buildCourseCodeIndex(courses: Course[]): Map<string, string> {
   const index = new Map<string, string>();
   for (const course of courses) {
-    index.set(normalizeCourseCode(course.code), course.id);
+    const normalized = normalizeCourseCode(course.code);
+    index.set(normalized, course.id);
+    index.set(normalized.replace(/\s+/g, ""), course.id);
   }
   return index;
 }
@@ -28,15 +30,16 @@ export function expandDepartmentShorthand(text: string): string {
 
 export function findCourseIdsInText(text: string, codeToId: Map<string, string>): string[] {
   const expanded = expandDepartmentShorthand(text);
-  const sortedCodes = [...codeToId.keys()].sort((a, b) => b.length - a.length);
   const found: string[] = [];
 
-  for (const code of sortedCodes) {
-    const pattern = new RegExp(`\\b${code.replace(/\s+/g, "\\s+")}\\b`, "i");
-    if (pattern.test(expanded)) {
-      const id = codeToId.get(code);
-      if (id) found.push(id);
-    }
+  // Match spaced and compact catalog codes, e.g. "MSE 220" and "MSE220".
+  const spacedPattern = /\b([A-Za-z]{2,8})\s+(\d{1,3}[A-Za-z]?)\b/g;
+  let match: RegExpExecArray | null;
+  while ((match = spacedPattern.exec(expanded)) !== null) {
+    const spaced = normalizeCourseCode(`${match[1]} ${match[2]}`);
+    const compact = spaced.replace(/\s+/g, "");
+    const id = codeToId.get(spaced) ?? codeToId.get(compact);
+    if (id) found.push(id);
   }
 
   return [...new Set(found)];

@@ -1,11 +1,6 @@
-import { courses } from "../data";
+import { courseEquivalencies, courseRequirementsById, courses } from "../data";
 import { Course, CourseHighlightRole, CourseRelationshipHighlights } from "../types";
-import { buildCourseCodeIndex } from "./courseCodes";
-import {
-  collectCourseIds,
-  extractRequirementSection,
-  parsePrerequisiteExpression,
-} from "./prerequisiteParser";
+import { buildCourseRequirementsIndex } from "./requirementNormalizer";
 
 export interface CourseDependencyGraph {
   getPrerequisites(courseId: string, recursive: boolean): Set<string>;
@@ -34,7 +29,11 @@ function transitiveClosure(
 }
 
 export function buildCourseDependencyGraph(courseList: Course[] = courses): CourseDependencyGraph {
-  const codeToId = buildCourseCodeIndex(courseList);
+  const requirementsIndex = buildCourseRequirementsIndex(
+    courseList,
+    courseRequirementsById,
+    courseEquivalencies
+  );
 
   const prerequisiteMap = new Map<string, Set<string>>();
   const corequisiteMap = new Map<string, Set<string>>();
@@ -47,16 +46,9 @@ export function buildCourseDependencyGraph(courseList: Course[] = courses): Cour
   }
 
   for (const course of courseList) {
-    const prereqText = extractRequirementSection(course.description, "prerequisite");
-    const coreqText = extractRequirementSection(course.description, "corequisite");
-
-    const prereqExpr = prereqText
-      ? parsePrerequisiteExpression(prereqText, codeToId)
-      : null;
-    const coreqExpr = coreqText ? parsePrerequisiteExpression(coreqText, codeToId) : null;
-
-    const prereqIds = collectCourseIds(prereqExpr);
-    const coreqIds = collectCourseIds(coreqExpr);
+    const normalized = requirementsIndex.get(course.id);
+    const prereqIds = new Set(normalized.prerequisiteIds);
+    const coreqIds = new Set(normalized.corequisiteIds);
 
     prerequisiteMap.set(course.id, prereqIds);
     corequisiteMap.set(course.id, coreqIds);
@@ -68,7 +60,9 @@ export function buildCourseDependencyGraph(courseList: Course[] = courses): Cour
 
   const getPrerequisites = (courseId: string, recursive: boolean): Set<string> => {
     const direct = prerequisiteMap.get(courseId) ?? new Set<string>();
-    return recursive ? transitiveClosure(courseId, (id) => prerequisiteMap.get(id) ?? new Set()) : new Set(direct);
+    return recursive
+      ? transitiveClosure(courseId, (id) => prerequisiteMap.get(id) ?? new Set())
+      : new Set(direct);
   };
 
   const getCorequisites = (courseId: string): Set<string> => {
@@ -77,7 +71,9 @@ export function buildCourseDependencyGraph(courseList: Course[] = courses): Cour
 
   const getDependents = (courseId: string, recursive: boolean): Set<string> => {
     const direct = dependentMap.get(courseId) ?? new Set<string>();
-    return recursive ? transitiveClosure(courseId, (id) => dependentMap.get(id) ?? new Set()) : new Set(direct);
+    return recursive
+      ? transitiveClosure(courseId, (id) => dependentMap.get(id) ?? new Set())
+      : new Set(direct);
   };
 
   const getHighlights = (

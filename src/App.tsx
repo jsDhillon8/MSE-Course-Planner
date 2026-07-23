@@ -217,7 +217,7 @@ function PlannerPage() {
       <header className="topbar">
         <div>
           <h1>SFU MSE Course Navigator</h1>
-          <p className="subtitle">DEV VERSION</p>
+          <p className="subtitle">ALPHA VERSION</p>
         </div>
         <div className="toolbar">
           <select
@@ -244,9 +244,9 @@ function PlannerPage() {
               ))}
             </select>
           )}
-          <button type="button">Import</button>
+          {/*<button type="button">Import</button>
           <button type="button">Export</button>
-          <button type="button">Settings</button>
+          <button type="button">Settings</button>*/}
           <label className="recursive-toggle">
             <input
               type="checkbox"
