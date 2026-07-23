@@ -1,9 +1,11 @@
 import { PrerequisiteExpression } from "../types";
 import { findCourseIdsInText } from "./courseCodes";
 
-/** @deprecated Use resolveRequirementTexts + normalizeRequirementsFromText instead. */
-  //prerequisiteText: string;
-  //corequisiteText: string;
+
+export interface SplitRequirementsText {
+  prerequisiteText: string;
+  corequisiteText: string;
+}
 
 
 export interface NormalizedRequirements {
@@ -13,224 +15,706 @@ export interface NormalizedRequirements {
   corequisiteIds: Set<string>;
 }
 
+
 /**
- * Split a combined SFU Outlines "Prerequisites:" block into prerequisite and
- * corequisite prose. Corequisites appear as a subsection inside the same field.
+ * Split SFU Outlines prerequisite block into prerequisite/corequisite text.
  */
-export function splitSfuRequirementsSection(combinedText: string): SplitRequirementsText {
+export function splitSfuRequirementsSection(
+  combinedText: string
+): SplitRequirementsText {
+
   let body = combinedText.trim();
-  if (!body) return { prerequisiteText: "", corequisiteText: "" };
 
-  // Strip optional top-level header.
-  body = body.replace(/^Prerequisites:\s*/i, "");
-
-  const coreqParts = body.split(/\bCorequisites:\s*/i);
-  if (coreqParts.length > 1) {
+  if (!body)
     return {
-      prerequisiteText: normalizeRequirementSection(coreqParts[0]),
-      corequisiteText: normalizeRequirementSection(coreqParts.slice(1).join("Corequisites:")),
+      prerequisiteText:"",
+      corequisiteText:""
     };
+
+
+  body = body.replace(
+    /^Prerequisites:\s*/i,
+    ""
+  );
+
+
+  const match =
+    body.match(
+      /([\s\S]*?)(?:Corequisites?:\s*)([\s\S]*)/i
+    );
+
+
+  if(match){
+
+    return {
+      prerequisiteText:
+        normalizeRequirementSection(match[1]),
+
+      corequisiteText:
+        normalizeRequirementSection(match[2])
+    };
+
   }
 
-  const coreqSingularParts = body.split(/\bCorequisite:\s*/i);
-  if (coreqSingularParts.length > 1) {
-    return {
-      prerequisiteText: normalizeRequirementSection(coreqSingularParts[0]),
-      corequisiteText: normalizeRequirementSection(coreqSingularParts.slice(1).join("Corequisite:")),
-    };
-  }
 
   return {
-    prerequisiteText: normalizeRequirementSection(body),
-    corequisiteText: "",
+    prerequisiteText:
+      normalizeRequirementSection(body),
+
+    corequisiteText:""
   };
+
 }
 
-/** Normalize bullet lists and inline SFU requirement prose for expression parsing. */
-export function normalizeRequirementSection(text: string): string {
-  const withoutBullets = text
-    .split("\n")
-    .map((line) => line.replace(/^\s*[-•*]\s*/, "").trim())
-    .filter(Boolean)
-    .join("; ");
 
-  return withoutBullets
-    .replace(/\(\s*/g, " (")
-    .replace(/\s*\)/g, ")")
-    .replace(/\s+/g, " ")
-    .replace(/\.$/, "")
-    .trim();
-}
-
-/** Extract calendar-style Prerequisite/Corequisite sentences from a course description. */
-export function extractCalendarRequirements(description: string): SplitRequirementsText {
-  const prerequisiteText = extractLabeledSection(description, "Prerequisite") ?? "";
-  const corequisiteText = extractLabeledSection(description, "Corequisite") ?? "";
-  return { prerequisiteText, corequisiteText };
-}
-
-function extractLabeledSection(description: string, label: "Prerequisite" | "Corequisite"): string | null {
-  const pattern =
-    label === "Prerequisite"
-      ? /Prerequisites?:\s*([\s\S]*?)(?=\s*Corequisites?:|\.\s*(?:Recommended|Students with credit|Quantitative|Breadth-Science)|$)/i
-      : /Corequisites?:\s*([\s\S]*?)(?=\.\s*(?:Recommended|Students with credit|Quantitative|Breadth-Science)|$)/i;
-
-  const match = description.match(pattern);
-  if (!match) return null;
-
-  return normalizeRequirementSection(match[1].replace(/\.$/, ""));
-}
 
 /**
- * Move "COURSE may be taken concurrently" clauses from prerequisite text into
- * corequisite text (common in SFU calendar prose embedded in API strings).
+ * Normalize SFU formatting.
  */
-export function extractConcurrentCorequisites(text: string): SplitRequirementsText {
-  let prerequisiteText = text;
-  const corequisiteParts: string[] = [];
+export function normalizeRequirementSection(
+  text:string
+):string {
 
-  const concurrentPattern =
-    /(?:,\s*|\band\s+|\bor\s+)?([A-Za-z]{2,8}\s*\d{1,3}[A-Za-z]?)\s+may be taken concurrently\.?/gi;
 
-  prerequisiteText = prerequisiteText.replace(concurrentPattern, (_match, courseRef: string) => {
-    corequisiteParts.push(courseRef.trim());
-    return "";
-  });
+  return text
+    .split("\n")
+    .map(line =>
+      line
+        .replace(/^\s*[-•*]\s*/,"")
+        .trim()
+    )
+    .filter(Boolean)
+    .join("; ")
 
-  prerequisiteText = prerequisiteText
-    .replace(/,\s*,/g, ",")
-    .replace(/,\s*\./g, ".")
-    .replace(/\s+and\s+\./i, ".")
-    .replace(/\s+or\s+\./i, ".")
-    .replace(/\.\s*\./g, ".")
-    .replace(/,\s*$/, "")
-    .replace(/\s+/g, " ")
+    .replace(/\s+/g," ")
+    .replace(/\(\s+/g,"(")
+    .replace(/\s+\)/g,")")
+    .replace(/\.$/,"")
     .trim();
 
-  return {
-    prerequisiteText,
-    corequisiteText: corequisiteParts.join("; "),
-  };
 }
 
-/** Resolve requirement prose from either SFU Outlines or calendar description formats. */
-export function resolveRequirementTexts(rawSource: string): SplitRequirementsText {
-  const trimmed = rawSource.trim();
-  if (!trimmed) return { prerequisiteText: "", corequisiteText: "" };
 
-  const usesSfuBlock =
-    /^Prerequisites:\s*/i.test(trimmed) || /\bCorequisites:\s*/i.test(trimmed);
 
-  let split: SplitRequirementsText;
-  if (usesSfuBlock) {
-    split = splitSfuRequirementsSection(trimmed);
-  } else if (/\bPrerequisites?:\s*/i.test(trimmed)) {
-    split = extractCalendarRequirements(trimmed);
-  } else {
-    split = { prerequisiteText: normalizeRequirementSection(trimmed), corequisiteText: "" };
-  }
+/**
+ * Extract calendar prerequisite/corequisite fields.
+ */
+export function extractCalendarRequirements(
+ description:string
+):SplitRequirementsText{
 
-  const concurrent = extractConcurrentCorequisites(split.prerequisiteText);
-  return {
-    prerequisiteText: concurrent.prerequisiteText,
-    corequisiteText: [split.corequisiteText, concurrent.corequisiteText]
-      .filter(Boolean)
-      .join("; "),
-  };
+
+ const prerequisiteText =
+   extractLabeledSection(
+     description,
+     "Prerequisite"
+   ) ?? "";
+
+
+ const corequisiteText =
+   extractLabeledSection(
+     description,
+     "Corequisite"
+   ) ?? "";
+
+
+ return {
+   prerequisiteText,
+   corequisiteText
+ };
+
 }
 
-function splitTopLevelOr(text: string): string[] {
-  return text
-    .split(/\s*;\s*|\s*;\s*or\s+|\s*,\s*or\s+(?=[A-Za-z])/i)
-    .map((part) => part.trim())
-    .filter(Boolean);
+
+
+function extractLabeledSection(
+ description:string,
+ label:"Prerequisite"|"Corequisite"
+):string|null{
+
+
+ const regex =
+ label==="Prerequisite"
+
+ ?
+ /Prerequisites?:\s*([\s\S]*?)(?=\.\s*(?:Corequisites?|Recommended|Students with credit|Quantitative|Breadth)|$)/i
+
+ :
+ /Corequisites?:\s*([\s\S]*?)(?=\.\s*(?:Recommended|Students with credit|Quantitative|Breadth)|$)/i;
+
+
+ const match =
+   description.match(regex);
+
+
+ if(!match)
+   return null;
+
+
+ return normalizeRequirementSection(
+   match[1]
+ );
+
 }
 
-function splitAndClause(text: string): string[] {
-  return text
-    .split(/\s+and\s+|\s*,\s*both with\s+/i)
-    .map((part) => part.trim())
-    .filter(Boolean);
+
+
+/**
+ * Extract "may be taken concurrently" courses.
+ */
+export function extractConcurrentCorequisites(
+ text:string
+):SplitRequirementsText{
+
+
+ const corequisites:string[]=[];
+
+
+ let prerequisiteText =
+ text.replace(
+ /([A-Z]{2,6}\s?\d{3}[A-Z]?)\s+may be taken concurrently/gi,
+ (_match,course)=>{
+    corequisites.push(course);
+    return "";
+ }
+ );
+
+
+ prerequisiteText =
+ prerequisiteText
+ .replace(/,\s*,/g,",")
+ .replace(/\s+/g," ")
+ .trim();
+
+
+
+ return {
+
+   prerequisiteText,
+
+   corequisiteText:
+     corequisites.join("; ")
+
+ };
+
 }
 
-function parseClause(clause: string, codeToId: Map<string, string>): PrerequisiteExpression | null {
-  const andParts = splitAndClause(clause);
-  const items: PrerequisiteExpression[] = [];
 
-  for (const part of andParts) {
-    const courseIds = findCourseIdsInText(part, codeToId);
-    if (courseIds.length === 1) {
-      items.push({ type: "course", courseId: courseIds[0] });
-    } else if (courseIds.length > 1) {
-      items.push({
-        type: "or",
-        items: courseIds.map((courseId) => ({ type: "course", courseId })),
-      });
-    }
-  }
 
-  if (items.length === 0) return null;
-  if (items.length === 1) return items[0];
-  return { type: "and", items };
+/**
+ * Resolve prerequisite text source.
+ */
+export function resolveRequirementTexts(
+ rawSource:string
+):SplitRequirementsText{
+
+
+ const source =
+   rawSource.trim();
+
+
+ if(!source)
+   return {
+     prerequisiteText:"",
+     corequisiteText:""
+   };
+
+
+
+ let result:SplitRequirementsText;
+
+
+ if(
+   /^Prerequisites:/i.test(source)
+   ||
+   /Corequisites?:/i.test(source)
+ ){
+
+   result =
+     splitSfuRequirementsSection(
+       source
+     );
+
+ }
+
+ else if(
+   /Prerequisites?:/i.test(source)
+ ){
+
+   result =
+     extractCalendarRequirements(
+       source
+     );
+
+ }
+
+ else {
+
+   result={
+     prerequisiteText:
+       normalizeRequirementSection(source),
+
+     corequisiteText:""
+   };
+
+ }
+
+
+
+ const concurrent =
+   extractConcurrentCorequisites(
+     result.prerequisiteText
+   );
+
+
+ return {
+
+   prerequisiteText:
+     concurrent.prerequisiteText,
+
+
+   corequisiteText:
+     [
+       result.corequisiteText,
+       concurrent.corequisiteText
+     ]
+     .filter(Boolean)
+     .join("; ")
+
+ };
+
 }
 
-/** Parse SFU-style prerequisite/corequisite prose into a structured expression tree. */
+
+
+/**
+ * Remove irrelevant SFU wording.
+ */
+function cleanClause(
+ text:string
+):string{
+
+
+ return text
+
+ .replace(
+ /\s+with\s+(?:a\s+)?minimum\s+grade\s+of\s+[A-F][+-]?/gi,
+ ""
+ )
+
+ .replace(
+ /\s+with\s+(?:a\s+)?grade\s+of\s+[A-F][+-]?/gi,
+ ""
+ )
+
+ .replace(
+ /\s*\([^)]*equivalent[^)]*\)/gi,
+ ""
+
+ )
+
+ .trim();
+
+}
+
+
+
+/**
+ * Split text while respecting parentheses.
+ */
+function splitOutsideParentheses(
+ text:string,
+ separator:RegExp
+):string[]{
+
+
+ const parts:string[]=[];
+
+ let current="";
+
+ let depth=0;
+
+
+ for(let i=0;i<text.length;i++){
+
+   const char=text[i];
+
+
+   if(char==="(")
+     depth++;
+
+
+   if(char===")")
+     depth--;
+
+
+
+   if(
+     depth===0 &&
+     separator.test(
+       text.slice(i)
+     )
+   ){
+
+     parts.push(
+       current.trim()
+     );
+
+     current="";
+
+     continue;
+   }
+
+
+   current+=char;
+
+ }
+
+
+ if(current.trim())
+   parts.push(
+     current.trim()
+   );
+
+
+ return parts;
+
+}
+
+
+
+/**
+ * Parse individual prerequisite clause.
+ */
+function parseClause(
+ clause:string,
+ codeToId:Map<string,string>
+):PrerequisiteExpression|null{
+
+
+ clause =
+   cleanClause(clause);
+
+
+
+ const oneOf =
+ clause.match(
+ /(?:one of|any of|either)\s+(.+)/i
+ );
+
+
+ if(oneOf){
+
+   const ids =
+     findCourseIdsInText(
+       oneOf[1],
+       codeToId
+     );
+
+
+   if(ids.length){
+
+     return {
+
+       type:"or",
+
+       items:
+         ids.map(courseId=>({
+
+           type:"course",
+
+           courseId
+
+         }))
+
+     };
+
+   }
+
+ }
+
+
+
+ const ids =
+   findCourseIdsInText(
+     clause,
+     codeToId
+   );
+
+
+ if(!ids.length)
+   return null;
+
+
+
+ if(ids.length===1){
+
+   return {
+
+     type:"course",
+
+     courseId:ids[0]
+
+   };
+
+ }
+
+
+
+ return {
+
+   type:"and",
+
+   items:
+     ids.map(courseId=>({
+
+       type:"course",
+
+       courseId
+
+     }))
+
+ };
+
+}
+
+
+
+/**
+ * Parse SFU prerequisite expression.
+ */
 export function parsePrerequisiteExpression(
-  text: string,
-  codeToId: Map<string, string>
-): PrerequisiteExpression | null {
-  const trimmed = normalizeRequirementSection(text);
-  if (!trimmed) return null;
+ text:string,
+ codeToId:Map<string,string>
+):PrerequisiteExpression|null{
 
-  const orClauses = splitTopLevelOr(trimmed);
-  const parsedClauses = orClauses
-    .map((clause) => parseClause(clause, codeToId))
-    .filter((clause): clause is PrerequisiteExpression => clause !== null);
 
-  if (parsedClauses.length === 0) return null;
-  if (parsedClauses.length === 1) return parsedClauses[0];
-  return { type: "or", items: parsedClauses };
+ const cleaned =
+   normalizeRequirementSection(
+     text
+   );
+
+
+ if(!cleaned)
+   return null;
+
+
+
+ const andParts =
+   splitOutsideParentheses(
+     cleaned,
+     /\s+and\s+/i
+   );
+
+
+
+ const expressions =
+   andParts
+   .map(part=>{
+
+
+     const orParts =
+       splitOutsideParentheses(
+         part,
+         /\s+or\s+/i
+       );
+
+
+
+     if(orParts.length>1){
+
+       const items =
+         orParts
+         .map(p =>
+           parseClause(
+             p,
+             codeToId
+           )
+         )
+         .filter(
+           (x):x is PrerequisiteExpression =>
+             x!==null
+         );
+
+
+       if(items.length){
+
+         return {
+
+           type:"or",
+
+           items
+
+         };
+
+       }
+
+     }
+
+
+
+     return parseClause(
+       part,
+       codeToId
+     );
+
+
+   })
+   .filter(
+     (x):x is PrerequisiteExpression =>
+       x!==null
+   );
+
+
+
+ if(!expressions.length)
+   return null;
+
+
+
+ if(expressions.length===1)
+   return expressions[0];
+
+
+
+ return {
+
+   type:"and",
+
+   items:expressions
+
+ };
+
 }
 
-export function collectCourseIds(expression: PrerequisiteExpression | null): Set<string> {
-  const ids = new Set<string>();
-  if (!expression) return ids;
 
-  const walk = (node: PrerequisiteExpression): void => {
-    if (node.type === "course") {
-      ids.add(node.courseId);
-      return;
-    }
-    for (const item of node.items) walk(item);
-  };
 
-  walk(expression);
-  return ids;
+/**
+ * Collect course IDs from expression.
+ */
+export function collectCourseIds(
+ expression:PrerequisiteExpression|null
+):Set<string>{
+
+
+ const ids =
+   new Set<string>();
+
+
+ if(!expression)
+   return ids;
+
+
+
+ function walk(
+  node:PrerequisiteExpression
+ ){
+
+   if(node.type==="course"){
+
+     ids.add(
+       node.courseId
+     );
+
+     return;
+
+   }
+
+
+   node.items.forEach(walk);
+
+ }
+
+
+ walk(expression);
+
+
+ return ids;
+
 }
 
+
+
+/**
+ * Full normalization pipeline.
+ */
 export function normalizeRequirementsFromText(
-  rawSource: string,
-  codeToId: Map<string, string>
-): NormalizedRequirements {
-  const { prerequisiteText, corequisiteText } = resolveRequirementTexts(rawSource);
+ rawSource:string,
+ codeToId:Map<string,string>
+):NormalizedRequirements{
 
-  const prerequisiteExpression = parsePrerequisiteExpression(prerequisiteText, codeToId);
-  const corequisiteExpression = parsePrerequisiteExpression(corequisiteText, codeToId);
 
-  return {
-    prerequisiteExpression,
-    corequisiteExpression,
-    prerequisiteIds: collectCourseIds(prerequisiteExpression),
-    corequisiteIds: collectCourseIds(corequisiteExpression),
-  };
+ const {
+   prerequisiteText,
+   corequisiteText
+
+ } =
+ resolveRequirementTexts(
+   rawSource
+ );
+
+
+
+ const prerequisiteExpression =
+   parsePrerequisiteExpression(
+     prerequisiteText,
+     codeToId
+   );
+
+
+ const corequisiteExpression =
+   parsePrerequisiteExpression(
+     corequisiteText,
+     codeToId
+   );
+
+
+
+ return {
+
+   prerequisiteExpression,
+
+   corequisiteExpression,
+
+
+   prerequisiteIds:
+     collectCourseIds(
+       prerequisiteExpression
+     ),
+
+
+   corequisiteIds:
+     collectCourseIds(
+       corequisiteExpression
+     )
+
+ };
+
 }
 
-/** @deprecated Use resolveRequirementTexts + normalizeRequirementsFromText instead. */
+
+
+/**
+ * Backwards compatibility.
+ */
 export function extractRequirementSection(
-  description: string,
-  kind: "prerequisite" | "corequisite"
-): string | null {
-  const split = resolveRequirementTexts(description);
-  const text = kind === "prerequisite" ? split.prerequisiteText : split.corequisiteText;
-  return text || null;
+ description:string,
+ kind:"prerequisite"|"corequisite"
+):string|null{
+
+
+ const result =
+   resolveRequirementTexts(
+     description
+   );
+
+
+ const text =
+   kind==="prerequisite"
+   ? result.prerequisiteText
+   : result.corequisiteText;
+
+
+ return text || null;
+
 }

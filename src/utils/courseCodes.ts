@@ -28,19 +28,84 @@ export function expandDepartmentShorthand(text: string): string {
   );
 }
 
-export function findCourseIdsInText(text: string, codeToId: Map<string, string>): string[] {
-  const expanded = expandDepartmentShorthand(text);
+export function findCourseIdsInText(
+  text: string,
+  codeToId: Map<string, string>
+): string[] {
+
+  const expanded =
+    expandDepartmentShorthand(text);
   const found: string[] = [];
 
-  // Match spaced and compact catalog codes, e.g. "MSE 220" and "MSE220".
-  const spacedPattern = /\b([A-Za-z]{2,8})\s+(\d{1,3}[A-Za-z]?)\b/g;
+
+  /*
+    Matches:
+
+    MSE 110
+    MSE110
+    MSE 110W
+    MSE110W
+    MSE 110 W
+    ENSC 251W
+
+  */
+  const coursePattern =
+    /\b([A-Za-z]{2,8})\s*(\d{1,3})\s*([A-Za-z])?\b/gi;
+
+
+
   let match: RegExpExecArray | null;
-  while ((match = spacedPattern.exec(expanded)) !== null) {
-    const spaced = normalizeCourseCode(`${match[1]} ${match[2]}`);
-    const compact = spaced.replace(/\s+/g, "");
-    const id = codeToId.get(spaced) ?? codeToId.get(compact);
-    if (id) found.push(id);
+
+
+  while (
+    (match = coursePattern.exec(expanded)) !== null
+  ) {
+
+
+    const dept =
+      match[1]
+      .toUpperCase();
+
+
+    const number =
+      match[2];
+
+
+    const suffix =
+      match[3]
+      ? match[3].toUpperCase()
+      : "";
+
+
+    const normalized =
+      normalizeCourseCode(
+        `${dept} ${number}${suffix}`
+      );
+
+
+    const compact =
+      normalized.replace(
+        /\s+/g,
+        ""
+      );
+
+
+    const id =
+      codeToId.get(normalized)
+      ??
+      codeToId.get(compact);
+
+
+
+    if(id){
+      found.push(id);
+    }
+
   }
 
-  return [...new Set(found)];
+
+  return [
+    ...new Set(found)
+  ];
+
 }
