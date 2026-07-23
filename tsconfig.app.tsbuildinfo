@@ -1,1 +1,1 @@
-{"root":["./src/app.tsx","./src/data.ts","./src/main.tsx","./src/sfuoutlines.ts","./src/types.ts"],"version":"5.9.3"}
+{"root":["./src/app.tsx","./src/data.ts","./src/main.tsx","./src/sfuoutlines.ts","./src/types.ts","./src/context/themecontext.tsx","./src/utils/coursecodes.ts","./src/utils/dependencygraph.ts","./src/utils/prerequisiteparser.ts"],"version":"5.9.3"}

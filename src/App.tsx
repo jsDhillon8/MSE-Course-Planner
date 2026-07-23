@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useState } from "react";
 import { Navigate, Route, Routes, useNavigate, useParams } from "react-router-dom";
+import { useTheme } from "./context/ThemeContext";
 import { courseById, courseEquivalencies, pageTemplates } from "./data";
 import {
   fetchSectionsForTerm,
@@ -9,12 +10,14 @@ import {
 } from "./sfuOutlines";
 import {
   Course,
+  CourseHighlightRole,
   OfferedSection,
   PageTemplate,
   SharedOutlineFields,
   TermPlan,
   VariantId,
 } from "./types";
+import { courseDependencyGraph } from "./utils/dependencyGraph";
 
 // ─── SFU API Types (outline panel only) ──────────────────────────────────────
 
@@ -140,9 +143,31 @@ function App() {
 function PlannerPage() {
   const { pageId } = useParams<{ pageId: string }>();
   const navigate = useNavigate();
+  const { theme, toggleTheme } = useTheme();
   const template = pageTemplates.find((p) => p.id === pageId) ?? pageTemplates[0];
   const [variant, setVariant] = useState<VariantId>("A" as VariantId);
   const [selectedCourse, setSelectedCourse] = useState<Course | null>(null);
+  const [recursiveHighlights, setRecursiveHighlights] = useState(true);
+
+  const handleCourseSelect = (course: Course) => {
+    setSelectedCourse((current) => (current?.id === course.id ? null : course));
+  };
+
+  useEffect(() => {
+    const onKeyDown = (event: KeyboardEvent) => {
+      if (event.key === "Escape") {
+        setSelectedCourse(null);
+      }
+    };
+
+    window.addEventListener("keydown", onKeyDown);
+    return () => window.removeEventListener("keydown", onKeyDown);
+  }, []);
+
+  const relationshipHighlights = useMemo(
+    () => courseDependencyGraph.getHighlights(selectedCourse?.id ?? null, recursiveHighlights),
+    [selectedCourse?.id, recursiveHighlights]
+  );
 
   const terms = useMemo<TermPlan[]>(() => {
     if (!template.supportsVariants || !template.termsByVariant) {
@@ -222,6 +247,22 @@ function PlannerPage() {
           <button type="button">Import</button>
           <button type="button">Export</button>
           <button type="button">Settings</button>
+          <label className="recursive-toggle">
+            <input
+              type="checkbox"
+              checked={recursiveHighlights}
+              onChange={(event) => setRecursiveHighlights(event.target.checked)}
+            />
+            Recursive highlights
+          </label>
+          <button
+            type="button"
+            className="theme-toggle"
+            onClick={toggleTheme}
+            aria-label={`Switch to ${theme === "light" ? "dark" : "light"} mode`}
+          >
+            {theme === "light" ? "Dark mode" : "Light mode"}
+          </button>
         </div>
       </header>
 
@@ -263,8 +304,10 @@ function PlannerPage() {
                           return (
                             <button
                               key={course.id}
-                              className={`course-card${selectedCourse?.id === course.id ? " selected" : ""}`}
-                              onClick={() => setSelectedCourse(course)}
+                              type="button"
+                              className={getCourseCardClassName(course.id, relationshipHighlights.roles)}
+                              onClick={() => handleCourseSelect(course)}
+                              aria-pressed={selectedCourse?.id === course.id}
                             >
                               <strong>{course.code}</strong>
                               <span>{course.title}</span>
@@ -287,7 +330,8 @@ function PlannerPage() {
               <h3>{selectedCourse.code}</h3>
               <p className="course-title-text">{selectedCourse.title}</p>
               <p>Credits: {selectedCourse.credits}</p>
-              {/*<p className="static-description">{selectedCourse.description}</p>*/}
+
+              <HighlightLegend roles={relationshipHighlights.roles} />
 
               {/* ── Live SFU Outline ── */}
               <div className="live-section">
@@ -359,6 +403,50 @@ function PlannerPage() {
         <div>Credits Progress: placeholder</div>
         <div>Warnings: placeholder</div>
       </footer>
+    </div>
+  );
+}
+
+// ─── Course Highlight Helpers ────────────────────────────────────────────────
+
+function getCourseCardClassName(
+  courseId: string,
+  roles: Map<string, CourseHighlightRole>
+): string {
+  const role = roles.get(courseId);
+  return role ? `course-card role-${role}` : "course-card";
+}
+
+function HighlightLegend({ roles }: { roles: Map<string, CourseHighlightRole> }) {
+  const counts = useMemo(() => {
+    const tally = { prerequisite: 0, corequisite: 0, dependent: 0 };
+    for (const role of roles.values()) {
+      if (role === "prerequisite") tally.prerequisite += 1;
+      if (role === "corequisite") tally.corequisite += 1;
+      if (role === "dependent") tally.dependent += 1;
+    }
+    return tally;
+  }, [roles]);
+
+  return (
+    <div className="highlight-legend" aria-label="Course relationship legend">
+      <h4>Curriculum Relationships</h4>
+      <div className="legend-item">
+        <span className="legend-swatch selected" aria-hidden="true" />
+        Selected course
+      </div>
+      <div className="legend-item">
+        <span className="legend-swatch prerequisite" aria-hidden="true" />
+        Prerequisites ({counts.prerequisite})
+      </div>
+      <div className="legend-item">
+        <span className="legend-swatch corequisite" aria-hidden="true" />
+        Corequisites ({counts.corequisite})
+      </div>
+      <div className="legend-item">
+        <span className="legend-swatch dependent" aria-hidden="true" />
+        Dependent courses ({counts.dependent})
+      </div>
     </div>
   );
 }

@@ -11,6 +11,19 @@ export interface Course {
   description: string;
 }
 
+export type PrerequisiteExpression =
+  | { type: "course"; courseId: string }
+  | { type: "and"; items: PrerequisiteExpression[] }
+  | { type: "or"; items: PrerequisiteExpression[] };
+
+export type CourseHighlightRole = "selected" | "prerequisite" | "corequisite" | "dependent";
+
+export interface CourseRelationshipHighlights {
+  roles: Map<string, CourseHighlightRole>;
+}
+
+export type ThemeMode = "light" | "dark";
+
 export interface TermPlan {
   id: string;
   label: string;
