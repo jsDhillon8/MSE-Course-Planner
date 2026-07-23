@@ -1,6 +1,8 @@
 import { useEffect, useMemo, useState } from "react";
 import { Navigate, Route, Routes, useNavigate, useParams } from "react-router-dom";
+import { WelcomeModal } from "./components/WelcomeModal";
 import { useTheme } from "./context/ThemeContext";
+import { useWelcomeModal } from "./hooks/useWelcomeModal";
 import { courseById, courseEquivalencies, pageTemplates } from "./data";
 import {
   fetchSectionsForTerm,
@@ -131,16 +133,25 @@ function useLiveCourseData(course: Course | null): LiveCourseData {
 // ─── App ─────────────────────────────────────────────────────────────────────
 
 function App() {
+  const { isOpen: isWelcomeOpen, open: openWelcome, dismiss: dismissWelcome } = useWelcomeModal();
+
   return (
-    <Routes>
-      <Route path="/" element={<Navigate to="/planner/post-2024-4-year" replace />} />
-      <Route path="/planner/:pageId" element={<PlannerPage />} />
-      <Route path="*" element={<Navigate to="/" replace />} />
-    </Routes>
+    <>
+      <WelcomeModal isOpen={isWelcomeOpen} onDismiss={dismissWelcome} />
+      <Routes>
+        <Route path="/" element={<Navigate to="/planner/post-2024-4-year" replace />} />
+        <Route path="/planner/:pageId" element={<PlannerPage onOpenWelcome={openWelcome} />} />
+        <Route path="*" element={<Navigate to="/" replace />} />
+      </Routes>
+    </>
   );
 }
 
-function PlannerPage() {
+interface PlannerPageProps {
+  onOpenWelcome: () => void;
+}
+
+function PlannerPage({ onOpenWelcome }: PlannerPageProps) {
   const { pageId } = useParams<{ pageId: string }>();
   const navigate = useNavigate();
   const { theme, toggleTheme } = useTheme();
@@ -262,6 +273,15 @@ function PlannerPage() {
             aria-label={`Switch to ${theme === "light" ? "dark" : "light"} mode`}
           >
             {theme === "light" ? "Dark mode" : "Light mode"}
+          </button>
+          <button
+            type="button"
+            className="help-button"
+            onClick={onOpenWelcome}
+            aria-label="Open welcome and help guide"
+            title="Help"
+          >
+            ?
           </button>
         </div>
       </header>
