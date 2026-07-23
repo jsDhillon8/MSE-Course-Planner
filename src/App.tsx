@@ -247,14 +247,14 @@ function PlannerPage() {
           <button type="button">Import</button>
           <button type="button">Export</button>
           <button type="button">Settings</button>
-          <label className="recursive-toggle">
+          {/*<label className="recursive-toggle">
             <input
               type="checkbox"
               checked={recursiveHighlights}
               onChange={(event) => setRecursiveHighlights(event.target.checked)}
             />
             Recursive highlights
-          </label>
+          </label>*/}
           <button
             type="button"
             className="theme-toggle"
