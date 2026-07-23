@@ -257,6 +257,34 @@ body {
   background: var(--highlight-dependent-bg);
 }
 
+/* ── Course slots (single course, or a "choose one of" group) ── */
+.course-slot {
+  display: grid;
+}
+
+.choice-slot {
+  display: flex;
+  align-items: stretch;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
+.choice-slot .course-card {
+  flex: 1 1 0;
+  min-width: 0;
+}
+
+.choice-divider {
+  align-self: center;
+  flex: 0 0 auto;
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--text-subtle);
+  padding: 2px 4px;
+}
+
 .details-panel {
   border-left: 1px solid var(--border);
   background: var(--surface);

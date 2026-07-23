@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
+import { Fragment, useEffect, useMemo, useState } from "react";
 import { Navigate, Route, Routes, useNavigate, useParams } from "react-router-dom";
 import { WelcomeModal } from "./components/WelcomeModal";
 import { useTheme } from "./context/ThemeContext";
@@ -11,8 +11,10 @@ import {
   termTupleToLabel,
 } from "./sfuOutlines";
 import {
+  CurriculumType,
   Course,
   CourseHighlightRole,
+  CourseSlot,
   OfferedSection,
   PageTemplate,
   SharedOutlineFields,
@@ -20,6 +22,7 @@ import {
   VariantId,
 } from "./types";
 import { courseDependencyGraph } from "./utils/dependencyGraph";
+import { getActiveTerms, slotCourseIds } from "./utils/scheduleTerms";
 
 // ─── SFU API Types (outline panel only) ──────────────────────────────────────
 
@@ -180,12 +183,7 @@ function PlannerPage({ onOpenWelcome }: PlannerPageProps) {
     [selectedCourse?.id, recursiveHighlights]
   );
 
-  const terms = useMemo<TermPlan[]>(() => {
-    if (!template.supportsVariants || !template.termsByVariant) {
-      return template.terms;
-    }
-    return template.termsByVariant[variant] ?? template.terms;
-  }, [template, variant]);
+  const terms = useMemo<TermPlan[]>(() => getActiveTerms(template, variant), [template, variant]);
 
   const termsByYear = useMemo(() => {
     const grouped = new Map<number, TermPlan[]>();
@@ -242,16 +240,22 @@ function PlannerPage({ onOpenWelcome }: PlannerPageProps) {
               </option>
             ))}
           </select>
-          {template.supportsVariants && (
-            <select
-              value={variant}
-              onChange={(event) => setVariant(event.target.value as VariantId)}
-              aria-label="Select 5-year option"
-            >
-              {template.availableVariants.map((option) => (
-                <option key={option} value={option}>
-                  Option {option}
-                </option>
+           {template.supportsVariants && (
+              <select
+                value={variant}
+                onChange={(event) => setVariant(event.target.value as VariantId)}
+                aria-label="Select curriculum option"
+              >
+                {template.availableVariants.map((option) => (
+                  <option key={option} value={option}>
+                    {template.curriculum === "double-degree"
+                      ? option === "A"
+                        ? "Pre-Fall 2024"
+                        : option === "B"
+                            ? "Post-Fall 2024"
+                            : `Option ${option}`
+                          : `Option ${option}`}
+        </option>
               ))}
             </select>
           )}
@@ -291,7 +295,7 @@ function PlannerPage({ onOpenWelcome }: PlannerPageProps) {
           <h2>{template.title}</h2>
           <p className="meta">
             Curriculum: <b>{formatCurriculum(template)}</b> | Plan: <b>{template.planLength}</b>
-            {template.supportsVariants ? (
+            {template.supportsVariants && template.curriculum !== "double-degree" ? (
               <>
                 {" "}
                 | 5-year option:  
@@ -311,29 +315,17 @@ function PlannerPage({ onOpenWelcome }: PlannerPageProps) {
                     <article key={term.id} className="term-column">
                       <h4>{term.label.split("-")[1]?.trim() ?? term.label}</h4>
                       <div className="course-list">
-                        {term.courseIds.map((courseId) => {
-                          const course = courseById[courseId];
-                          if (!course) {
-                            return (
-                              <div key={courseId} className="course-card">
-                                <strong>Unknown Course</strong>
-                                <span>{courseId}</span>
-                              </div>
-                            );
-                          }
-                          return (
-                            <button
-                              key={course.id}
-                              type="button"
-                              className={getCourseCardClassName(course.id, relationshipHighlights.roles)}
-                              onClick={() => handleCourseSelect(course)}
-                              aria-pressed={selectedCourse?.id === course.id}
-                            >
-                              <strong>{course.code}</strong>
-                              <span>{course.title}</span>
-                            </button>
-                          );
-                        })}
+                        {term.courseIds.map((slot, index) => (
+                          <ScheduleSlotCard
+                            // Arrays (choice groups) don't have a stable single id, so key on
+                            // their joined ids + position; plain slots key on the course id.
+                            key={Array.isArray(slot) ? `${slot.join("-")}-${index}` : slot}
+                            slot={slot}
+                            selectedCourseId={selectedCourse?.id ?? null}
+                            highlightRoles={relationshipHighlights.roles}
+                            onSelect={handleCourseSelect}
+                          />
+                        ))}
                       </div>
                     </article>
                   ))}
@@ -435,6 +427,68 @@ function getCourseCardClassName(
 ): string {
   const role = roles.get(courseId);
   return role ? `course-card role-${role}` : "course-card";
+}
+
+interface ScheduleSlotCardProps {
+  slot: CourseSlot;
+  selectedCourseId: string | null;
+  highlightRoles: Map<string, CourseHighlightRole>;
+  onSelect: (course: Course) => void;
+}
+
+/**
+ * Renders a single slot from a term's `courseIds` config.
+ *
+ * A slot is either:
+ *  - a single course id (string) → renders one course card, exactly as before.
+ *  - a "choose one of" group (string[]) → renders every course in the group
+ *    side-by-side on one row, separated by an "OR" divider, so the student
+ *    can see and pick whichever course they intend to take.
+ *
+ * This is the only place that knows how to interpret a CourseSlot, so adding
+ * a new choice group anywhere in templates.json (or removing one) never
+ * requires touching the rest of the component tree.
+ */
+function ScheduleSlotCard({ slot, selectedCourseId, highlightRoles, onSelect }: ScheduleSlotCardProps) {
+  const courseIds = slotCourseIds(slot);
+  const isChoiceGroup = courseIds.length > 1;
+
+  return (
+    <div
+      className={isChoiceGroup ? "course-slot choice-slot" : "course-slot"}
+      role={isChoiceGroup ? "group" : undefined}
+      aria-label={isChoiceGroup ? "Choose one of the following courses" : undefined}
+    >
+      {courseIds.map((courseId, index) => {
+        const course = courseById[courseId];
+        return (
+          <Fragment key={courseId}>
+            {index > 0 && (
+              <span className="choice-divider" aria-hidden="true">
+                OR
+              </span>
+            )}
+            {course ? (
+              <button
+                type="button"
+                className={getCourseCardClassName(course.id, highlightRoles)}
+                onClick={() => onSelect(course)}
+                aria-pressed={selectedCourseId === course.id}
+              >
+                <strong>{course.code}</strong>
+                <span>{course.title}</span>
+              </button>
+            ) : (
+              <div className="course-card">
+                <strong>Unknown Course</strong>
+                <span>{courseId}</span>
+              </div>
+            )}
+          </Fragment>
+        );
+      })}
+    </div>
+  );
 }
 
 function HighlightLegend({ roles }: { roles: Map<string, CourseHighlightRole> }) {

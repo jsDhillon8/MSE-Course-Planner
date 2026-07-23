@@ -24,10 +24,25 @@ export interface CourseRelationshipHighlights {
 
 export type ThemeMode = "light" | "dark";
 
+/**
+ * A single slot in a term's course list.
+ *
+ * - `string` — a single required course, referenced by its `Course.id`.
+ * - `string[]` — a "choose one of" group. All ids in the array are
+ *   rendered side-by-side on the same row, and the student may pick
+ *   any one of them to satisfy that slot (e.g. ["bus343", "buec232"]
+ *   renders as "BUS 343 OR BUEC 232").
+ *
+ * This keeps the recommended-schedule config purely data-driven: adding,
+ * removing, or grouping courses only requires editing `templates.json`,
+ * never the React components that render it.
+ */
+export type CourseSlot = string | string[];
+
 export interface TermPlan {
   id: string;
   label: string;
-  courseIds: string[];
+  courseIds: CourseSlot[];
 }
 
 export interface PageTemplate {
@@ -37,8 +52,20 @@ export interface PageTemplate {
   planLength: PlanLength;
   supportsVariants: boolean;
   availableVariants: VariantId[];
+  /**
+   * Per-variant recommended schedules (5-year plans with Option A/B/C
+   * co-op placements). When a template supports variants, this is the
+   * single source of truth for its terms — see `terms` below.
+   */
   termsByVariant?: Partial<Record<VariantId, TermPlan[]>>;
-  terms: TermPlan[];
+  /**
+   * The recommended schedule for templates that don't support variants
+   * (4-year plans, double-degree). Templates that DO support variants
+   * should omit this and rely solely on `termsByVariant`, so there is
+   * never a second copy of the same schedule to keep in sync — use
+   * `getActiveTerms()` from `utils/scheduleTerms` to read the right one.
+   */
+  terms?: TermPlan[];
 }
 
 export interface CourseEquivalency {
