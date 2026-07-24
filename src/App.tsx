@@ -11,7 +11,6 @@ import {
   termTupleToLabel,
 } from "./sfuOutlines";
 import {
-  CurriculumType,
   Course,
   CourseHighlightRole,
   CourseSlot,
