@@ -49,6 +49,7 @@
   { "id": "mse405w", "code": "MSE 405W", "title": "The Business of Engineering II, Entrepreneurship for Engineers", "credits": 4 },
   { "id": "mse410", "code": "MSE 410", "title": "Capstone Design Technical Project I", "credits": 3 },
   { "id": "mse411", "code": "MSE 411", "title": "Capstone Design Technical Project II", "credits": 3 },
+  { "id": "mse450", "code": "MSE 450", "title": "Real-Time and Embedded Control Systems", "credits": 3 },
 
   { "id": "compElec1", "code": "COMP ELEC 1", "title": "Complementary Elective 1", "credits": 3 },
   { "id": "compElec2", "code": "COMP ELEC 2", "title": "Complementary Elective 2", "credits": 3 },
@@ -64,6 +65,8 @@
   { "id": "coop", "code": "CO-OP", "title": "Co-op Term", "credits": 0 },
   { "id": "coopOpt", "code": "CO-OP", "title": "Optional Co-op Term", "credits": 0 },
 
+  { "id": "buec232", "code": "BUEC 232", "title": "Data and Decisions I", "credits": 4 },
+
   { "id": "bus207", "code": "BUS 207", "title": "Managerial Economics", "credits": 3 },
   { "id": "bus232", "code": "BUS 232", "title": "Business Statistics", "credits": 3 },
   { "id": "bus251", "code": "BUS 251", "title": "Financial Accounting I", "credits": 3 },
@@ -72,6 +75,7 @@
 
   { "id": "bus311", "code": "BUS 311", "title": "Operations Management", "credits": 3 },
   { "id": "bus312", "code": "BUS 312", "title": "Introduction to Marketing", "credits": 3 },
+  { "id": "bus336", "code": "BUS 336", "title": "Data Analytics and Visualization", "credits": 3 },
   { "id": "bus374", "code": "BUS 374", "title": "Organization Theory", "credits": 3 },
   { "id": "bus343", "code": "BUS 343", "title": "Accounting for Managers", "credits": 3 },
   { "id": "bus360w", "code": "BUS 360W", "title": "Business Communication", "credits": 4 },
@@ -81,7 +85,7 @@
   { "id": "bus478", "code": "BUS 478", "title": "Strategy", "credits": 3 },
 
 
-  { "id": "busLElec1", "code": "BUS 3XX ELEC 1", "title": "Business Elective 1", "credits": 3 },
+  { "id": "busLElec1", "code": "BUS 3XX ELEC 1", "title": "300 Level Business Elective", "credits": 3 },
   { "id": "busElec1", "code": "BUS 4XX ELEC 1", "title": "Business Elective 1", "credits": 3 },
   { "id": "busElec2", "code": "BUS 4XX ELEC 2", "title": "Business Elective 2", "credits": 3 },
   { "id": "busElec3", "code": "BUS 4XX ELEC 3", "title": "Business Elective 3", "credits": 3 },
