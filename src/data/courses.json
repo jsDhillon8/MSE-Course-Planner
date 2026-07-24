@@ -78,7 +78,7 @@
   { "id": "bus381", "code": "BUS 381", "title": "Introduction to Human Resource Management", "credits": 3 },
   { "id": "bus393", "code": "BUS 393", "title": "Commercial Law", "credits": 3 },
 
-    { "id": "bus478", "code": "BUS 478", "title": "Strategy", "credits": 3 },
+  { "id": "bus478", "code": "BUS 478", "title": "Strategy", "credits": 3 },
 
 
   { "id": "busLElec1", "code": "BUS 3XX ELEC 1", "title": "Business Elective 1", "credits": 3 },

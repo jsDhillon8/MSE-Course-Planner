@@ -179,7 +179,7 @@
         { "id": "nc_dd_y1_u", "label": "Year 1 - Summer", "courseIds": [] },
         { "id": "nc_dd_y2_f", "label": "Year 2 - Fall", "courseIds": ["mse221", "math251", "math260", "mse220", "econ103", "mse250"] },
         { "id": "nc_dd_y2_s", "label": "Year 2 - Spring", "courseIds": ["mse222", "mse210", "bus393", "bus254", "bus251", "bus272"] },
-        { "id": "nc_dd_y2_u", "label": "Year 2 - Summer", "courseIds": ["coopOpt  "] },
+        { "id": "nc_dd_y2_u", "label": "Year 2 - Summer", "courseIds": ["coopOpt"] },
         { "id": "nc_dd_y3_f", "label": "Year 3 - Fall", "courseIds": ["bus312", "bus381", ["bus207", "econ301"], "bus343", "mse321", "buec232"] },
         { "id": "nc_dd_y3_s", "label": "Year 3 - Spring", "courseIds": ["mse223", "mse251", "mse280", "mse211", "bus3xx", "bus336"] },
         { "id": "nc_dd_y3_u", "label": "Year 3 - Summer", "courseIds": ["coop"] },
