@@ -552,8 +552,8 @@ function PlannerPage({ onOpenWelcome }: PlannerPageProps) {
             Reset Progress
           </button>
         </div>
-        <div>Validation: placeholder</div>
-        <div>Warnings: placeholder</div>
+        {/*<div>Validation: placeholder</div>
+        <div>Warnings: placeholder</div>*/}
       </footer>
     </div>
   );
