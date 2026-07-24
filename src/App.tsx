@@ -1,4 +1,5 @@
 import { Fragment, useEffect, useMemo, useState } from "react";
+import type { ChangeEvent, KeyboardEvent } from "react";
 import { Navigate, Route, Routes, useNavigate, useParams } from "react-router-dom";
 import { WelcomeModal } from "./components/WelcomeModal";
 import { useTheme } from "./context/ThemeContext";
@@ -22,6 +23,7 @@ import {
 } from "./types";
 import { courseDependencyGraph } from "./utils/dependencyGraph";
 import { getActiveTerms, slotCourseIds } from "./utils/scheduleTerms";
+import { computeCompletedCredits, computeTotalCurriculumCredits } from "./utils/credits";
 
 // ─── SFU API Types (outline panel only) ──────────────────────────────────────
 
@@ -132,6 +134,37 @@ function useLiveCourseData(course: Course | null): LiveCourseData {
   return state;
 }
 
+// ─── Progress persistence (checked courses + transfer credits) ──────────────
+
+const COMPLETED_COURSES_STORAGE_KEY = "mse-planner:completed-course-ids";
+const TRANSFER_CREDITS_STORAGE_KEY = "mse-planner:transfer-credits";
+
+function loadCompletedCourseIds(): Set<string> {
+  try {
+    const raw = localStorage.getItem(COMPLETED_COURSES_STORAGE_KEY);
+    if (!raw) return new Set();
+    const parsed = JSON.parse(raw);
+    if (!Array.isArray(parsed)) return new Set();
+    // Ignore any stored ids that no longer correspond to a real course.
+    return new Set(
+      parsed.filter((id): id is string => typeof id === "string" && !!courseById[id])
+    );
+  } catch {
+    return new Set();
+  }
+}
+
+function loadTransferCredits(): number {
+  try {
+    const raw = localStorage.getItem(TRANSFER_CREDITS_STORAGE_KEY);
+    if (raw === null) return 0;
+    const parsed = Number(raw);
+    return Number.isInteger(parsed) && parsed >= 0 ? parsed : 0;
+  } catch {
+    return 0;
+  }
+}
+
 // ─── App ─────────────────────────────────────────────────────────────────────
 
 function App() {
@@ -162,6 +195,75 @@ function PlannerPage({ onOpenWelcome }: PlannerPageProps) {
   const [selectedCourse, setSelectedCourse] = useState<Course | null>(null);
   const [recursiveHighlights, setRecursiveHighlights] = useState(true);
 
+  // ── Completion / transfer-credit progress ──
+  const [completedCourseIds, setCompletedCourseIds] = useState<Set<string>>(loadCompletedCourseIds);
+  const [transferCredits, setTransferCredits] = useState<number>(loadTransferCredits);
+
+  useEffect(() => {
+    try {
+      localStorage.setItem(
+        COMPLETED_COURSES_STORAGE_KEY,
+        JSON.stringify(Array.from(completedCourseIds))
+      );
+    } catch {
+      // localStorage may be unavailable (private browsing, quota, etc.) - fail silently.
+    }
+  }, [completedCourseIds]);
+
+  useEffect(() => {
+    try {
+      localStorage.setItem(TRANSFER_CREDITS_STORAGE_KEY, String(transferCredits));
+    } catch {
+      // ignore
+    }
+  }, [transferCredits]);
+
+  const toggleCourseCompleted = (courseId: string) => {
+    setCompletedCourseIds((prev) => {
+      const next = new Set(prev);
+      if (next.has(courseId)) next.delete(courseId);
+      else next.add(courseId);
+      return next;
+    });
+  };
+
+  const handleTransferCreditsChange = (event: ChangeEvent<HTMLInputElement>) => {
+    const raw = event.target.value;
+    if (raw.trim() === "") {
+      setTransferCredits(0);
+      return;
+    }
+    const parsed = Number(raw);
+    if (!Number.isInteger(parsed) || parsed < 0 || Number.isNaN(parsed)) {
+      setTransferCredits(0);
+      return;
+    }
+    setTransferCredits(parsed);
+  };
+
+  const handleTransferCreditsKeyDown = (event: KeyboardEvent<HTMLInputElement>) => {
+    // Block characters that would let a number input accept decimals/negatives/exponents.
+    if (["-", "+", "e", "E", "."].includes(event.key)) {
+      event.preventDefault();
+    }
+  };
+
+  const handleResetProgress = () => {
+    const confirmed = window.confirm(
+      "Are you sure you want to reset your progress? This will uncheck all completed courses and reset transfer credits."
+    );
+    if (!confirmed) return;
+
+    setCompletedCourseIds(new Set());
+    setTransferCredits(0);
+    try {
+      localStorage.removeItem(COMPLETED_COURSES_STORAGE_KEY);
+      localStorage.removeItem(TRANSFER_CREDITS_STORAGE_KEY);
+    } catch {
+      // ignore
+    }
+  };
+
   const handleCourseSelect = (course: Course) => {
     setSelectedCourse((current) => (current?.id === course.id ? null : course));
   };
@@ -173,8 +275,8 @@ function PlannerPage({ onOpenWelcome }: PlannerPageProps) {
       }
     };
 
-    window.addEventListener("keydown", onKeyDown);
-    return () => window.removeEventListener("keydown", onKeyDown);
+    window.addEventListener("keydown", onKeyDown as unknown as EventListener);
+    return () => window.removeEventListener("keydown", onKeyDown as unknown as EventListener);
   }, []);
 
   const relationshipHighlights = useMemo(
@@ -219,6 +321,21 @@ function PlannerPage({ onOpenWelcome }: PlannerPageProps) {
   }, [selectedCourse]);
 
   const liveData = useLiveCourseData(selectedCourse);
+
+  // ── Credits totals ──
+  const totalCurriculumCredits = useMemo(
+    () => computeTotalCurriculumCredits(terms, courseById),
+    [terms]
+  );
+
+  const completedCredits = useMemo(
+    () => computeCompletedCredits(terms, completedCourseIds, courseById),
+    [terms, completedCourseIds]
+  );
+
+  const totalCompleted = completedCredits + transferCredits;
+  const completionPercent =
+    totalCurriculumCredits > 0 ? Math.round((totalCompleted / totalCurriculumCredits) * 100) : 0;
 
   return (
     <div className="app-shell">
@@ -322,6 +439,8 @@ function PlannerPage({ onOpenWelcome }: PlannerPageProps) {
                             slot={slot}
                             selectedCourseId={selectedCourse?.id ?? null}
                             highlightRoles={relationshipHighlights.roles}
+                            completedCourseIds={completedCourseIds}
+                            onToggleCompleted={toggleCourseCompleted}
                             onSelect={handleCourseSelect}
                           />
                         ))}
@@ -410,8 +529,30 @@ function PlannerPage({ onOpenWelcome }: PlannerPageProps) {
       </main>
 
       <footer className="status-rail">
+        <div className="credits-counter">
+          <span>Completed Credits: {completedCredits}</span>
+          <span className="transfer-credits-field">
+            Transfer Credits:{" "}
+            <input
+              type="number"
+              className="transfer-credits-input"
+              min={0}
+              step={1}
+              inputMode="numeric"
+              value={transferCredits}
+              onChange={handleTransferCreditsChange}
+              onKeyDown={handleTransferCreditsKeyDown}
+              aria-label="Transfer credits"
+            />
+          </span>
+          <span>
+            Total Completed: {totalCompleted} / {totalCurriculumCredits} Credits ({completionPercent}%)
+          </span>
+          <button type="button" className="reset-progress-btn" onClick={handleResetProgress}>
+            Reset Progress
+          </button>
+        </div>
         <div>Validation: placeholder</div>
-        <div>Credits Progress: placeholder</div>
         <div>Warnings: placeholder</div>
       </footer>
     </div>
@@ -432,6 +573,8 @@ interface ScheduleSlotCardProps {
   slot: CourseSlot;
   selectedCourseId: string | null;
   highlightRoles: Map<string, CourseHighlightRole>;
+  completedCourseIds: Set<string>;
+  onToggleCompleted: (courseId: string) => void;
   onSelect: (course: Course) => void;
 }
 
@@ -448,7 +591,14 @@ interface ScheduleSlotCardProps {
  * a new choice group anywhere in templates.json (or removing one) never
  * requires touching the rest of the component tree.
  */
-function ScheduleSlotCard({ slot, selectedCourseId, highlightRoles, onSelect }: ScheduleSlotCardProps) {
+function ScheduleSlotCard({
+  slot,
+  selectedCourseId,
+  highlightRoles,
+  completedCourseIds,
+  onToggleCompleted,
+  onSelect,
+}: ScheduleSlotCardProps) {
   const courseIds = slotCourseIds(slot);
   const isChoiceGroup = courseIds.length > 1;
 
@@ -460,6 +610,7 @@ function ScheduleSlotCard({ slot, selectedCourseId, highlightRoles, onSelect }: 
     >
       {courseIds.map((courseId, index) => {
         const course = courseById[courseId];
+        const isCompleted = completedCourseIds.has(courseId);
         return (
           <Fragment key={courseId}>
             {index > 0 && (
@@ -468,15 +619,36 @@ function ScheduleSlotCard({ slot, selectedCourseId, highlightRoles, onSelect }: 
               </span>
             )}
             {course ? (
-              <button
-                type="button"
-                className={getCourseCardClassName(course.id, highlightRoles)}
-                onClick={() => onSelect(course)}
+              <div
+                className={`${getCourseCardClassName(course.id, highlightRoles)}${
+                  isCompleted ? " completed" : ""
+                }`}
+                role="button"
+                tabIndex={0}
                 aria-pressed={selectedCourseId === course.id}
+                onClick={() => onSelect(course)}
+                onKeyDown={(event) => {
+                  if (event.key === "Enter" || event.key === " ") {
+                    event.preventDefault();
+                    onSelect(course);
+                  }
+                }}
               >
+                <label
+                  className="course-checkbox"
+                  onClick={(event) => event.stopPropagation()}
+                >
+                  <input
+                    type="checkbox"
+                    checked={isCompleted}
+                    onClick={(event) => event.stopPropagation()}
+                    onChange={() => onToggleCompleted(course.id)}
+                    aria-label={`Mark ${course.code} as completed`}
+                  />
+                </label>
                 <strong>{course.code}</strong>
                 <span>{course.title}</span>
-              </button>
+              </div>
             ) : (
               <div className="course-card">
                 <strong>Unknown Course</strong>
