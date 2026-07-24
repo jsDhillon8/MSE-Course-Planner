@@ -59,8 +59,9 @@ export function WelcomeModal({ isOpen, onDismiss }: WelcomeModalProps) {
           <li>
             <span className="welcome-feature-title">Course Information Cards</span>
             <span className="welcome-feature-desc">
-              Click any course to view its description, prerequisites,
-              requirements, and other available details.
+              Click any course to view its description, prerequisites, 
+              requirements, and other details. Check the box to add the 
+              course credits to your progress counter.
             </span>
           </li>
           <li>
