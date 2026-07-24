@@ -546,7 +546,7 @@ function PlannerPage({ onOpenWelcome }: PlannerPageProps) {
             />
           </span>
           <span>
-            Total Completed: {totalCompleted} / {totalCurriculumCredits} Credits ({completionPercent}%)
+            Progress: {totalCompleted} / {totalCurriculumCredits} Credits ({completionPercent}%)
           </span>
           <button type="button" className="reset-progress-btn" onClick={handleResetProgress}>
             Reset Progress
