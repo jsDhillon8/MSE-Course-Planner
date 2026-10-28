@@ -1,6 +1,9 @@
 import {
   HistoricalLookupResult,
   OfferedSection,
+  OfferingHistory,
+  OfferingFill,
+  SeasonOfferingStats,
   SharedOutlineFields,
   TermName,
   TermTuple,
@@ -50,7 +53,15 @@ interface SfuOutline {
   instructor?: SfuInstructor[];
   courseSchedule?: SfuScheduleItem[];
   grades?: { description: string; weight: string }[];
+  title?: string;
+  name?: string;
+  units?: string | number;
 }
+
+type SectionsFetchResult =
+  | { kind: "ok"; sections: SfuSection[]; termSlug: string }
+  | { kind: "empty"; termSlug: string }
+  | { kind: "error" };
 
 export function getCurrentAcademicTerm(): TermTuple {
   const now = new Date();
@@ -97,20 +108,31 @@ export function termCodeToLabel(termCode: string): string {
   return `${sem} ${year}`;
 }
 
+async function fetchSectionsForTermInternal(
+  termSlug: string,
+  dept: string,
+  num: string
+): Promise<SectionsFetchResult> {
+  try {
+    const res = await fetch(`${SFU_BASE}?${termSlug}/${dept}/${num}`);
+    if (res.status === 404) return { kind: "empty", termSlug };
+    if (!res.ok) return { kind: "error" };
+    const data = await res.json();
+    if (!Array.isArray(data) || data.length === 0) return { kind: "empty", termSlug };
+    return { kind: "ok", sections: data as SfuSection[], termSlug };
+  } catch {
+    return { kind: "error" };
+  }
+}
+
 export async function fetchSectionsForTerm(
   termSlug: string,
   dept: string,
   num: string
 ): Promise<{ sections: SfuSection[]; termSlug: string } | null> {
-  try {
-    const res = await fetch(`${SFU_BASE}?${termSlug}/${dept}/${num}`);
-    if (!res.ok) return null;
-    const data = await res.json();
-    if (!Array.isArray(data) || data.length === 0) return null;
-    return { sections: data as SfuSection[], termSlug };
-  } catch {
-    return null;
-  }
+  const result = await fetchSectionsForTermInternal(termSlug, dept, num);
+  if (result.kind === "ok") return { sections: result.sections, termSlug: result.termSlug };
+  return null;
 }
 
 function enrollmentSections(result: { sections: SfuSection[]; termSlug: string }) {
@@ -125,6 +147,15 @@ function campusFromOutline(outline: SfuOutline): string {
   return item?.campus ?? "Unknown";
 }
 
+function parseUnits(value: unknown): number | undefined {
+  if (typeof value === "number" && Number.isFinite(value)) return value;
+  if (typeof value === "string") {
+    const parsed = parseFloat(value);
+    if (Number.isFinite(parsed)) return parsed;
+  }
+  return undefined;
+}
+
 function sharedOutlineFrom(outline: SfuOutline): SharedOutlineFields {
   return {
     description: outline.description,
@@ -133,7 +164,38 @@ function sharedOutlineFrom(outline: SfuOutline): SharedOutlineFields {
     notes: outline.notes,
     educationalGoals: outline.educationalGoals,
     grades: outline.grades,
+    title: outline.title || outline.name,
+    units: parseUnits(outline.units),
   };
+}
+
+function hydrateOutline(raw: Record<string, unknown>, fallback: SfuOutline): SfuOutline {
+  const info = (raw.info ?? raw.courseInfo ?? {}) as Record<string, unknown>;
+  const outline: SfuOutline = { ...fallback };
+  if (!outline.courseSchedule && raw.courseSchedule) {
+    outline.courseSchedule = raw.courseSchedule as SfuScheduleItem[];
+  }
+  if (!outline.instructor && raw.instructor) {
+    outline.instructor = raw.instructor as SfuInstructor[];
+  }
+  if (!outline.grades && raw.grades) {
+    outline.grades = raw.grades as { description: string; weight: string }[];
+  }
+  if (!outline.notes && typeof info.notes === "string") outline.notes = info.notes;
+  if (!outline.notes && typeof raw.notes === "string") outline.notes = raw.notes;
+  if (!outline.prerequisites && typeof info.prerequisites === "string") {
+    outline.prerequisites = info.prerequisites;
+  }
+  if (!outline.corequisites && typeof info.corequisites === "string") {
+    outline.corequisites = info.corequisites;
+  }
+  if (outline.units == null && info.units != null) outline.units = info.units as string | number;
+  if (!outline.title && typeof info.title === "string") outline.title = info.title;
+  if (!outline.title && typeof info.name === "string") outline.title = info.name;
+  if (!outline.description && typeof info.description === "string") {
+    outline.description = info.description;
+  }
+  return outline;
 }
 
 async function fetchSectionOutlines(
@@ -148,13 +210,9 @@ async function fetchSectionOutlines(
       try {
         const res = await fetch(`${SFU_BASE}?${termSlug}/${dept}/${number}/${section.value}`);
         if (!res.ok) return null;
-        const raw = await res.json();
-        const outline: SfuOutline = raw.info ?? raw.courseInfo ?? raw;
-        if (!outline.courseSchedule && raw.courseSchedule) outline.courseSchedule = raw.courseSchedule;
-        if (!outline.instructor && raw.instructor) outline.instructor = raw.instructor;
-        if (!outline.grades && raw.grades) outline.grades = raw.grades;
-        if (!outline.notes && raw.info?.notes) outline.notes = raw.info.notes;
-        if (!outline.notes && raw.notes) outline.notes = raw.notes;
+        const raw = (await res.json()) as Record<string, unknown>;
+        const base: SfuOutline = (raw.info ?? raw.courseInfo ?? raw) as SfuOutline;
+        const outline = hydrateOutline(raw, base);
         return { outline, sectionName: section.value };
       } catch {
         return null;
@@ -253,4 +311,162 @@ export async function findHistoricalOffering(
   }
 
   return null;
+}
+
+function emptySeasonStats(): SeasonOfferingStats {
+  return { offered: 0, total: 0 };
+}
+
+function emptyOfferingHistory(): OfferingHistory {
+  return {
+    fall: emptySeasonStats(),
+    spring: emptySeasonStats(),
+    summer: emptySeasonStats(),
+  };
+}
+
+function createPromiseQueue(maxConcurrent: number) {
+  let active = 0;
+  const waiting: Array<() => void> = [];
+
+  const pump = () => {
+    while (active < maxConcurrent && waiting.length > 0) {
+      const next = waiting.shift();
+      if (next) next();
+    }
+  };
+
+  return function enqueue<T>(work: () => Promise<T>): Promise<T> {
+    return new Promise<T>((resolve, reject) => {
+      const start = () => {
+        active += 1;
+        Promise.resolve()
+          .then(work)
+          .then(resolve, reject)
+          .finally(() => {
+            active -= 1;
+            pump();
+          });
+      };
+
+      if (active < maxConcurrent) start();
+      else waiting.push(start);
+    });
+  };
+}
+
+const enqueueOfferingRequest = createPromiseQueue(4);
+
+/**
+ * Counts how often a course had enrollment sections in each season over
+ * `termsBack` past terms. Unlike findHistoricalOffering, this does not stop
+ * at the first match. Network/5xx failures are skipped (not counted). A 404
+ * is treated as a checked term with no sections.
+ */
+export async function getOfferingHistory(
+  dept: string,
+  number: string,
+  termsBack = 9
+): Promise<OfferingHistory> {
+  const history = emptyOfferingHistory();
+
+  const termResults = await Promise.all(
+    getPastTerms(termsBack).map((tuple) =>
+      enqueueOfferingRequest(async () => {
+        try {
+          const termSlug = termTupleToSlug(tuple);
+          const result = await fetchSectionsForTermInternal(termSlug, dept, number);
+          return { tuple, result };
+        } catch {
+          return { tuple, result: { kind: "error" as const } };
+        }
+      })
+    )
+  );
+
+  for (const { tuple, result } of termResults) {
+    if (result.kind === "error") continue;
+
+    const season = history[tuple.term];
+    season.total += 1;
+
+    if (result.kind === "ok" && enrollmentSections(result).length > 0) {
+      season.offered += 1;
+    }
+  }
+
+  return history;
+}
+
+export function offeringFill(stats: SeasonOfferingStats | undefined): OfferingFill {
+  if (!stats || stats.total <= 0) return "unknown";
+  const ratio = stats.offered / stats.total;
+  if (ratio >= 2 / 3) return "full";
+  if (ratio >= 1 / 3) return "half";
+  return "empty";
+}
+
+export function offeringTooltip(seasonLabel: string, stats: SeasonOfferingStats | undefined): string {
+  if (!stats || stats.total <= 0) return `${seasonLabel}: Unknown`;
+  return `${seasonLabel}: ${stats.offered}/${stats.total} recent years`;
+}
+
+const offeringHistoryCache = new Map<string, OfferingHistory | "failed">();
+const offeringHistoryInflight = new Map<string, Promise<OfferingHistory | "failed">>();
+
+function cacheKeyForCourse(dept: string, number: string): string {
+  return `${dept.trim().toLowerCase()} ${number.trim().toLowerCase()}`;
+}
+
+/** Module-level cached history fetch, limited to 4 concurrent SFU requests. */
+export function loadOfferingHistory(
+  dept: string,
+  number: string,
+  termsBack = 9
+): Promise<OfferingHistory | "failed"> {
+  const key = cacheKeyForCourse(dept, number);
+  const cached = offeringHistoryCache.get(key);
+  if (cached) return Promise.resolve(cached);
+
+  const inflight = offeringHistoryInflight.get(key);
+  if (inflight) return inflight;
+
+  const request = (async () => {
+    try {
+      const history = await getOfferingHistory(dept, number, termsBack);
+      offeringHistoryCache.set(key, history);
+      return history;
+    } catch {
+      offeringHistoryCache.set(key, "failed");
+      return "failed";
+    }
+  })().finally(() => {
+    offeringHistoryInflight.delete(key);
+  });
+
+  offeringHistoryInflight.set(key, request);
+  return request;
+}
+
+export async function fetchCourseInfoFields(
+  dept: string,
+  number: string
+): Promise<{ title?: string; description: string; units?: number } | null> {
+  const [currentResult, registrationResult] = await Promise.all([
+    fetchSectionsForTerm("current/current", dept, number),
+    fetchSectionsForTerm("registration/registration", dept, number),
+  ]);
+
+  let resolved = await resolveOfferedSections(dept, number, [currentResult, registrationResult]);
+  if (!resolved) {
+    const historical = await findHistoricalOffering(dept, number, 6);
+    if (!historical) return null;
+    resolved = historical;
+  }
+
+  return {
+    title: resolved.sharedOutline.title,
+    description: resolved.sharedOutline.description ?? "",
+    units: resolved.sharedOutline.units,
+  };
 }

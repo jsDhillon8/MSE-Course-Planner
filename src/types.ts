@@ -11,6 +11,24 @@ export interface Course {
   description: string;
 }
 
+/** Catalog-like course stored on a custom plan when the equivalent is not in courses.json. */
+export interface CustomCourseEntry {
+  id: string;
+  code: string;
+  title: string;
+  credits: number;
+  description: string;
+}
+
+/** Records an equivalent swap so Undo can restore the original id at the same term index. */
+export interface CustomSwapRecord {
+  replacementId: string;
+  originalCourseId: string;
+  originalCode: string;
+  termId: string;
+  index: number;
+}
+
 export type PrerequisiteExpression =
   | { type: "course"; courseId: string }
   | { type: "and"; items: PrerequisiteExpression[] }
@@ -107,7 +125,22 @@ export interface SharedOutlineFields {
   notes?: string;
   educationalGoals?: string;
   grades?: { description: string; weight: string }[];
+  title?: string;
+  units?: number;
 }
+
+export interface SeasonOfferingStats {
+  offered: number;
+  total: number;
+}
+
+export interface OfferingHistory {
+  fall: SeasonOfferingStats;
+  spring: SeasonOfferingStats;
+  summer: SeasonOfferingStats;
+}
+
+export type OfferingFill = "full" | "half" | "empty" | "unknown";
 
 export interface HistoricalLookupResult {
   year: number;

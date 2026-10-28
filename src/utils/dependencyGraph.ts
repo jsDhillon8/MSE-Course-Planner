@@ -110,3 +110,4 @@ export function buildCourseDependencyGraph(courseList: Course[] = courses): Cour
 
 /** Singleton graph — built once at module load. */
 export const courseDependencyGraph = buildCourseDependencyGraph();
+

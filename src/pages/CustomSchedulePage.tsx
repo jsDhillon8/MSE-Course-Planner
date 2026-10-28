@@ -1,14 +1,22 @@
 import { useEffect, useMemo, useState } from "react";
 import type { DragEvent } from "react";
 import { AppHeader } from "../components/AppHeader";
-import { CourseDetailsPanel } from "../components/CourseDetailsPanel";
+import { CourseDetailsPanel, EquivalentBox } from "../components/CourseDetailsPanel";
 import { HighlightLegend } from "../components/HighlightLegend";
 import { ProgressFooter } from "../components/ProgressFooter";
-import { ScheduleSlotCard } from "../components/ScheduleSlotCard";
+import { formatOfferingWarning, offeringWarningLevel, ScheduleSlotCard } from "../components/ScheduleSlotCard";
 import { courseById, courses, pageTemplates } from "../data";
 import { useCourseProgress } from "../hooks/useCourseProgress";
-import { Course, VariantId } from "../types";
-import { courseDepartment, isPlaceholderCourse } from "../utils/courseCodes";
+import { useOfferingHistories } from "../hooks/useOfferingHistories";
+import { fetchCourseInfoFields } from "../sfuOutlines";
+import { Course, CourseHighlightRole, VariantId } from "../types";
+import {
+  buildCourseCodeIndex,
+  courseDepartment,
+  isPlaceholderCourse,
+  normalizeCourseCode,
+  parseCourseCode,
+} from "../utils/courseCodes";
 import {
   computeCompletedCredits,
   computeTermCredits,
@@ -21,17 +29,25 @@ import {
   CourseDragPayload,
   createEmptyCustomPlan,
   CustomPlan,
+  customCourseIdFromCode,
   customPlanFromTemplate,
+  findSwapForCourse,
   loadCustomPlan,
   placeCourse,
   placedCourseIds,
+  planCourseLookup,
   removeCourseFromPlan,
+  resolvePlanCourse,
   saveCustomPlan,
+  swapCourseIntoPlan,
+  termNameFromLabel,
+  undoSwapInPlan,
 } from "../utils/customPlan";
 import { courseDependencyGraph } from "../utils/dependencyGraph";
 import { groupTermsByYear } from "../utils/scheduleTerms";
 
 const DRAG_MIME = "application/x-mse-course";
+const courseIdByCode = buildCourseCodeIndex(courses);
 
 interface CustomSchedulePageProps {
   onOpenWelcome: () => void;
@@ -70,6 +86,8 @@ export function CustomSchedulePage({ onOpenWelcome }: CustomSchedulePageProps) {
     handleResetProgress,
   } = useCourseProgress();
 
+  const lookup = useMemo(() => planCourseLookup(plan), [plan]);
+
   useEffect(() => {
     saveCustomPlan(plan);
   }, [plan]);
@@ -81,6 +99,13 @@ export function CustomSchedulePage({ onOpenWelcome }: CustomSchedulePageProps) {
     window.addEventListener("keydown", onKeyDown);
     return () => window.removeEventListener("keydown", onKeyDown);
   }, []);
+
+  useEffect(() => {
+    if (!selectedCourse) return;
+    const latest = lookup[selectedCourse.id];
+    if (latest && latest !== selectedCourse) setSelectedCourse(latest);
+    if (!latest) setSelectedCourse(null);
+  }, [lookup, selectedCourse]);
 
   const placed = useMemo(() => placedCourseIds(plan), [plan]);
 
@@ -143,24 +168,72 @@ export function CustomSchedulePage({ onOpenWelcome }: CustomSchedulePageProps) {
 
   const termsByYear = useMemo(() => groupTermsByYear(plan.terms), [plan.terms]);
 
-  const relationshipHighlights = useMemo(
-    () => courseDependencyGraph.getHighlights(selectedCourse?.id ?? null, recursiveHighlights),
-    [selectedCourse?.id, recursiveHighlights]
-  );
+  const gridCourses = useMemo(() => {
+    const list: Course[] = [];
+    for (const term of plan.terms) {
+      for (const id of term.courseIds) {
+        const course = lookup[id];
+        if (course) list.push(course);
+      }
+    }
+    return list;
+  }, [plan.terms, lookup]);
+
+  const historyCourses = useMemo(() => {
+    const list = [...gridCourses];
+    if (selectedCourse && !list.some((course) => course.id === selectedCourse.id)) {
+      list.push(selectedCourse);
+    }
+    return list;
+  }, [gridCourses, selectedCourse]);
+
+  const offeringHistories = useOfferingHistories(historyCourses);
+
+  const highlightSourceId = selectedCourse
+    ? findSwapForCourse(plan, selectedCourse.id)?.originalCourseId ?? selectedCourse.id
+    : null;
+
+  const relationshipHighlights = useMemo(() => {
+    const highlights = courseDependencyGraph.getHighlights(highlightSourceId, recursiveHighlights);
+    if (!selectedCourse || selectedCourse.id === highlightSourceId) return highlights;
+
+    const roles = new Map<string, CourseHighlightRole>(highlights.roles);
+    roles.delete(highlightSourceId ?? "");
+    roles.set(selectedCourse.id, "selected");
+    return { roles };
+  }, [highlightSourceId, recursiveHighlights, selectedCourse]);
 
   const totalCurriculumCredits = useMemo(
-    () => computeTotalCurriculumCredits(plan.terms, courseById),
-    [plan.terms]
+    () => computeTotalCurriculumCredits(plan.terms, lookup),
+    [plan.terms, lookup]
   );
 
   const completedCredits = useMemo(
-    () => computeCompletedCredits(plan.terms, completedCourseIds, courseById),
-    [plan.terms, completedCourseIds]
+    () => computeCompletedCredits(plan.terms, completedCourseIds, lookup),
+    [plan.terms, completedCourseIds, lookup]
   );
 
   const totalCompleted = completedCredits + transferCredits;
   const completionPercent =
     totalCurriculumCredits > 0 ? Math.round((totalCompleted / totalCurriculumCredits) * 100) : 0;
+
+  const offeringWarnings = useMemo(() => {
+    const items: string[] = [];
+    for (const term of plan.terms) {
+      const season = termNameFromLabel(term.label);
+      for (const courseId of term.courseIds) {
+        const course = lookup[courseId];
+        if (!course || isPlaceholderCourse(course)) continue;
+        const history = offeringHistories.get(course.id);
+        const level = offeringWarningLevel(history, season);
+        if (level === "none" || !history || history === "loading" || history === "unknown" || !season) {
+          continue;
+        }
+        items.push(formatOfferingWarning(course, term.label, season, history));
+      }
+    }
+    return items;
+  }, [plan.terms, lookup, offeringHistories]);
 
   const beginDrag = (event: DragEvent<HTMLDivElement>, courseId: string, fromTermId: string | null) => {
     const payload: CourseDragPayload = { courseId, fromTermId };
@@ -191,6 +264,11 @@ export function CustomSchedulePage({ onOpenWelcome }: CustomSchedulePageProps) {
     setPlan((current) => removeCourseFromPlan(current, payload.courseId, payload.fromTermId ?? undefined));
   };
 
+  const keepDrag = (event: DragEvent) => {
+    event.preventDefault();
+    if (event.dataTransfer) event.dataTransfer.dropEffect = "move";
+  };
+
   const termDropState = (termId: string): "valid" | "invalid" | null => {
     if (!dragging) return null;
     return canPlaceCourse(plan, dragging.courseId, termId, dragging.fromTermId) ? "valid" : "invalid";
@@ -219,6 +297,55 @@ export function CustomSchedulePage({ onOpenWelcome }: CustomSchedulePageProps) {
     setSelectedCourse((current) => (current?.id === course.id ? null : course));
   };
 
+  const handleUndoSwap = (courseId: string) => {
+    const swap = findSwapForCourse(plan, courseId);
+    setPlan((current) => undoSwapInPlan(current, courseId));
+    if (swap) {
+      const original = resolvePlanCourse(plan, swap.originalCourseId) ?? courseById[swap.originalCourseId];
+      if (original) setSelectedCourse(original);
+    }
+  };
+
+  const handleSwapIntoPlan = async (box: EquivalentBox) => {
+    if (!selectedCourse) return;
+    if (!placed.has(selectedCourse.id)) return;
+    const originalId = selectedCourse.id;
+
+    const normalized = normalizeCourseCode(box.code);
+    const catalogId =
+      courseIdByCode.get(normalized) ?? courseIdByCode.get(normalized.replace(/\s+/g, ""));
+    const catalogCourse = catalogId ? courseById[catalogId] : undefined;
+
+    let replacement: Course;
+    if (catalogCourse) {
+      replacement = catalogCourse;
+    } else {
+      const parsed = parseCourseCode(box.code);
+      let title = box.title ?? box.code;
+      let credits = 0;
+      let description = "";
+      if (parsed && !isPlaceholderCourse({ code: box.code })) {
+        const info = await fetchCourseInfoFields(parsed.dept, parsed.number);
+        if (info) {
+          if (info.title) title = info.title;
+          if (info.units != null) credits = info.units;
+          description = info.description;
+        }
+      }
+      replacement = {
+        id: customCourseIdFromCode(box.code),
+        code: normalized,
+        title,
+        credits,
+        description,
+      };
+    }
+
+    setPlan((current) => swapCourseIntoPlan(current, originalId, replacement));
+    setSelectedCourse(replacement);
+  };
+
+  const selectedInPlan = Boolean(selectedCourse && placed.has(selectedCourse.id));
   const pickerDropActive = Boolean(dragging?.fromTermId);
 
   return (
@@ -263,12 +390,12 @@ export function CustomSchedulePage({ onOpenWelcome }: CustomSchedulePageProps) {
             hoverTarget === "picker" && pickerDropActive ? " drop-hover" : ""
           }`}
           onDragOver={(event) => {
-            if (!dragging?.fromTermId) return;
-            event.preventDefault();
-            event.dataTransfer.dropEffect = "move";
-            setHoverTarget("picker");
+            keepDrag(event);
+            if (dragging?.fromTermId) setHoverTarget("picker");
           }}
-          onDragLeave={() => {
+          onDragLeave={(event) => {
+            const next = event.relatedTarget as Node | null;
+            if (next && event.currentTarget.contains(next)) return;
             if (hoverTarget === "picker") setHoverTarget(null);
           }}
           onDrop={dropOnPicker}
@@ -314,6 +441,7 @@ export function CustomSchedulePage({ onOpenWelcome }: CustomSchedulePageProps) {
                       completedCourseIds={completedCourseIds}
                       onToggleCompleted={toggleCourseCompleted}
                       onSelect={handleCourseSelect}
+                      courseLookup={lookup}
                       draggable
                       onCourseDragStart={(event, courseId) => beginDrag(event, courseId, null)}
                       onCourseDragEnd={endDrag}
@@ -346,13 +474,24 @@ export function CustomSchedulePage({ onOpenWelcome }: CustomSchedulePageProps) {
             onToggleRecursive={setRecursiveHighlights}
           />
 
+          {offeringWarnings.length > 0 && (
+            <aside className="schedule-warnings" aria-label="Offering warnings">
+              <h3>Offering warnings</h3>
+              <ul>
+                {offeringWarnings.map((warning) => (
+                  <li key={warning}>{warning}</li>
+                ))}
+              </ul>
+            </aside>
+          )}
+
           <div className="year-grid">
             {termsByYear.map((yearGroup) => (
               <section key={yearGroup.year} className="year-row">
                 <h3 className="year-title">Year {yearGroup.year}</h3>
                 <div className="term-grid">
                   {yearGroup.terms.map((term) => {
-                    const credits = computeTermCredits(term.courseIds, courseById);
+                    const credits = computeTermCredits(term.courseIds, lookup);
                     const over = credits > TERM_CREDIT_WARN_THRESHOLD;
                     const dropState = dragging ? termDropState(term.id) : null;
                     const dropClass =
@@ -362,25 +501,29 @@ export function CustomSchedulePage({ onOpenWelcome }: CustomSchedulePageProps) {
                           ? " drop-target-invalid"
                           : "";
                     const hoverClass = hoverTarget === term.id ? " drop-hover" : "";
+                    const season = termNameFromLabel(term.label);
 
                     return (
                       <article
                         key={term.id}
                         className={`term-column${over ? " term-over-credits" : ""}${dropClass}${hoverClass}`}
                         onDragOver={(event) => {
-                          if (!dragging) return;
-                          event.preventDefault();
-                          event.dataTransfer.dropEffect = canPlaceCourse(
-                            plan,
-                            dragging.courseId,
-                            term.id,
-                            dragging.fromTermId
-                          )
-                            ? "move"
-                            : "none";
+                          keepDrag(event);
+                          if (dragging) {
+                            event.dataTransfer.dropEffect = canPlaceCourse(
+                              plan,
+                              dragging.courseId,
+                              term.id,
+                              dragging.fromTermId
+                            )
+                              ? "move"
+                              : "none";
+                          }
                           setHoverTarget(term.id);
                         }}
-                        onDragLeave={() => {
+                        onDragLeave={(event) => {
+                          const next = event.relatedTarget as Node | null;
+                          if (next && event.currentTarget.contains(next)) return;
                           if (hoverTarget === term.id) setHoverTarget(null);
                         }}
                         onDrop={(event) => dropOnTerm(event, term.id)}
@@ -393,34 +536,43 @@ export function CustomSchedulePage({ onOpenWelcome }: CustomSchedulePageProps) {
                           </span>
                         </h4>
                         <div className="course-list">
-                          {term.courseIds.map((courseId) => (
-                            <ScheduleSlotCard
-                              key={courseId}
-                              slot={courseId}
-                              selectedCourseId={selectedCourse?.id ?? null}
-                              highlightRoles={relationshipHighlights.roles}
-                              completedCourseIds={completedCourseIds}
-                              onToggleCompleted={toggleCourseCompleted}
-                              onSelect={handleCourseSelect}
-                              draggable
-                              onCourseDragStart={(event, id) => beginDrag(event, id, term.id)}
-                              onCourseDragEnd={endDrag}
-                              currentTermId={term.id}
-                              moveOptions={plan.terms
-                                .filter((option) => option.id !== term.id)
-                                .map((option) => ({
-                                  id: option.id,
-                                  label: option.label,
-                                  disabled: !canPlaceCourse(plan, courseId, option.id, term.id),
-                                }))}
-                              onMoveToTerm={(id, destTermId) =>
-                                setPlan((current) => placeCourse(current, id, destTermId, term.id))
-                              }
-                              onRemoveFromPlan={(id) =>
-                                setPlan((current) => removeCourseFromPlan(current, id, term.id))
-                              }
-                            />
-                          ))}
+                          {term.courseIds.map((courseId) => {
+                            const swap = findSwapForCourse(plan, courseId);
+                            return (
+                              <ScheduleSlotCard
+                                key={courseId}
+                                slot={courseId}
+                                selectedCourseId={selectedCourse?.id ?? null}
+                                highlightRoles={relationshipHighlights.roles}
+                                completedCourseIds={completedCourseIds}
+                                onToggleCompleted={toggleCourseCompleted}
+                                onSelect={handleCourseSelect}
+                                courseLookup={lookup}
+                                draggable
+                                onCourseDragStart={(event, id) => beginDrag(event, id, term.id)}
+                                onCourseDragEnd={endDrag}
+                                currentTermId={term.id}
+                                moveOptions={plan.terms
+                                  .filter((option) => option.id !== term.id)
+                                  .map((option) => ({
+                                    id: option.id,
+                                    label: option.label,
+                                    disabled: !canPlaceCourse(plan, courseId, option.id, term.id),
+                                  }))}
+                                onMoveToTerm={(id, destTermId) =>
+                                  setPlan((current) => placeCourse(current, id, destTermId, term.id))
+                                }
+                                onRemoveFromPlan={(id) =>
+                                  setPlan((current) => removeCourseFromPlan(current, id, term.id))
+                                }
+                                showOfferingBadges
+                                offeringHistory={offeringHistories.get(courseId)}
+                                termSeason={season}
+                                swappedFromCode={swap?.originalCode}
+                                onUndoSwap={swap ? handleUndoSwap : undefined}
+                              />
+                            );
+                          })}
                         </div>
                       </article>
                     );
@@ -431,7 +583,11 @@ export function CustomSchedulePage({ onOpenWelcome }: CustomSchedulePageProps) {
           </div>
         </section>
 
-        <CourseDetailsPanel selectedCourse={selectedCourse} />
+        <CourseDetailsPanel
+          selectedCourse={selectedCourse}
+          swapEnabled={selectedInPlan}
+          onSwapIntoPlan={handleSwapIntoPlan}
+        />
       </main>
 
       <ProgressFooter

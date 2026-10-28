@@ -2,7 +2,7 @@ import { useEffect, useMemo, useState } from "react";
 import { courseById, courseEquivalencies, courses } from "../data";
 import { useLiveCourseData } from "../hooks/useLiveCourseData";
 import { Course, OfferedSection, SharedOutlineFields } from "../types";
-import { buildCourseCodeIndex, normalizeCourseCode } from "../utils/courseCodes";
+import { buildCourseCodeIndex, isPlaceholderCourse, normalizeCourseCode } from "../utils/courseCodes";
 import { parseEquivalents } from "../utils/parseEquivalents";
 
 const courseIdByCode = buildCourseCodeIndex(courses);
@@ -14,7 +14,7 @@ interface LiveOutlineBlockProps {
   historicalLabel?: string;
 }
 
-interface EquivalentBox {
+export interface EquivalentBox {
   code: string;
   title?: string;
   fromOutline: boolean;
@@ -25,9 +25,19 @@ interface EquivalentBoxCardProps {
   box: EquivalentBox;
   isActive: boolean;
   onSelect: () => void;
+  swapEnabled: boolean;
+  swapBusy: boolean;
+  onSwapIntoPlan: (box: EquivalentBox) => void;
 }
 
-function EquivalentBoxCard({ box, isActive, onSelect }: EquivalentBoxCardProps) {
+function EquivalentBoxCard({
+  box,
+  isActive,
+  onSelect,
+  swapEnabled,
+  swapBusy,
+  onSwapIntoPlan,
+}: EquivalentBoxCardProps) {
   return (
     <div
       className={`equiv-box${isActive ? " active" : ""}`}
@@ -50,6 +60,19 @@ function EquivalentBoxCard({ box, isActive, onSelect }: EquivalentBoxCardProps) 
         </span>
       </div>
       {box.title && <span className="equiv-box-title">{box.title}</span>}
+      {swapEnabled && (
+        <button
+          type="button"
+          className="swap-into-plan-btn"
+          disabled={swapBusy}
+          onClick={(event) => {
+            event.stopPropagation();
+            onSwapIntoPlan(box);
+          }}
+        >
+          {swapBusy ? "Swapping…" : "Swap into plan"}
+        </button>
+      )}
     </div>
   );
 }
@@ -218,14 +241,23 @@ function LiveOutlineBlock({ sharedOutline, sections, isHistorical, historicalLab
 
 interface CourseDetailsPanelProps {
   selectedCourse: Course | null;
+  swapEnabled?: boolean;
+  onSwapIntoPlan?: (box: EquivalentBox) => void | Promise<void>;
 }
 
-export function CourseDetailsPanel({ selectedCourse }: CourseDetailsPanelProps) {
+export function CourseDetailsPanel({
+  selectedCourse,
+  swapEnabled = false,
+  onSwapIntoPlan,
+}: CourseDetailsPanelProps) {
   const [selectedEquivalentCode, setSelectedEquivalentCode] = useState<string | null>(null);
-  const liveData = useLiveCourseData(selectedCourse?.code ?? null);
+  const [swapBusyCode, setSwapBusyCode] = useState<string | null>(null);
+  const isPlaceholder = selectedCourse ? isPlaceholderCourse(selectedCourse) : false;
+  const liveData = useLiveCourseData(isPlaceholder ? null : selectedCourse?.code ?? null);
 
   useEffect(() => {
     setSelectedEquivalentCode(null);
+    setSwapBusyCode(null);
   }, [selectedCourse?.id]);
 
   useEffect(() => {
@@ -290,6 +322,16 @@ export function CourseDetailsPanel({ selectedCourse }: CourseDetailsPanelProps) 
     return [...byCode.values()].sort((a, b) => a.code.localeCompare(b.code));
   }, [selectedCourse, liveData.sharedOutline]);
 
+  const handleSwap = async (box: EquivalentBox) => {
+    if (!onSwapIntoPlan) return;
+    setSwapBusyCode(box.code);
+    try {
+      await onSwapIntoPlan(box);
+    } finally {
+      setSwapBusyCode(null);
+    }
+  };
+
   return (
     <aside className="details-panel">
       <h2>Course Details</h2>
@@ -300,24 +342,33 @@ export function CourseDetailsPanel({ selectedCourse }: CourseDetailsPanelProps) 
           <p>Credits: {selectedCourse.credits}</p>
 
           <div className="live-section">
-            {liveData.status === "loading" && (
-              <p className="empty-note">Contacting SFU Outlines API…</p>
-            )}
-            {liveData.status === "not-offered" && (
+            {isPlaceholder ? (
               <p className="empty-note">
-                No section found for the current or upcoming term, and no recent offering was found.
+                This is a planner slot (elective, CO-OP, or similar), not a catalog course, so no
+                SFU outline is fetched.
               </p>
-            )}
-            {liveData.status === "error" && (
-              <p className="empty-note">Could not reach the SFU Outlines API right now.</p>
-            )}
-            {liveData.status === "success" && liveData.sharedOutline && (
-              <LiveOutlineBlock
-                sharedOutline={liveData.sharedOutline}
-                sections={liveData.sections}
-                isHistorical={liveData.isHistorical}
-                historicalLabel={liveData.historicalLabel}
-              />
+            ) : (
+              <>
+                {liveData.status === "loading" && (
+                  <p className="empty-note">Contacting SFU Outlines API…</p>
+                )}
+                {liveData.status === "not-offered" && (
+                  <p className="empty-note">
+                    No section found for the current or upcoming term, and no recent offering was found.
+                  </p>
+                )}
+                {liveData.status === "error" && (
+                  <p className="empty-note">Could not reach the SFU Outlines API right now.</p>
+                )}
+                {liveData.status === "success" && liveData.sharedOutline && (
+                  <LiveOutlineBlock
+                    sharedOutline={liveData.sharedOutline}
+                    sections={liveData.sections}
+                    isHistorical={liveData.isHistorical}
+                    historicalLabel={liveData.historicalLabel}
+                  />
+                )}
+              </>
             )}
           </div>
 
@@ -334,6 +385,9 @@ export function CourseDetailsPanel({ selectedCourse }: CourseDetailsPanelProps) 
                       current === box.code ? null : box.code
                     )
                   }
+                  swapEnabled={Boolean(swapEnabled && onSwapIntoPlan)}
+                  swapBusy={swapBusyCode === box.code}
+                  onSwapIntoPlan={handleSwap}
                 />
               ))}
             </div>
