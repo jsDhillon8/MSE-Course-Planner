@@ -12,7 +12,6 @@
   "mse224": "Prerequisites:\n- MATH 152\n- MSE 103",
   "mse250": "Prerequisites:\n- PHYS 141\n- MSE 281\n- MATH 232\nCorequisites:\n- MSE 281",
   "mse251": "Prerequisites:\n- MSE 250",
-  "mse252": "Prerequisites:\n- MSE 251",
   "mse280": "Prerequisites:\n- MSE 281",
   "mse281": "Prerequisites:\n- MATH 251\n- MSE 103\n- MSE 250\nCorequisites:\n- MSE 250",
   "mse310": "Prerequisites:\n- MSE 224\n- MSE 251\n- MSE 280",

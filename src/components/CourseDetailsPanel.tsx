@@ -14,7 +14,7 @@ interface LiveOutlineBlockProps {
   historicalLabel?: string;
 }
 
-interface EquivalentBox {
+export interface EquivalentBox {
   code: string;
   title?: string;
   fromOutline: boolean;
@@ -25,9 +25,19 @@ interface EquivalentBoxCardProps {
   box: EquivalentBox;
   isActive: boolean;
   onSelect: () => void;
+  swapEnabled: boolean;
+  swapBusy: boolean;
+  onSwapIntoPlan: (box: EquivalentBox) => void;
 }
 
-function EquivalentBoxCard({ box, isActive, onSelect }: EquivalentBoxCardProps) {
+function EquivalentBoxCard({
+  box,
+  isActive,
+  onSelect,
+  swapEnabled,
+  swapBusy,
+  onSwapIntoPlan,
+}: EquivalentBoxCardProps) {
   return (
     <div
       className={`equiv-box${isActive ? " active" : ""}`}
@@ -50,6 +60,19 @@ function EquivalentBoxCard({ box, isActive, onSelect }: EquivalentBoxCardProps) 
         </span>
       </div>
       {box.title && <span className="equiv-box-title">{box.title}</span>}
+      {swapEnabled && (
+        <button
+          type="button"
+          className="swap-into-plan-btn"
+          disabled={swapBusy}
+          onClick={(event) => {
+            event.stopPropagation();
+            onSwapIntoPlan(box);
+          }}
+        >
+          {swapBusy ? "Swapping…" : "Swap into plan"}
+        </button>
+      )}
     </div>
   );
 }
@@ -218,15 +241,23 @@ function LiveOutlineBlock({ sharedOutline, sections, isHistorical, historicalLab
 
 interface CourseDetailsPanelProps {
   selectedCourse: Course | null;
+  swapEnabled?: boolean;
+  onSwapIntoPlan?: (box: EquivalentBox) => void | Promise<void>;
 }
 
-export function CourseDetailsPanel({ selectedCourse }: CourseDetailsPanelProps) {
+export function CourseDetailsPanel({
+  selectedCourse,
+  swapEnabled = false,
+  onSwapIntoPlan,
+}: CourseDetailsPanelProps) {
   const [selectedEquivalentCode, setSelectedEquivalentCode] = useState<string | null>(null);
+  const [swapBusyCode, setSwapBusyCode] = useState<string | null>(null);
   const isPlaceholder = selectedCourse ? isPlaceholderCourse(selectedCourse) : false;
   const liveData = useLiveCourseData(isPlaceholder ? null : selectedCourse?.code ?? null);
 
   useEffect(() => {
     setSelectedEquivalentCode(null);
+    setSwapBusyCode(null);
   }, [selectedCourse?.id]);
 
   useEffect(() => {
@@ -291,6 +322,16 @@ export function CourseDetailsPanel({ selectedCourse }: CourseDetailsPanelProps) 
     return [...byCode.values()].sort((a, b) => a.code.localeCompare(b.code));
   }, [selectedCourse, liveData.sharedOutline]);
 
+  const handleSwap = async (box: EquivalentBox) => {
+    if (!onSwapIntoPlan) return;
+    setSwapBusyCode(box.code);
+    try {
+      await onSwapIntoPlan(box);
+    } finally {
+      setSwapBusyCode(null);
+    }
+  };
+
   return (
     <aside className="details-panel">
       <h2>Course Details</h2>
@@ -344,6 +385,9 @@ export function CourseDetailsPanel({ selectedCourse }: CourseDetailsPanelProps) 
                       current === box.code ? null : box.code
                     )
                   }
+                  swapEnabled={Boolean(swapEnabled && onSwapIntoPlan)}
+                  swapBusy={swapBusyCode === box.code}
+                  onSwapIntoPlan={handleSwap}
                 />
               ))}
             </div>

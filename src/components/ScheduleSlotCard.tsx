@@ -1,8 +1,10 @@
 import { Fragment, useRef } from "react";
 import type { DragEvent } from "react";
 import { courseById } from "../data";
-import { Course, CourseHighlightRole, CourseSlot } from "../types";
+import { offeringFill, offeringTooltip } from "../sfuOutlines";
+import { Course, CourseHighlightRole, CourseSlot, OfferingHistory, TermName } from "../types";
 import { slotCourseIds } from "../utils/scheduleTerms";
+import { OfferingHistoryState } from "../hooks/useOfferingHistories";
 
 export function getCourseCardClassName(
   courseId: string,
@@ -16,6 +18,39 @@ export interface TermMoveOption {
   id: string;
   label: string;
   disabled?: boolean;
+}
+
+const SEASON_BADGES: { key: TermName; short: string; label: string }[] = [
+  { key: "fall", short: "F", label: "Fall" },
+  { key: "spring", short: "Sp", label: "Spring" },
+  { key: "summer", short: "Su", label: "Summer" },
+];
+
+interface OfferingBadgesProps {
+  history: OfferingHistoryState | undefined;
+}
+
+function OfferingBadges({ history }: OfferingBadgesProps) {
+  const resolved = history && history !== "loading" && history !== "unknown" ? history : undefined;
+  const isUnknown = !resolved;
+
+  return (
+    <div className="offering-badges" aria-label="Recent offering history">
+      {SEASON_BADGES.map((season) => {
+        const stats = resolved ? resolved[season.key] : undefined;
+        const fill = isUnknown ? "unknown" : offeringFill(stats);
+        const title =
+          history === "loading"
+            ? `${season.label}: loading`
+            : offeringTooltip(season.label, stats);
+        return (
+          <span key={season.key} className={`offering-pip fill-${fill}`} title={title}>
+            {season.short}
+          </span>
+        );
+      })}
+    </div>
+  );
 }
 
 interface ScheduleSlotCardProps {
@@ -32,6 +67,23 @@ interface ScheduleSlotCardProps {
   currentTermId?: string;
   onMoveToTerm?: (courseId: string, termId: string) => void;
   onRemoveFromPlan?: (courseId: string) => void;
+  courseLookup?: Record<string, Course>;
+  offeringHistory?: OfferingHistoryState;
+  showOfferingBadges?: boolean;
+  termSeason?: TermName | null;
+  swappedFromCode?: string;
+  onUndoSwap?: (courseId: string) => void;
+}
+
+export function offeringWarningLevel(
+  history: OfferingHistoryState | undefined,
+  season: TermName | null | undefined
+): "none" | "rare" | "never" {
+  if (!season || !history || history === "loading" || history === "unknown") return "none";
+  const fill = offeringFill(history[season]);
+  if (fill === "empty") return "never";
+  if (fill === "half") return "rare";
+  return "none";
 }
 
 export function ScheduleSlotCard({
@@ -48,10 +100,17 @@ export function ScheduleSlotCard({
   currentTermId,
   onMoveToTerm,
   onRemoveFromPlan,
+  courseLookup = courseById,
+  offeringHistory,
+  showOfferingBadges = false,
+  termSeason = null,
+  swappedFromCode,
+  onUndoSwap,
 }: ScheduleSlotCardProps) {
   const courseIds = slotCourseIds(slot);
   const isChoiceGroup = courseIds.length > 1;
   const suppressClickRef = useRef(false);
+  const warning = offeringWarningLevel(offeringHistory, termSeason);
 
   return (
     <div
@@ -60,8 +119,14 @@ export function ScheduleSlotCard({
       aria-label={isChoiceGroup ? "Choose one of the following courses" : undefined}
     >
       {courseIds.map((courseId, index) => {
-        const course = courseById[courseId];
+        const course = courseLookup[courseId];
         const isCompleted = completedCourseIds.has(courseId);
+        const warningClass =
+          warning === "never"
+            ? " offering-warning never-offered"
+            : warning === "rare"
+              ? " offering-warning rarely-offered"
+              : "";
         return (
           <Fragment key={courseId}>
             {index > 0 && (
@@ -73,7 +138,7 @@ export function ScheduleSlotCard({
               <div
                 className={`${getCourseCardClassName(course.id, highlightRoles)}${
                   isCompleted ? " completed" : ""
-                }${draggable ? " is-draggable" : ""}`}
+                }${draggable ? " is-draggable" : ""}${warningClass}`}
                 role="button"
                 tabIndex={0}
                 draggable={draggable}
@@ -121,6 +186,27 @@ export function ScheduleSlotCard({
                 </label>
                 <strong>{course.code}</strong>
                 <span>{course.title}</span>
+                {showOfferingBadges && <OfferingBadges history={offeringHistory} />}
+                {swappedFromCode && (
+                  <div className="swap-meta">
+                    <span className="swap-from">swapped from {swappedFromCode}</span>
+                    {onUndoSwap && (
+                      <button
+                        type="button"
+                        className="undo-swap-btn"
+                        onClick={(event) => {
+                          event.stopPropagation();
+                          onUndoSwap(course.id);
+                        }}
+                      >
+                        Undo swap
+                      </button>
+                    )}
+                    <span className="swap-note">
+                      Confirm with an advisor that this counts toward your degree.
+                    </span>
+                  </div>
+                )}
                 {moveOptions && onMoveToTerm && (
                   <label
                     className="course-move-control"
@@ -170,4 +256,15 @@ export function ScheduleSlotCard({
       })}
     </div>
   );
+}
+
+export function formatOfferingWarning(
+  course: Course,
+  termLabel: string,
+  season: TermName,
+  history: OfferingHistory
+): string {
+  const stats = history[season];
+  const seasonLabel = season === "fall" ? "falls" : season === "spring" ? "springs" : "summers";
+  return `${course.code} in ${termLabel}: offered in ${stats.offered}/${stats.total} recent ${seasonLabel}`;
 }
