@@ -1,0 +1,60 @@
+/* ─── Bug Report Modal ──────────────────────────────────────────────── */
+
+.bug-report-form {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.bug-report-form label {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--text);
+}
+
+.bug-report-form input,
+.bug-report-form textarea {
+  font: inherit;
+  font-weight: 400;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: var(--surface);
+  color: var(--text);
+  padding: 8px 10px;
+  resize: vertical;
+}
+
+.bug-report-form input:focus,
+.bug-report-form textarea:focus {
+  outline: none;
+  border-color: var(--primary);
+}
+
+.bug-report-form input:disabled,
+.bug-report-form textarea:disabled,
+.bug-report-form button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* Visually hidden without pushing content off-screen (which would add a scrollbar in the modal). */
+.bug-report-form .bug-report-honeypot {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  border: 0;
+  overflow: hidden;
+  clip-path: inset(50%);
+  opacity: 0;
+  pointer-events: none;
+}
+
+.bug-report-error {
+  margin: 0;
+  font-size: 0.85rem;
+  color: #dc2626;
+}
