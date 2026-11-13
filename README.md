@@ -135,7 +135,7 @@ API: `GET /api/rmp/professor?name=Amr%20Marzouk&course=MSE%20110` (the `course` 
 VITE_RMP_API_URL=https://<service>.onrender.com/api/rmp
 ```
 
-Then rebuild (`npm run build`) and commit `docs/` as usual. If this variable is missing, the production build hides the Instructor Ratings section instead of showing errors.
+Then commit and push to `main`; the GitHub Actions workflow rebuilds and deploys the site. If this variable is missing, the production build hides the Instructor Ratings section instead of showing errors.
 
 Free Render services sleep after ~15 minutes idle, so the first lookup after a quiet period can take 30–60 seconds while it wakes up.
 

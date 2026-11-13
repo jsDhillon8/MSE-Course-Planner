@@ -10,9 +10,6 @@ node_modules/
 dist/
 api.http
 
-# Keep docs tracked because GitHub Pages uses it
-# docs/
-
 # ===================================
 # Environment Variables
 # ===================================

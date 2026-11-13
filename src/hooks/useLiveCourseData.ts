@@ -95,14 +95,10 @@ export function useLiveCourseData(courseCode: string | null): LiveCourseData {
         liveCourseCache.set(cacheKey, result);
         if (!cancelled) setState(result);
       } catch (err) {
-        const errorResult: LiveCourseData = {
-          status: "error",
-          sharedOutline: null,
-          sections: [],
-          errorMsg: String(err),
-        };
-        liveCourseCache.set(cacheKey, errorResult);
-        if (!cancelled) setState(errorResult);
+        // Not cached, so reopening the course retries the request.
+        if (!cancelled) {
+          setState({ status: "error", sharedOutline: null, sections: [], errorMsg: String(err) });
+        }
       }
     }
 

@@ -118,6 +118,14 @@ export function isCoopCourseId(courseId: string, plan?: CustomPlan): boolean {
   return isCoopCourse(course);
 }
 
+/**
+ * Slots that may appear in several terms (templates reuse one `coop` id for
+ * every work term). Each copy still has to sit alone in its term.
+ */
+export function isRepeatableCourseId(courseId: string, plan?: CustomPlan): boolean {
+  return isCoopCourseId(courseId, plan);
+}
+
 export function placedCourseIds(plan: CustomPlan): Set<string> {
   const ids = new Set<string>();
   for (const term of plan.terms) {
@@ -141,14 +149,24 @@ export function findCoursePlacement(
   return null;
 }
 
-function flattenSlots(slots: CourseSlot[]): string[] {
+/**
+ * Flattens one term's slots to plain ids. `usedInPlan` spans the whole plan so a
+ * course is placed only once; a "choose one" slot falls back to its first
+ * alternative that isn't already placed. Repeatable slots (CO-OP) are only
+ * deduped within the term.
+ */
+function flattenSlots(slots: CourseSlot[], usedInPlan: Set<string>): string[] {
   const ids: string[] = [];
-  const seen = new Set<string>();
   for (const slot of slots) {
-    const first = slotCourseIds(slot)[0];
-    if (!first || seen.has(first) || !courseById[first]) continue;
-    seen.add(first);
-    ids.push(first);
+    const pick = slotCourseIds(slot).find(
+      (id) =>
+        courseById[id] &&
+        !ids.includes(id) &&
+        (isRepeatableCourseId(id) || !usedInPlan.has(id))
+    );
+    if (!pick) continue;
+    ids.push(pick);
+    usedInPlan.add(pick);
   }
   return ids;
 }
@@ -157,6 +175,7 @@ function flattenSlots(slots: CourseSlot[]): string[] {
 export function customPlanFromTemplate(template: PageTemplate, variant: VariantId): CustomPlan {
   const plan = createEmptyCustomPlan();
   const sourceTerms = getActiveTerms(template, variant);
+  const usedInPlan = new Set<string>();
 
   for (const source of sourceTerms) {
     const year = yearFromLabel(source.label);
@@ -166,7 +185,7 @@ export function customPlanFromTemplate(template: PageTemplate, variant: VariantI
     const dest = plan.terms.find((term) => term.label === `Year ${year} - ${season}`);
     if (!dest) continue;
 
-    dest.courseIds = flattenSlots(source.courseIds);
+    dest.courseIds = flattenSlots(source.courseIds, usedInPlan);
   }
 
   return plan;

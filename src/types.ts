@@ -91,8 +91,6 @@ export interface CourseEquivalency {
   equivalentCourseId: string;
   faculty: string;
   equivalencyType: "full" | "partial" | "elective-only";
-  evidenceSource: string;
-  expiry: string | null;
 }
 
 export interface TermTuple {

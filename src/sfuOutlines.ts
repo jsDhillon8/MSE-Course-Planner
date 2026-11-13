@@ -108,7 +108,29 @@ export function termCodeToLabel(termCode: string): string {
   return `${sem} ${year}`;
 }
 
-async function fetchSectionsForTermInternal(
+/**
+ * Session cache of section-list requests, shared by every caller (live panel,
+ * course info lookup, offering history). Failed requests are evicted so they retry.
+ */
+const sectionsFetchCache = new Map<string, Promise<SectionsFetchResult>>();
+
+function fetchSectionsForTermInternal(
+  termSlug: string,
+  dept: string,
+  num: string
+): Promise<SectionsFetchResult> {
+  const key = `${termSlug}/${dept}/${num}`.toLowerCase();
+  const cached = sectionsFetchCache.get(key);
+  if (cached) return cached;
+  const request = fetchSectionsForTermUncached(termSlug, dept, num).then((result) => {
+    if (result.kind === "error") sectionsFetchCache.delete(key);
+    return result;
+  });
+  sectionsFetchCache.set(key, request);
+  return request;
+}
+
+async function fetchSectionsForTermUncached(
   termSlug: string,
   dept: string,
   num: string
@@ -384,6 +406,11 @@ export async function getOfferingHistory(
     )
   );
 
+  if (termResults.length > 0 && termResults.every(({ result }) => result.kind === "error")) {
+    // Nothing could be checked (offline, proxy down). Report a failure instead of 0/0 data.
+    throw new Error(`Offering history unavailable for ${dept} ${number}`);
+  }
+
   for (const { tuple, result } of termResults) {
     if (result.kind === "error") continue;
 
@@ -411,7 +438,8 @@ export function offeringTooltip(seasonLabel: string, stats: SeasonOfferingStats 
   return `${seasonLabel}: ${stats.offered}/${stats.total} recent years`;
 }
 
-const offeringHistoryCache = new Map<string, OfferingHistory | "failed">();
+/** Successful lookups only; failures are not cached so a later render can retry. */
+const offeringHistoryCache = new Map<string, OfferingHistory>();
 const offeringHistoryInflight = new Map<string, Promise<OfferingHistory | "failed">>();
 
 function cacheKeyForCourse(dept: string, number: string): string {
@@ -437,8 +465,7 @@ export function loadOfferingHistory(
       offeringHistoryCache.set(key, history);
       return history;
     } catch {
-      offeringHistoryCache.set(key, "failed");
-      return "failed";
+      return "failed" as const;
     }
   })().finally(() => {
     offeringHistoryInflight.delete(key);
@@ -448,10 +475,30 @@ export function loadOfferingHistory(
   return request;
 }
 
-export async function fetchCourseInfoFields(
+type CourseInfoFields = { title?: string; description: string; units?: number };
+
+/** Successful lookups only; a null result is retried on the next call. */
+const courseInfoCache = new Map<string, Promise<CourseInfoFields | null>>();
+
+export function fetchCourseInfoFields(dept: string, number: string): Promise<CourseInfoFields | null> {
+  const key = cacheKeyForCourse(dept, number);
+  const cached = courseInfoCache.get(key);
+  if (cached) return cached;
+  const request = fetchCourseInfoFieldsUncached(dept, number).then((info) => {
+    if (!info) courseInfoCache.delete(key);
+    return info;
+  }, (err) => {
+    courseInfoCache.delete(key);
+    throw err;
+  });
+  courseInfoCache.set(key, request);
+  return request;
+}
+
+async function fetchCourseInfoFieldsUncached(
   dept: string,
   number: string
-): Promise<{ title?: string; description: string; units?: number } | null> {
+): Promise<CourseInfoFields | null> {
   const [currentResult, registrationResult] = await Promise.all([
     fetchSectionsForTerm("current/current", dept, number),
     fetchSectionsForTerm("registration/registration", dept, number),

@@ -32,6 +32,7 @@ import {
   customCourseIdFromCode,
   customPlanFromTemplate,
   findSwapForCourse,
+  isRepeatableCourseId,
   loadCustomPlan,
   placeCourse,
   placedCourseIds,
@@ -120,7 +121,7 @@ export function CustomSchedulePage({ onOpenWelcome }: CustomSchedulePageProps) {
   const pickerCourses = useMemo(() => {
     const query = search.trim().toLowerCase();
     return courses.filter((course) => {
-      if (placed.has(course.id)) return false;
+      if (placed.has(course.id) && !isRepeatableCourseId(course.id)) return false;
       if (query) {
         const haystack = `${course.code} ${course.title}`.toLowerCase();
         if (!haystack.includes(query)) return false;
