@@ -21,9 +21,6 @@ function spaFallback(): Plugin {
 export default defineConfig({
   plugins: [react(), spaFallback()],
   base: "/MSE-Course-Planner/",
-  build: {
-    outDir: "docs",
-  },
   server: {
     proxy: {
       // RMP proxy server (npm run server). Production uses VITE_RMP_API_URL instead.
