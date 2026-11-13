@@ -1,5 +1,7 @@
-import type { ReactNode } from "react";
+import { useState, type ReactNode } from "react";
 import { useNavigate } from "react-router-dom";
+import { BugReportModal } from "./BugReportModal";
+import { isBugReportEnabled } from "../../api/bugReport";
 import { useTheme } from "../../theme/ThemeContext";
 import { pageTemplates } from "../../data";
 import { PageTemplate, VariantId } from "../../types";
@@ -24,6 +26,7 @@ export function AppHeader({
 }: AppHeaderProps) {
   const navigate = useNavigate();
   const { theme, toggleTheme } = useTheme();
+  const [bugReportOpen, setBugReportOpen] = useState(false);
 
   return (
     <header className="topbar">
@@ -76,6 +79,15 @@ export function AppHeader({
         >
           {theme === "light" ? "Dark mode" : "Light mode"}
         </button>
+        {isBugReportEnabled() && (
+          <button
+            type="button"
+            onClick={() => setBugReportOpen(true)}
+            aria-label="Report a bug"
+          >
+            Report bug
+          </button>
+        )}
         <button
           type="button"
           className="help-button"
@@ -86,6 +98,9 @@ export function AppHeader({
           ?
         </button>
       </div>
+      {isBugReportEnabled() && (
+        <BugReportModal isOpen={bugReportOpen} onDismiss={() => setBugReportOpen(false)} />
+      )}
     </header>
   );
 }
