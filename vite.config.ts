@@ -7,4 +7,10 @@ export default defineConfig({
   build: {
     outDir: "docs",
   },
+  server: {
+    proxy: {
+      // RMP proxy server (npm run server). Production uses VITE_RMP_API_URL instead.
+      "/api": "http://localhost:3001",
+    },
+  },
 });

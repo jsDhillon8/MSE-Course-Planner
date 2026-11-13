@@ -1144,3 +1144,247 @@ p.empty-note.historical-note {
   font-size: 0.8rem;
   color: var(--text-muted);
 }
+/* ── Instructor ratings (RateMyProfessors) ── */
+.rmp-section {
+  margin-top: 12px;
+  display: grid;
+  gap: 6px;
+  font-size: 0.88rem;
+}
+
+.rmp-heading {
+  margin: 0;
+}
+
+.rmp-hint,
+.rmp-source {
+  margin: 0;
+  font-size: 0.75rem;
+  color: var(--text-subtle);
+}
+
+.rmp-instructor-list {
+  display: grid;
+  gap: 6px;
+}
+
+.rmp-instructor {
+  border: 1px solid var(--border-subtle);
+  border-radius: 8px;
+  background: var(--surface-muted);
+}
+
+.rmp-instructor[open] {
+  border-color: var(--border);
+}
+
+.rmp-instructor-summary {
+  cursor: pointer;
+  list-style: none;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 10px;
+  border-radius: 8px;
+  color: var(--text);
+  font-weight: 600;
+  user-select: none;
+}
+
+.rmp-instructor-summary::-webkit-details-marker,
+.rmp-instructor-summary::marker {
+  display: none;
+}
+
+.rmp-instructor-summary::before {
+  content: "▶";
+  font-size: 0.65rem;
+  color: var(--text-muted);
+  transition: transform var(--transition-fast);
+}
+
+.rmp-instructor[open] > .rmp-instructor-summary::before {
+  transform: rotate(90deg);
+}
+
+.rmp-instructor-summary:hover {
+  color: var(--primary);
+}
+
+.rmp-instructor-summary:focus-visible,
+.rmp-link-button:focus-visible,
+.rmp-profile-link:focus-visible {
+  outline: 2px solid var(--primary);
+  outline-offset: 2px;
+}
+
+.rmp-instructor-name {
+  flex: 1;
+  min-width: 0;
+}
+
+.rmp-instructor-body {
+  display: grid;
+  gap: 8px;
+  padding: 0 10px 10px;
+}
+
+.rmp-instructor-body .empty-note {
+  margin: 0;
+}
+
+.rmp-profile-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.rmp-profile-header strong {
+  display: block;
+  color: var(--text);
+}
+
+.rmp-profile-dept {
+  font-size: 0.78rem;
+  color: var(--text-subtle);
+}
+
+.rmp-match-warning {
+  display: grid;
+  gap: 4px;
+  padding: 8px;
+  border: 1px solid var(--warning);
+  border-radius: 6px;
+  background: var(--warning-soft);
+}
+
+.rmp-match-warning .live-badge {
+  justify-self: start;
+  white-space: normal;
+}
+
+.rmp-match-warning p {
+  margin: 0;
+  font-size: 0.8rem;
+  line-height: 1.4;
+  color: var(--text);
+}
+
+.rmp-stats {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(90px, 1fr));
+  gap: 6px;
+  margin: 0;
+}
+
+.rmp-stats div {
+  background: var(--surface);
+  border: 1px solid var(--border-subtle);
+  border-radius: 6px;
+  padding: 6px 8px;
+}
+
+.rmp-stats dt {
+  font-size: 0.7rem;
+  color: var(--text-subtle);
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+}
+
+.rmp-stats dd {
+  margin: 2px 0 0;
+  font-weight: 700;
+  color: var(--text);
+}
+
+.rmp-profile-link {
+  color: var(--primary);
+  font-weight: 600;
+  font-size: 0.82rem;
+  justify-self: start;
+  border-radius: 4px;
+}
+
+.rmp-note {
+  margin: 0;
+  font-size: 0.75rem;
+  color: var(--text-subtle);
+}
+
+.rmp-comments {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 8px;
+}
+
+.rmp-comment {
+  background: var(--surface);
+  border: 1px solid var(--border-subtle);
+  border-radius: 6px;
+  padding: 8px;
+  display: grid;
+  gap: 4px;
+}
+
+.rmp-comment-meta,
+.rmp-comment-scores {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 4px 10px;
+  font-size: 0.72rem;
+  color: var(--text-subtle);
+}
+
+.rmp-comment-tag {
+  font-weight: 600;
+  padding: 1px 6px;
+  border-radius: 999px;
+  background: var(--border-subtle);
+  color: var(--text-muted);
+}
+
+.rmp-comment-tag.class {
+  background: var(--primary-soft);
+  color: var(--primary);
+}
+
+.rmp-comment-tag.equivalent {
+  background: var(--success-soft);
+  color: var(--success);
+}
+
+.rmp-comment-class {
+  font-weight: 600;
+  color: var(--text-muted);
+}
+
+.rmp-comment-text {
+  margin: 0;
+  color: var(--text-muted);
+  font-size: 0.83rem;
+  line-height: 1.5;
+  white-space: pre-line;
+  overflow-wrap: anywhere;
+}
+
+.rmp-link-button {
+  justify-self: start;
+  background: none;
+  border: none;
+  padding: 0;
+  font: inherit;
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--primary);
+  cursor: pointer;
+  border-radius: 4px;
+}
+
+.rmp-link-button:hover {
+  text-decoration: underline;
+}
