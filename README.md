@@ -100,3 +100,43 @@
 - **Reliability:** Deterministic validation engine with regression fixtures.
 - **Performance:** Virtualized grid rendering for large custom plans.
 - **Transparency:** Every warning includes remediation steps.
+
+---
+
+## Instructor Ratings (RateMyProfessors proxy)
+
+The course details panel can show RateMyProfessors (RMP) ratings for each instructor. Browsers can't call RMP directly (CORS), and GitHub Pages only serves static files, so the lookup runs in a small Express server in `server/` that is **hosted separately from GitHub Pages**.
+
+### Local development
+
+Run the proxy and the Vite dev server in two terminals:
+
+```bash
+npm run server   # RMP proxy on http://localhost:3001
+npm run dev      # Vite on http://localhost:5173, proxies /api -> localhost:3001
+```
+
+No env vars are needed locally. Ratings load only when you expand an instructor, and both the server (24h) and the browser cache results.
+
+API: `GET /api/rmp/professor?name=Amr%20Marzouk&course=MSE%20110` (the `course` param is optional).
+
+### Deploying the proxy to Render
+
+1. Push `render.yaml` and `server/` to `main` on GitHub.
+2. In Render: **New > Blueprint**, pick this repository, and apply. This creates the `mse-rmp-proxy` web service (free plan, `npm ci --omit=dev`, `npm run server`, health check `/healthz`).
+3. Note the service URL (for example `https://mse-rmp-proxy.onrender.com`) and check `https://<service>.onrender.com/healthz` returns `{"ok":true}`.
+4. If the site is served from another origin, edit `ALLOWED_ORIGINS` in the Render dashboard (comma-separated, origin only, no path).
+
+### Pointing the GitHub Pages build at the proxy
+
+`VITE_RMP_API_URL` is read at build time. Create `.env.production` (see `.env.example`):
+
+```
+VITE_RMP_API_URL=https://<service>.onrender.com/api/rmp
+```
+
+Then rebuild (`npm run build`) and commit `docs/` as usual. If this variable is missing, the production build hides the Instructor Ratings section instead of showing errors.
+
+Free Render services sleep after ~15 minutes idle, so the first lookup after a quiet period can take 30–60 seconds while it wakes up.
+
+RMP's API is unofficial and may change or rate-limit without notice; data may be incomplete.

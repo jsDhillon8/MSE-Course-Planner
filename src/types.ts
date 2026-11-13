@@ -149,3 +149,48 @@ export interface HistoricalLookupResult {
   sharedOutline: SharedOutlineFields;
   isHistorical: true;
 }
+
+/** One written RateMyProfessors rating returned by the RMP proxy server. */
+export interface RmpComment {
+  id: string;
+  class: string;
+  date: string;
+  comment: string;
+  clarityRating: number | null;
+  difficultyRating: number | null;
+  helpfulRating: number | null;
+  grade: string | null;
+  /** True when the rating is for the course currently selected in the planner. */
+  fromClass: boolean;
+  /** Which tier the comment was picked from: the course itself, an SFU-listed equivalent, or general. */
+  source: RmpCommentTier;
+  /** RMP course name (e.g. "ENSC220") when source is "equivalent". */
+  equivalentCourse: string | null;
+}
+
+export type RmpCommentTier = "class" | "equivalent" | "general";
+
+export interface RmpProfessor {
+  name: string;
+  department: string;
+  school: string;
+  avgRating: number;
+  avgDifficulty: number;
+  numRatings: number;
+  /** null when RMP has no "would take again" data. */
+  wouldTakeAgainPercent: number | null;
+  url: string;
+}
+
+export type RmpCommentSource = "class" | "mixed" | "equivalent" | "general";
+
+export type RmpInsights =
+  | { found: false }
+  | {
+      found: true;
+      isExactNameMatch: boolean;
+      professor: RmpProfessor;
+      commentSource: RmpCommentSource;
+      note: string;
+      comments: RmpComment[];
+    };

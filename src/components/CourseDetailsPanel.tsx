@@ -1,11 +1,17 @@
 import { useEffect, useMemo, useState } from "react";
 import { courseById, courseEquivalencies, courses } from "../data";
 import { useLiveCourseData } from "../hooks/useLiveCourseData";
+import { InstructorRatings } from "./InstructorRatings";
 import { Course, OfferedSection, SharedOutlineFields } from "../types";
 import { buildCourseCodeIndex, isPlaceholderCourse, normalizeCourseCode } from "../utils/courseCodes";
 import { parseEquivalents } from "../utils/parseEquivalents";
 
 const courseIdByCode = buildCourseCodeIndex(courses);
+
+/** Equivalent course codes listed in the SFU outline notes (seed equivalencies excluded). */
+function outlineEquivalentCodes(notes: string | undefined, selfCode: string): string[] {
+  return parseEquivalents(notes, selfCode).map((item) => item.code);
+}
 
 interface LiveOutlineBlockProps {
   sharedOutline: SharedOutlineFields;
@@ -79,11 +85,20 @@ function EquivalentBoxCard({
 
 interface EquivalentSlideOverProps {
   courseCode: string;
+  /** The course this slide-over was opened from; treated as an equivalent for RMP comments. */
+  sourceCourseCode: string | null;
   onClose: () => void;
 }
 
-function EquivalentSlideOver({ courseCode, onClose }: EquivalentSlideOverProps) {
+function EquivalentSlideOver({ courseCode, sourceCourseCode, onClose }: EquivalentSlideOverProps) {
   const liveData = useLiveCourseData(courseCode);
+  const rmpEquivalentCodes = useMemo(
+    () => [
+      ...(sourceCourseCode ? [sourceCourseCode] : []),
+      ...outlineEquivalentCodes(liveData.sharedOutline?.notes, courseCode),
+    ],
+    [sourceCourseCode, liveData.sharedOutline?.notes, courseCode]
+  );
   const normalized = normalizeCourseCode(courseCode);
   const courseId =
     courseIdByCode.get(normalized) ?? courseIdByCode.get(normalized.replace(/\s+/g, ""));
@@ -122,12 +137,19 @@ function EquivalentSlideOver({ courseCode, onClose }: EquivalentSlideOverProps) 
             <p className="empty-note">Could not reach the SFU Outlines API right now.</p>
           )}
           {liveData.status === "success" && liveData.sharedOutline && (
-            <LiveOutlineBlock
-              sharedOutline={liveData.sharedOutline}
-              sections={liveData.sections}
-              isHistorical={liveData.isHistorical}
-              historicalLabel={liveData.historicalLabel}
-            />
+            <>
+              <LiveOutlineBlock
+                sharedOutline={liveData.sharedOutline}
+                sections={liveData.sections}
+                isHistorical={liveData.isHistorical}
+                historicalLabel={liveData.historicalLabel}
+              />
+              <InstructorRatings
+                sections={liveData.sections}
+                courseCode={courseCode}
+                equivalentCodes={rmpEquivalentCodes}
+              />
+            </>
           )}
         </div>
       </aside>
@@ -361,12 +383,22 @@ export function CourseDetailsPanel({
                   <p className="empty-note">Could not reach the SFU Outlines API right now.</p>
                 )}
                 {liveData.status === "success" && liveData.sharedOutline && (
-                  <LiveOutlineBlock
-                    sharedOutline={liveData.sharedOutline}
-                    sections={liveData.sections}
-                    isHistorical={liveData.isHistorical}
-                    historicalLabel={liveData.historicalLabel}
-                  />
+                  <>
+                    <LiveOutlineBlock
+                      sharedOutline={liveData.sharedOutline}
+                      sections={liveData.sections}
+                      isHistorical={liveData.isHistorical}
+                      historicalLabel={liveData.historicalLabel}
+                    />
+                    <InstructorRatings
+                      sections={liveData.sections}
+                      courseCode={selectedCourse.code}
+                      equivalentCodes={outlineEquivalentCodes(
+                        liveData.sharedOutline.notes,
+                        selectedCourse.code
+                      )}
+                    />
+                  </>
                 )}
               </>
             )}
@@ -402,6 +434,7 @@ export function CourseDetailsPanel({
       {selectedEquivalentCode && (
         <EquivalentSlideOver
           courseCode={selectedEquivalentCode}
+          sourceCourseCode={selectedCourse?.code ?? null}
           onClose={() => setSelectedEquivalentCode(null)}
         />
       )}

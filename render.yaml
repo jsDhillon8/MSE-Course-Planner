@@ -1,0 +1,25 @@
+# Render Blueprint for the RateMyProfessors proxy (server/index.js).
+# The React app itself stays on GitHub Pages; only the API runs on Render.
+# Docs: https://render.com/docs/blueprint-spec
+services:
+  - type: web
+    name: mse-rmp-proxy
+    runtime: node
+    plan: free
+    region: oregon
+    branch: main
+    buildCommand: npm ci --omit=dev
+    startCommand: npm run server
+    healthCheckPath: /healthz
+    autoDeploy: true
+    # Only redeploy when server code or dependencies change, not on frontend/docs builds.
+    buildFilter:
+      paths:
+        - server/**
+        - package.json
+        - package-lock.json
+    envVars:
+      - key: NODE_VERSION
+        value: "22"
+      - key: ALLOWED_ORIGINS
+        value: https://jsdhillon8.github.io
