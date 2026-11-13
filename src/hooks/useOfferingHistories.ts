@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useState } from "react";
-import { loadOfferingHistory } from "../sfuOutlines";
+import { loadOfferingHistory } from "../api/sfuOutlines";
 import { Course, OfferingHistory } from "../types";
-import { isPlaceholderCourse, normalizeCourseCode, parseCourseCode } from "../utils/courseCodes";
+import { isPlaceholderCourse, normalizeCourseCode, parseCourseCode } from "../lib/courseCodes";
 
 export type OfferingHistoryState = OfferingHistory | "loading" | "unknown";
 

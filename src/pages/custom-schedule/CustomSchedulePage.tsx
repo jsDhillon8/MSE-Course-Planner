@@ -1,28 +1,28 @@
 import { useEffect, useMemo, useState } from "react";
 import type { DragEvent } from "react";
-import { AppHeader } from "../components/AppHeader";
-import { CourseDetailsPanel, EquivalentBox } from "../components/CourseDetailsPanel";
-import { HighlightLegend } from "../components/HighlightLegend";
-import { ProgressFooter } from "../components/ProgressFooter";
-import { formatOfferingWarning, offeringWarningLevel, ScheduleSlotCard } from "../components/ScheduleSlotCard";
-import { courseById, courses, pageTemplates } from "../data";
-import { useCourseProgress } from "../hooks/useCourseProgress";
-import { useOfferingHistories } from "../hooks/useOfferingHistories";
-import { fetchCourseInfoFields } from "../sfuOutlines";
-import { Course, CourseHighlightRole, VariantId } from "../types";
+import { AppHeader } from "../../components/layout/AppHeader";
+import { CourseDetailsPanel, EquivalentBox } from "../../components/course-details/CourseDetailsPanel";
+import { HighlightLegend } from "../../components/schedule/HighlightLegend";
+import { ProgressFooter } from "../../components/layout/ProgressFooter";
+import { formatOfferingWarning, offeringWarningLevel, ScheduleSlotCard } from "../../components/schedule/ScheduleSlotCard";
+import { courseById, courses, pageTemplates } from "../../data";
+import { useCourseProgress } from "../../hooks/useCourseProgress";
+import { useOfferingHistories } from "../../hooks/useOfferingHistories";
+import { fetchCourseInfoFields } from "../../api/sfuOutlines";
+import { Course, CourseHighlightRole, VariantId } from "../../types";
 import {
   buildCourseCodeIndex,
   courseDepartment,
   isPlaceholderCourse,
   normalizeCourseCode,
   parseCourseCode,
-} from "../utils/courseCodes";
+} from "../../lib/courseCodes";
 import {
   computeCompletedCredits,
   computeTermCredits,
   computeTotalCurriculumCredits,
   TERM_CREDIT_WARN_THRESHOLD,
-} from "../utils/credits";
+} from "../../lib/credits";
 import {
   canPlaceCourse,
   clearCustomPlanStorage,
@@ -43,9 +43,10 @@ import {
   swapCourseIntoPlan,
   termNameFromLabel,
   undoSwapInPlan,
-} from "../utils/customPlan";
-import { courseDependencyGraph } from "../utils/dependencyGraph";
-import { groupTermsByYear } from "../utils/scheduleTerms";
+} from "../../lib/customPlan";
+import { courseDependencyGraph } from "../../lib/dependencyGraph";
+import { groupTermsByYear } from "../../lib/scheduleTerms";
+import "./CustomSchedulePage.css";
 
 const DRAG_MIME = "application/x-mse-course";
 const courseIdByCode = buildCourseCodeIndex(courses);

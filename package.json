@@ -11,7 +11,7 @@
     "build": "tsc -b && vite build",
     "preview": "vite preview",
     "server": "node server/index.js",
-    "test:parse-equivalents": "npx tsx src/utils/parseEquivalents.test.ts"
+    "test:parse-equivalents": "npx tsx src/lib/parseEquivalents.test.ts"
   },
   "dependencies": {
     "cors": "^2.8.6",

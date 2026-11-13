@@ -1,4 +1,4 @@
-import { RmpInsights, OfferedSectionInstructor } from "./types";
+import { RmpInsights, OfferedSectionInstructor } from "../types";
 
 /**
  * Base URL of the RMP proxy server (see server/index.js).

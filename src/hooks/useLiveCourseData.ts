@@ -4,9 +4,9 @@ import {
   findHistoricalOffering,
   resolveOfferedSections,
   termTupleToLabel,
-} from "../sfuOutlines";
+} from "../api/sfuOutlines";
 import { OfferedSection, SharedOutlineFields } from "../types";
-import { normalizeCourseCode, parseCourseCode } from "../utils/courseCodes";
+import { normalizeCourseCode, parseCourseCode } from "../lib/courseCodes";
 
 export type LiveStatus = "idle" | "loading" | "success" | "error" | "not-offered";
 

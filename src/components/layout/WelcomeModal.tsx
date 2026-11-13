@@ -1,4 +1,5 @@
 import { useEffect } from "react";
+import "./WelcomeModal.css";
 
 interface WelcomeModalProps {
   isOpen: boolean;

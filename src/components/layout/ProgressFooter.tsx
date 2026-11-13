@@ -1,4 +1,5 @@
 import type { ChangeEvent, KeyboardEvent } from "react";
+import "./ProgressFooter.css";
 
 interface ProgressFooterProps {
   completedCredits: number;

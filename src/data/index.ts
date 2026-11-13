@@ -1,8 +1,8 @@
-import coursesJson from "./data/courses.json";
-import courseRequirementsJson from "./data/courseRequirements.json";
-import equivalenciesJson from "./data/equivalencies.json";
-import templatesJson from "./data/templates.json";
-import { Course, CourseEquivalency, PageTemplate } from "./types";
+import coursesJson from "./courses.json";
+import courseRequirementsJson from "./courseRequirements.json";
+import equivalenciesJson from "./equivalencies.json";
+import templatesJson from "./templates.json";
+import { Course, CourseEquivalency, PageTemplate } from "../types";
 
 export const courses = coursesJson as Course[];
 export const pageTemplates = templatesJson as PageTemplate[];

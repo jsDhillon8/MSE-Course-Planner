@@ -1,10 +1,11 @@
 import { useEffect, useMemo, useState } from "react";
-import { courseById, courseEquivalencies, courses } from "../data";
-import { useLiveCourseData } from "../hooks/useLiveCourseData";
+import { courseById, courseEquivalencies, courses } from "../../data";
+import { useLiveCourseData } from "../../hooks/useLiveCourseData";
+import "./CourseDetailsPanel.css";
 import { InstructorRatings } from "./InstructorRatings";
-import { Course, OfferedSection, SharedOutlineFields } from "../types";
-import { buildCourseCodeIndex, isPlaceholderCourse, normalizeCourseCode } from "../utils/courseCodes";
-import { parseEquivalents } from "../utils/parseEquivalents";
+import { Course, OfferedSection, SharedOutlineFields } from "../../types";
+import { buildCourseCodeIndex, isPlaceholderCourse, normalizeCourseCode } from "../../lib/courseCodes";
+import { parseEquivalents } from "../../lib/parseEquivalents";
 
 const courseIdByCode = buildCourseCodeIndex(courses);
 

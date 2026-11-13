@@ -7,7 +7,7 @@ import {
   SharedOutlineFields,
   TermName,
   TermTuple,
-} from "./types";
+} from "../types";
 
 const SFU_BASE = "https://www.sfu.ca/bin/wcm/course-outlines";
 
