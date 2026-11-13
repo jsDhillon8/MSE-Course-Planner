@@ -89,7 +89,6 @@ export interface PageTemplate {
 export interface CourseEquivalency {
   sourceCourseId: string;
   equivalentCourseId: string;
-  faculty: string;
   equivalencyType: "full" | "partial" | "elective-only";
 }
 

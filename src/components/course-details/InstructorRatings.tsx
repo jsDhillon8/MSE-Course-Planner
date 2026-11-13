@@ -1,7 +1,8 @@
 import { useState } from "react";
-import { useRmpInsights } from "../hooks/useRmpInsights";
-import { isRmpEnabled, uniqueInstructorNames } from "../rmp";
-import { OfferedSection, RmpComment, RmpCommentTier } from "../types";
+import { useRmpInsights } from "../../hooks/useRmpInsights";
+import { isRmpEnabled, uniqueInstructorNames } from "../../api/rmp";
+import { OfferedSection, RmpComment, RmpCommentTier } from "../../types";
+import "./InstructorRatings.css";
 
 const MAX_COMMENTS = 5;
 const COMMENT_PREVIEW_CHARS = 260;

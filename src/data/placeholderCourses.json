@@ -1,0 +1,17 @@
+[
+  { "id": "compElec1", "code": "COMP ELEC 1", "title": "Complementary Elective 1", "credits": 3 },
+  { "id": "compElec2", "code": "COMP ELEC 2", "title": "Complementary Elective 2", "credits": 3 },
+  { "id": "compElec3", "code": "COMP ELEC 3", "title": "Complementary Elective 3", "credits": 3 },
+  { "id": "techElec1", "code": "MSE 4XX TECH ELEC 1", "title": "Technical Elective 1", "credits": 3 },
+  { "id": "techElec2", "code": "MSE 4XX TECH ELEC 2", "title": "Technical Elective 2", "credits": 3 },
+  { "id": "techElec3", "code": "MSE 4XX TECH ELEC 3", "title": "Technical Elective 3", "credits": 3 },
+  { "id": "techElec4", "code": "MSE 4XX TECH ELEC 4", "title": "Technical Elective 4", "credits": 3 },
+  { "id": "techElec5", "code": "MSE 4XX TECH ELEC 5", "title": "Technical Elective 5", "credits": 3 },
+  { "id": "techElec6", "code": "MSE 4XX TECH ELEC 6", "title": "Technical Elective 6", "credits": 3 },
+  { "id": "coop", "code": "CO-OP", "title": "Co-op Term", "credits": 0 },
+  { "id": "coopOpt", "code": "CO-OP", "title": "Optional Co-op Term", "credits": 0 },
+  { "id": "busLElec1", "code": "BUS 3XX ELEC 1", "title": "300 Level Business Elective", "credits": 3 },
+  { "id": "busElec1", "code": "BUS 4XX ELEC 1", "title": "Business Elective 1", "credits": 3 },
+  { "id": "busElec2", "code": "BUS 4XX ELEC 2", "title": "Business Elective 2", "credits": 3 },
+  { "id": "busElec3", "code": "BUS 4XX ELEC 3", "title": "Business Elective 3", "credits": 3 }
+]

@@ -1,0 +1,43 @@
+.status-rail {
+  border-top: 1px solid var(--border);
+  padding: 10px 16px;
+  background: var(--surface);
+  display: flex;
+  gap: 16px;
+  flex-wrap: wrap;
+  color: var(--text-muted);
+  transition: background-color var(--transition-fast), border-color var(--transition-fast);
+}
+
+/* ── Credits counter ── */
+.credits-counter {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  flex-wrap: wrap;
+  color: var(--text);
+}
+
+.transfer-credits-input {
+  width: 70px;
+  border: 1px solid var(--border);
+  background: var(--surface);
+  color: var(--text);
+  border-radius: 6px;
+  padding: 4px 6px;
+  transition: background-color var(--transition-fast), border-color var(--transition-fast), color var(--transition-fast);
+}
+
+.reset-progress-btn {
+  border: 1px solid var(--danger);
+  color: var(--danger);
+  background: transparent;
+  border-radius: 8px;
+  padding: 6px 10px;
+  cursor: pointer;
+  transition: background-color var(--transition-fast);
+}
+
+.reset-progress-btn:hover {
+  background: var(--danger-soft);
+}

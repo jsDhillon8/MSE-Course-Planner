@@ -1,5 +1,6 @@
 import { useMemo } from "react";
-import { CourseHighlightRole } from "../types";
+import { CourseHighlightRole } from "../../types";
+import "./HighlightLegend.css";
 
 interface HighlightLegendProps {
   roles: Map<string, CourseHighlightRole>;

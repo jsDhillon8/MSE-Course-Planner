@@ -1,0 +1,74 @@
+.topbar {
+  padding: 16px 20px;
+  border-bottom: 1px solid var(--border);
+  background: var(--surface);
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+  align-items: flex-start;
+  transition: background-color var(--transition-fast), border-color var(--transition-fast);
+}
+
+.topbar h1 {
+  margin: 0 0 4px;
+  font-size: 1.25rem;
+}
+
+.subtitle {
+  margin: 0;
+  color: var(--text-muted);
+}
+
+.toolbar {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+.toolbar select,
+.toolbar button {
+  border: 1px solid var(--border);
+  background: var(--surface);
+  color: var(--text);
+  border-radius: 8px;
+  padding: 8px 10px;
+  min-height: 36px;
+  transition:
+    background-color var(--transition-fast),
+    border-color var(--transition-fast),
+    color var(--transition-fast);
+}
+
+.toolbar button:hover {
+  border-color: var(--primary);
+}
+
+.theme-toggle {
+  min-width: 92px;
+}
+
+/* ─── Help Button ───────────────────────────────────────────────────── */
+
+.help-button {
+  min-width: 36px;
+  width: 36px;
+  height: 36px;
+  padding: 0;
+  border-radius: 999px;
+  font-weight: 700;
+  font-size: 0.95rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.toolbar button.help-button {
+  background-color: var(--text) !important;
+  color: var(--surface) !important;
+  border-color: var(--text) !important;
+}
+
+.toolbar button.help-button:hover {
+  opacity: 0.85;
+}

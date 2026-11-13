@@ -1,0 +1,114 @@
+.custom-layout {
+  grid-template-columns: minmax(220px, 280px) 1fr 320px;
+}
+
+.custom-layout .term-column .course-list {
+  min-height: 72px;
+}
+
+.picker-panel {
+  border-right: 1px solid var(--border);
+  background: var(--surface);
+  padding: 16px;
+  overflow: auto;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  transition:
+    background-color var(--transition-fast),
+    border-color var(--transition-fast),
+    box-shadow var(--transition-fast);
+}
+
+.picker-panel h2 {
+  margin: 0;
+}
+
+.picker-search,
+.picker-panel select {
+  width: 100%;
+  border: 1px solid var(--border);
+  background: var(--surface);
+  color: var(--text);
+  border-radius: 8px;
+  padding: 8px 10px;
+  min-height: 36px;
+}
+
+.picker-list {
+  display: grid;
+  gap: 14px;
+  margin-top: 8px;
+}
+
+.picker-group h3 {
+  margin: 0 0 8px;
+  font-size: 0.85rem;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.term-credits {
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--text-subtle);
+  white-space: nowrap;
+}
+
+.term-credits.warn {
+  color: var(--warning);
+}
+
+.term-column.term-over-credits {
+  border-color: var(--warning);
+}
+
+.drop-target-valid {
+  outline: 2px dashed var(--drop-valid-border);
+  background: var(--drop-valid-bg);
+}
+
+.drop-target-invalid {
+  outline: 2px dashed var(--drop-invalid-border);
+  background: var(--drop-invalid-bg);
+}
+
+.drop-hover {
+  box-shadow: 0 0 0 2px var(--primary);
+}
+
+@media (max-width: 1000px) {
+  .custom-layout {
+    grid-template-columns: 1fr;
+  }
+
+  .picker-panel {
+    border-right: none;
+    border-bottom: 1px solid var(--border);
+    max-height: 320px;
+  }
+}
+
+.schedule-warnings {
+  margin-top: 12px;
+  border: 1px solid var(--warning);
+  background: var(--warning-soft);
+  color: var(--text);
+  border-radius: 8px;
+  padding: 10px 12px;
+}
+
+.schedule-warnings h3 {
+  margin: 0 0 6px;
+  font-size: 0.85rem;
+  color: var(--warning);
+}
+
+.schedule-warnings ul {
+  margin: 0;
+  padding-left: 18px;
+  font-size: 0.8rem;
+  color: var(--text-muted);
+}

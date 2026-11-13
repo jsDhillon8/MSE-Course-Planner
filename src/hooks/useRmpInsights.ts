@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { fetchRmpInsights, isRmpEnabled, normalizeEquivalentCodes } from "../rmp";
+import { fetchRmpInsights, isRmpEnabled, normalizeEquivalentCodes } from "../api/rmp";
 import { RmpInsights } from "../types";
 
 export type RmpStatus = "idle" | "loading" | "success" | "not-found" | "error";

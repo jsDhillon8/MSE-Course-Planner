@@ -1,8 +1,9 @@
 import type { ReactNode } from "react";
 import { useNavigate } from "react-router-dom";
-import { useTheme } from "../context/ThemeContext";
-import { pageTemplates } from "../data";
-import { PageTemplate, VariantId } from "../types";
+import { useTheme } from "../../theme/ThemeContext";
+import { pageTemplates } from "../../data";
+import { PageTemplate, VariantId } from "../../types";
+import "./AppHeader.css";
 
 interface AppHeaderProps {
   selectedPageId: string;

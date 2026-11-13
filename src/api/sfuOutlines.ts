@@ -7,7 +7,7 @@ import {
   SharedOutlineFields,
   TermName,
   TermTuple,
-} from "./types";
+} from "../types";
 
 const SFU_BASE = "https://www.sfu.ca/bin/wcm/course-outlines";
 
@@ -478,27 +478,37 @@ export function loadOfferingHistory(
 type CourseInfoFields = { title?: string; description: string; units?: number };
 
 /** Successful lookups only; a null result is retried on the next call. */
-const courseInfoCache = new Map<string, Promise<CourseInfoFields | null>>();
+const sharedOutlineCache = new Map<string, Promise<SharedOutlineFields | null>>();
 
-export function fetchCourseInfoFields(dept: string, number: string): Promise<CourseInfoFields | null> {
+/**
+ * Course-level outline fields (title, units, requirements, notes) from the current or
+ * registration term, falling back to the most recent of the last 6 terms.
+ */
+export function fetchSharedOutline(dept: string, number: string): Promise<SharedOutlineFields | null> {
   const key = cacheKeyForCourse(dept, number);
-  const cached = courseInfoCache.get(key);
+  const cached = sharedOutlineCache.get(key);
   if (cached) return cached;
-  const request = fetchCourseInfoFieldsUncached(dept, number).then((info) => {
-    if (!info) courseInfoCache.delete(key);
-    return info;
+  const request = fetchSharedOutlineUncached(dept, number).then((outline) => {
+    if (!outline) sharedOutlineCache.delete(key);
+    return outline;
   }, (err) => {
-    courseInfoCache.delete(key);
+    sharedOutlineCache.delete(key);
     throw err;
   });
-  courseInfoCache.set(key, request);
+  sharedOutlineCache.set(key, request);
   return request;
 }
 
-async function fetchCourseInfoFieldsUncached(
+export async function fetchCourseInfoFields(dept: string, number: string): Promise<CourseInfoFields | null> {
+  const outline = await fetchSharedOutline(dept, number);
+  if (!outline) return null;
+  return { title: outline.title, description: outline.description ?? "", units: outline.units };
+}
+
+async function fetchSharedOutlineUncached(
   dept: string,
   number: string
-): Promise<CourseInfoFields | null> {
+): Promise<SharedOutlineFields | null> {
   const [currentResult, registrationResult] = await Promise.all([
     fetchSectionsForTerm("current/current", dept, number),
     fetchSectionsForTerm("registration/registration", dept, number),
@@ -511,9 +521,5 @@ async function fetchCourseInfoFieldsUncached(
     resolved = historical;
   }
 
-  return {
-    title: resolved.sharedOutline.title,
-    description: resolved.sharedOutline.description ?? "",
-    units: resolved.sharedOutline.units,
-  };
+  return resolved.sharedOutline;
 }

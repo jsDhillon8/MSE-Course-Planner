@@ -1,10 +1,11 @@
 import { Fragment, useRef } from "react";
 import type { DragEvent } from "react";
-import { courseById } from "../data";
-import { offeringFill, offeringTooltip } from "../sfuOutlines";
-import { Course, CourseHighlightRole, CourseSlot, OfferingHistory, TermName } from "../types";
-import { slotCourseIds } from "../utils/scheduleTerms";
-import { OfferingHistoryState } from "../hooks/useOfferingHistories";
+import { courseById } from "../../data";
+import { offeringFill, offeringTooltip } from "../../api/sfuOutlines";
+import { Course, CourseHighlightRole, CourseSlot, OfferingHistory, TermName } from "../../types";
+import { slotCourseIds } from "../../lib/scheduleTerms";
+import { OfferingHistoryState } from "../../hooks/useOfferingHistories";
+import "./ScheduleSlotCard.css";
 
 export function getCourseCardClassName(
   courseId: string,
