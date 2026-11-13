@@ -11,7 +11,9 @@
     "build": "tsc -b && vite build",
     "preview": "vite preview",
     "server": "node server/index.js",
-    "test:parse-equivalents": "npx tsx src/lib/parseEquivalents.test.ts"
+    "test:parse-equivalents": "tsx src/lib/parseEquivalents.test.ts",
+    "test:dependency-graph": "tsx src/lib/dependencyGraph.test.ts",
+    "sync-data": "tsx scripts/sync-course-data.ts"
   },
   "dependencies": {
     "cors": "^2.8.6",
@@ -24,6 +26,7 @@
     "@types/react": "^18.3.12",
     "@types/react-dom": "^18.3.1",
     "@vitejs/plugin-react": "^4.3.3",
+    "tsx": "^4.23.15",
     "typescript": "^5.6.3",
     "vite": "^5.4.10"
   }

@@ -86,6 +86,18 @@
 | **ProgramProfile** | programId, name, owningFaculty, graduationRules | Handles standard MSE vs MSE+Business |
 | **CourseEquivalency** | sourceCourseId, equivalentCourseId, faculty, type, provenance | Maps approved cross-faculty substitutions |
 
+### Course data files (`src/data/`)
+
+| File | Edited by | Contents |
+|---|---|---|
+| `templates.json` | hand | Plan templates (courses per term, co-op variants) |
+| `placeholderCourses.json` | hand | Placeholder slots (COMP ELEC 1, CO-OP, ...) |
+| `electives.json` | hand | Extra course codes to sync, by category (e.g. `technical`) |
+| `equivalencyOverrides.json` | hand | Equivalency pairs to add, or to change the type of a generated pair |
+| `generated/*.json` | `npm run sync-data` | Courses, raw SFU requirement text, and equivalencies from outline notes |
+
+Refresh once a term: run `npm run sync-data`, review `git diff src/data/generated`, then run `npm run test:dependency-graph`. If the requirement map changed on purpose, paste the new snapshot the test prints into `src/lib/dependencyGraph.snapshot.json`.
+
 ---
 
 ## Implementation Plan
