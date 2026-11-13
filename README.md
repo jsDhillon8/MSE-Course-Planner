@@ -96,7 +96,7 @@
 | `equivalencyOverrides.json` | hand | Equivalency pairs to add, or to change the type of a generated pair |
 | `generated/*.json` | `npm run sync-data` | Courses, raw SFU requirement text, and equivalencies from outline notes |
 
-Refresh once a term: run `npm run sync-data`, review `git diff src/data/generated`, then run `npm run test:dependency-graph`. If the requirement map changed on purpose, paste the new snapshot the test prints into `src/lib/dependencyGraph.snapshot.json`.
+Refresh once a term: run `npm run sync-data`, review `git diff src/data/generated`, then run `npm run test:dependency-graph`. If the requirement map changed on purpose, paste the new snapshot the test prints into `src/lib/requirements/dependencyGraph.snapshot.json`.
 
 ---
 

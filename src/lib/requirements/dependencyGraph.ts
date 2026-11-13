@@ -1,5 +1,5 @@
-import { courseEquivalencies, courseRequirementsById, courses } from "../data";
-import { Course, CourseHighlightRole, CourseRelationshipHighlights } from "../types";
+import { courseEquivalencies, courseRequirementsById, courses } from "../../data";
+import { Course, CourseHighlightRole, CourseRelationshipHighlights } from "../../types";
 import { buildCourseRequirementsIndex } from "./requirementNormalizer";
 
 export interface CourseDependencyGraph {

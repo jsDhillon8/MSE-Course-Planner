@@ -1,1 +1,10 @@
-[]
+[
+  { "sourceCourseId": "math150", "equivalentCourseId": "math151", "equivalencyType": "full" },
+  { "sourceCourseId": "math151", "equivalentCourseId": "math150", "equivalencyType": "full" },
+  { "sourceCourseId": "chem120", "equivalentCourseId": "chem121", "equivalencyType": "full" },
+  { "sourceCourseId": "chem121", "equivalentCourseId": "chem120", "equivalencyType": "full" },
+  { "sourceCourseId": "mse112", "equivalentCourseId": "mse110", "equivalencyType": "full" },
+  { "sourceCourseId": "mse224", "equivalentCourseId": "mse221", "equivalencyType": "full" },
+  { "sourceCourseId": "mse323", "equivalentCourseId": "mse223", "equivalencyType": "full" },
+  { "sourceCourseId": "bus232", "equivalentCourseId": "buec232", "equivalencyType": "full" }
+]

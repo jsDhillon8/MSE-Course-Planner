@@ -5,7 +5,7 @@
 //    dependencyGraph.snapshot.json. If course data changes on purpose (e.g. after
 //    syncing from SFU), review the printed diff, then replace the snapshot file with
 //    the JSON printed below it.
-import { courses } from "../data";
+import { courses } from "../../data";
 import { courseDependencyGraph as graph } from "./dependencyGraph";
 import snapshot from "./dependencyGraph.snapshot.json";
 

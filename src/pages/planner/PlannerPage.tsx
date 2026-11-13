@@ -8,7 +8,7 @@ import { ScheduleSlotCard } from "../../components/schedule/ScheduleSlotCard";
 import { courseById, pageTemplates } from "../../data";
 import { useCourseProgress } from "../../hooks/useCourseProgress";
 import { computeCompletedCredits, computeTotalCurriculumCredits } from "../../lib/credits";
-import { courseDependencyGraph } from "../../lib/dependencyGraph";
+import { courseDependencyGraph } from "../../lib/requirements/dependencyGraph";
 import { formatCurriculum } from "../../lib/formatCurriculum";
 import { getActiveTerms, groupTermsByYear } from "../../lib/scheduleTerms";
 import { Course, TermPlan, VariantId } from "../../types";

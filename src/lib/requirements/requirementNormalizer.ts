@@ -1,7 +1,33 @@
-import { courseEquivalencies, courses } from "../data";
-import { Course, CourseEquivalency } from "../types";
-import { buildCourseCodeIndex } from "./courseCodes";
-import { NormalizedRequirements, normalizeRequirementsFromText } from "./prerequisiteParser";
+// Step 3 of requirement parsing: build each course's requirements, expanded with equivalencies.
+import { courseEquivalencies, courses } from "../../data";
+import { Course, CourseEquivalency, PrerequisiteExpression } from "../../types";
+import { buildCourseCodeIndex } from "../courseCodes";
+import { collectCourseIds, parsePrerequisiteExpression } from "./requirementExpression";
+import { resolveRequirementTexts } from "./requirementText";
+
+export interface NormalizedRequirements {
+  prerequisiteExpression: PrerequisiteExpression | null;
+  corequisiteExpression: PrerequisiteExpression | null;
+  prerequisiteIds: Set<string>;
+  corequisiteIds: Set<string>;
+}
+
+/** Full pipeline for one course: find the text, parse it, collect the course ids. */
+export function normalizeRequirementsFromText(
+  rawSource: string,
+  codeToId: Map<string, string>,
+): NormalizedRequirements {
+  const { prerequisiteText, corequisiteText } = resolveRequirementTexts(rawSource);
+  const prerequisiteExpression = parsePrerequisiteExpression(prerequisiteText, codeToId);
+  const corequisiteExpression = parsePrerequisiteExpression(corequisiteText, codeToId);
+
+  return {
+    prerequisiteExpression,
+    corequisiteExpression,
+    prerequisiteIds: collectCourseIds(prerequisiteExpression),
+    corequisiteIds: collectCourseIds(corequisiteExpression),
+  };
+}
 
 export interface CourseRequirementsIndex {
   get(courseId: string): NormalizedRequirements;

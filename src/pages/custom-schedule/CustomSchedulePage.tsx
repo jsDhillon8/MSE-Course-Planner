@@ -1,83 +1,48 @@
 import { useEffect, useMemo, useState } from "react";
-import type { DragEvent } from "react";
+import { CourseDetailsPanel } from "../../components/course-details/CourseDetailsPanel";
 import { AppHeader } from "../../components/layout/AppHeader";
-import { CourseDetailsPanel, EquivalentBox } from "../../components/course-details/CourseDetailsPanel";
-import { HighlightLegend } from "../../components/schedule/HighlightLegend";
 import { ProgressFooter } from "../../components/layout/ProgressFooter";
-import { formatOfferingWarning, offeringWarningLevel, ScheduleSlotCard } from "../../components/schedule/ScheduleSlotCard";
-import { courseById, courses, pageTemplates } from "../../data";
+import { HighlightLegend } from "../../components/schedule/HighlightLegend";
+import { formatOfferingWarning, offeringWarningLevel } from "../../components/schedule/ScheduleSlotCard";
+import { pageTemplates } from "../../data";
 import { useCourseProgress } from "../../hooks/useCourseProgress";
 import { useOfferingHistories } from "../../hooks/useOfferingHistories";
-import { fetchCourseInfoFields } from "../../api/sfuOutlines";
-import { Course, CourseHighlightRole, VariantId } from "../../types";
-import {
-  buildCourseCodeIndex,
-  courseDepartment,
-  isPlaceholderCourse,
-  normalizeCourseCode,
-  parseCourseCode,
-} from "../../lib/courseCodes";
+import { isPlaceholderCourse } from "../../lib/courseCodes";
 import {
   computeCompletedCredits,
-  computeTermCredits,
   computeTotalCurriculumCredits,
   TERM_CREDIT_WARN_THRESHOLD,
 } from "../../lib/credits";
 import {
-  canPlaceCourse,
   clearCustomPlanStorage,
-  CourseDragPayload,
   createEmptyCustomPlan,
   CustomPlan,
-  customCourseIdFromCode,
   customPlanFromTemplate,
   findSwapForCourse,
-  isRepeatableCourseId,
   loadCustomPlan,
-  placeCourse,
   placedCourseIds,
   planCourseLookup,
-  removeCourseFromPlan,
-  resolvePlanCourse,
   saveCustomPlan,
-  swapCourseIntoPlan,
   termNameFromLabel,
-  undoSwapInPlan,
 } from "../../lib/customPlan";
-import { courseDependencyGraph } from "../../lib/dependencyGraph";
-import { groupTermsByYear } from "../../lib/scheduleTerms";
+import { courseDependencyGraph } from "../../lib/requirements/dependencyGraph";
+import { Course, CourseHighlightRole, VariantId } from "../../types";
+import type { SharedCourseCardProps } from "./courseCardProps";
+import { CoursePicker } from "./CoursePicker";
 import "./CustomSchedulePage.css";
-
-const DRAG_MIME = "application/x-mse-course";
-const courseIdByCode = buildCourseCodeIndex(courses);
+import { CustomTermGrid } from "./CustomTermGrid";
+import { useCourseDrag } from "./useCourseDrag";
+import { useEquivalentSwap } from "./useEquivalentSwap";
 
 interface CustomSchedulePageProps {
   onOpenWelcome: () => void;
-}
-
-function parseDragPayload(event: DragEvent): CourseDragPayload | null {
-  const raw = event.dataTransfer.getData(DRAG_MIME) || event.dataTransfer.getData("text/plain");
-  if (!raw) return null;
-  try {
-    const parsed = JSON.parse(raw) as CourseDragPayload;
-    if (typeof parsed?.courseId === "string") {
-      return { courseId: parsed.courseId, fromTermId: parsed.fromTermId ?? null };
-    }
-  } catch {
-    if (courseById[raw]) return { courseId: raw, fromTermId: null };
-  }
-  return null;
 }
 
 export function CustomSchedulePage({ onOpenWelcome }: CustomSchedulePageProps) {
   const [plan, setPlan] = useState<CustomPlan>(loadCustomPlan);
   const [selectedCourse, setSelectedCourse] = useState<Course | null>(null);
   const [recursiveHighlights, setRecursiveHighlights] = useState(true);
-  const [search, setSearch] = useState("");
-  const [deptFilter, setDeptFilter] = useState("all");
   const [templateSeed, setTemplateSeed] = useState(`${pageTemplates[0]?.id ?? ""}:A`);
-  const [dragging, setDragging] = useState<CourseDragPayload | null>(null);
-  const [hoverTarget, setHoverTarget] = useState<string | null>(null);
 
   const {
     completedCourseIds,
@@ -111,64 +76,14 @@ export function CustomSchedulePage({ onOpenWelcome }: CustomSchedulePageProps) {
 
   const placed = useMemo(() => placedCourseIds(plan), [plan]);
 
-  const departments = useMemo(() => {
-    const depts = new Set<string>();
-    for (const course of courses) {
-      if (!isPlaceholderCourse(course)) depts.add(courseDepartment(course));
-    }
-    return [...depts].sort();
-  }, []);
-
-  const pickerCourses = useMemo(() => {
-    const query = search.trim().toLowerCase();
-    return courses.filter((course) => {
-      if (placed.has(course.id) && !isRepeatableCourseId(course.id)) return false;
-      if (query) {
-        const haystack = `${course.code} ${course.title}`.toLowerCase();
-        if (!haystack.includes(query)) return false;
-      }
-      const dept = courseDepartment(course);
-      if (deptFilter === "all") return true;
-      if (deptFilter === "Slots") return dept === "Slots";
-      return dept === deptFilter;
-    });
-  }, [placed, search, deptFilter]);
-
-  const pickerGroups = useMemo(() => {
-    const slots: Course[] = [];
-    const byDept = new Map<string, Course[]>();
-
-    for (const course of pickerCourses) {
-      if (isPlaceholderCourse(course)) {
-        slots.push(course);
-        continue;
-      }
-      const dept = courseDepartment(course);
-      const list = byDept.get(dept) ?? [];
-      list.push(course);
-      byDept.set(dept, list);
-    }
-
-    const groups = [...byDept.entries()]
-      .sort(([a], [b]) => a.localeCompare(b))
-      .map(([dept, items]) => ({
-        id: dept,
-        title: dept,
-        courses: items.sort((a, b) => a.code.localeCompare(b.code)),
-      }));
-
-    if (slots.length && (deptFilter === "all" || deptFilter === "Slots")) {
-      groups.push({
-        id: "Slots",
-        title: "Slots",
-        courses: slots.sort((a, b) => a.code.localeCompare(b.code) || a.title.localeCompare(b.title)),
-      });
-    }
-
-    return groups;
-  }, [pickerCourses, deptFilter]);
-
-  const termsByYear = useMemo(() => groupTermsByYear(plan.terms), [plan.terms]);
+  const drag = useCourseDrag(plan, setPlan);
+  const { handleSwapIntoPlan, handleUndoSwap } = useEquivalentSwap(
+    plan,
+    setPlan,
+    placed,
+    selectedCourse,
+    setSelectedCourse,
+  );
 
   const gridCourses = useMemo(() => {
     const list: Course[] = [];
@@ -237,45 +152,6 @@ export function CustomSchedulePage({ onOpenWelcome }: CustomSchedulePageProps) {
     return items;
   }, [plan.terms, lookup, offeringHistories]);
 
-  const beginDrag = (event: DragEvent<HTMLDivElement>, courseId: string, fromTermId: string | null) => {
-    const payload: CourseDragPayload = { courseId, fromTermId };
-    event.dataTransfer.effectAllowed = "move";
-    event.dataTransfer.setData(DRAG_MIME, JSON.stringify(payload));
-    event.dataTransfer.setData("text/plain", JSON.stringify(payload));
-    setDragging(payload);
-  };
-
-  const endDrag = () => {
-    setDragging(null);
-    setHoverTarget(null);
-  };
-
-  const dropOnTerm = (event: DragEvent, destTermId: string) => {
-    event.preventDefault();
-    const payload = dragging ?? parseDragPayload(event);
-    endDrag();
-    if (!payload) return;
-    setPlan((current) => placeCourse(current, payload.courseId, destTermId, payload.fromTermId));
-  };
-
-  const dropOnPicker = (event: DragEvent) => {
-    event.preventDefault();
-    const payload = dragging ?? parseDragPayload(event);
-    endDrag();
-    if (!payload?.fromTermId) return;
-    setPlan((current) => removeCourseFromPlan(current, payload.courseId, payload.fromTermId ?? undefined));
-  };
-
-  const keepDrag = (event: DragEvent) => {
-    event.preventDefault();
-    if (event.dataTransfer) event.dataTransfer.dropEffect = "move";
-  };
-
-  const termDropState = (termId: string): "valid" | "invalid" | null => {
-    if (!dragging) return null;
-    return canPlaceCourse(plan, dragging.courseId, termId, dragging.fromTermId) ? "valid" : "invalid";
-  };
-
   const handleStartFromTemplate = () => {
     const [templateId, variantId] = templateSeed.split(":");
     const template = pageTemplates.find((item) => item.id === templateId);
@@ -299,56 +175,16 @@ export function CustomSchedulePage({ onOpenWelcome }: CustomSchedulePageProps) {
     setSelectedCourse((current) => (current?.id === course.id ? null : course));
   };
 
-  const handleUndoSwap = (courseId: string) => {
-    const swap = findSwapForCourse(plan, courseId);
-    setPlan((current) => undoSwapInPlan(current, courseId));
-    if (swap) {
-      const original = resolvePlanCourse(plan, swap.originalCourseId) ?? courseById[swap.originalCourseId];
-      if (original) setSelectedCourse(original);
-    }
-  };
-
-  const handleSwapIntoPlan = async (box: EquivalentBox) => {
-    if (!selectedCourse) return;
-    if (!placed.has(selectedCourse.id)) return;
-    const originalId = selectedCourse.id;
-
-    const normalized = normalizeCourseCode(box.code);
-    const catalogId =
-      courseIdByCode.get(normalized) ?? courseIdByCode.get(normalized.replace(/\s+/g, ""));
-    const catalogCourse = catalogId ? courseById[catalogId] : undefined;
-
-    let replacement: Course;
-    if (catalogCourse) {
-      replacement = catalogCourse;
-    } else {
-      const parsed = parseCourseCode(box.code);
-      let title = box.title ?? box.code;
-      let credits = 0;
-      let description = "";
-      if (parsed && !isPlaceholderCourse({ code: box.code })) {
-        const info = await fetchCourseInfoFields(parsed.dept, parsed.number);
-        if (info) {
-          if (info.title) title = info.title;
-          if (info.units != null) credits = info.units;
-          description = info.description;
-        }
-      }
-      replacement = {
-        id: customCourseIdFromCode(box.code),
-        code: normalized,
-        title,
-        credits,
-        description,
-      };
-    }
-
-    setPlan((current) => swapCourseIntoPlan(current, originalId, replacement));
-    setSelectedCourse(replacement);
-  };
-
   const selectedInPlan = Boolean(selectedCourse && placed.has(selectedCourse.id));
-  const pickerDropActive = Boolean(dragging?.fromTermId);
+
+  const cardProps: SharedCourseCardProps = {
+    selectedCourseId: selectedCourse?.id ?? null,
+    highlightRoles: relationshipHighlights.roles,
+    completedCourseIds,
+    onToggleCompleted: toggleCourseCompleted,
+    onSelect: handleCourseSelect,
+    courseLookup: lookup,
+  };
 
   return (
     <div className="app-shell">
@@ -387,81 +223,7 @@ export function CustomSchedulePage({ onOpenWelcome }: CustomSchedulePageProps) {
       />
 
       <main className="planner-layout custom-layout">
-        <aside
-          className={`picker-panel${pickerDropActive ? " drop-target-valid" : ""}${
-            hoverTarget === "picker" && pickerDropActive ? " drop-hover" : ""
-          }`}
-          onDragOver={(event) => {
-            keepDrag(event);
-            if (dragging?.fromTermId) setHoverTarget("picker");
-          }}
-          onDragLeave={(event) => {
-            const next = event.relatedTarget as Node | null;
-            if (next && event.currentTarget.contains(next)) return;
-            if (hoverTarget === "picker") setHoverTarget(null);
-          }}
-          onDrop={dropOnPicker}
-        >
-          <h2>Course picker</h2>
-          <p className="meta">Drag a course onto a term, or use Add to…</p>
-          <input
-            type="search"
-            className="picker-search"
-            value={search}
-            onChange={(event) => setSearch(event.target.value)}
-            placeholder="Search courses"
-            aria-label="Search courses"
-          />
-          <select
-            value={deptFilter}
-            onChange={(event) => setDeptFilter(event.target.value)}
-            aria-label="Filter by department"
-          >
-            <option value="all">All departments</option>
-            {departments.map((dept) => (
-              <option key={dept} value={dept}>
-                {dept}
-              </option>
-            ))}
-            <option value="Slots">Slots</option>
-          </select>
-
-          <div className="picker-list">
-            {pickerGroups.length === 0 && (
-              <p className="empty-note">No matching unplaced courses.</p>
-            )}
-            {pickerGroups.map((group) => (
-              <section key={group.id} className="picker-group">
-                <h3>{group.title}</h3>
-                <div className="course-list">
-                  {group.courses.map((course) => (
-                    <ScheduleSlotCard
-                      key={course.id}
-                      slot={course.id}
-                      selectedCourseId={selectedCourse?.id ?? null}
-                      highlightRoles={relationshipHighlights.roles}
-                      completedCourseIds={completedCourseIds}
-                      onToggleCompleted={toggleCourseCompleted}
-                      onSelect={handleCourseSelect}
-                      courseLookup={lookup}
-                      draggable
-                      onCourseDragStart={(event, courseId) => beginDrag(event, courseId, null)}
-                      onCourseDragEnd={endDrag}
-                      moveOptions={plan.terms.map((term) => ({
-                        id: term.id,
-                        label: term.label,
-                        disabled: !canPlaceCourse(plan, course.id, term.id, null),
-                      }))}
-                      onMoveToTerm={(courseId, termId) =>
-                        setPlan((current) => placeCourse(current, courseId, termId, null))
-                      }
-                    />
-                  ))}
-                </div>
-              </section>
-            ))}
-          </div>
-        </aside>
+        <CoursePicker plan={plan} setPlan={setPlan} placed={placed} drag={drag} cardProps={cardProps} />
 
         <section className="grid-panel">
           <h2>Custom Schedule</h2>
@@ -487,102 +249,14 @@ export function CustomSchedulePage({ onOpenWelcome }: CustomSchedulePageProps) {
             </aside>
           )}
 
-          <div className="year-grid">
-            {termsByYear.map((yearGroup) => (
-              <section key={yearGroup.year} className="year-row">
-                <h3 className="year-title">Year {yearGroup.year}</h3>
-                <div className="term-grid">
-                  {yearGroup.terms.map((term) => {
-                    const credits = computeTermCredits(term.courseIds, lookup);
-                    const over = credits > TERM_CREDIT_WARN_THRESHOLD;
-                    const dropState = dragging ? termDropState(term.id) : null;
-                    const dropClass =
-                      dropState === "valid"
-                        ? " drop-target-valid"
-                        : dropState === "invalid"
-                          ? " drop-target-invalid"
-                          : "";
-                    const hoverClass = hoverTarget === term.id ? " drop-hover" : "";
-                    const season = termNameFromLabel(term.label);
-
-                    return (
-                      <article
-                        key={term.id}
-                        className={`term-column${over ? " term-over-credits" : ""}${dropClass}${hoverClass}`}
-                        onDragOver={(event) => {
-                          keepDrag(event);
-                          if (dragging) {
-                            event.dataTransfer.dropEffect = canPlaceCourse(
-                              plan,
-                              dragging.courseId,
-                              term.id,
-                              dragging.fromTermId
-                            )
-                              ? "move"
-                              : "none";
-                          }
-                          setHoverTarget(term.id);
-                        }}
-                        onDragLeave={(event) => {
-                          const next = event.relatedTarget as Node | null;
-                          if (next && event.currentTarget.contains(next)) return;
-                          if (hoverTarget === term.id) setHoverTarget(null);
-                        }}
-                        onDrop={(event) => dropOnTerm(event, term.id)}
-                      >
-                        <h4>
-                          {term.label.split("-")[1]?.trim() ?? term.label}
-                          <span className={`term-credits${over ? " warn" : ""}`}>
-                            {credits} cr
-                            {over ? " — over 18" : ""}
-                          </span>
-                        </h4>
-                        <div className="course-list">
-                          {term.courseIds.map((courseId) => {
-                            const swap = findSwapForCourse(plan, courseId);
-                            return (
-                              <ScheduleSlotCard
-                                key={courseId}
-                                slot={courseId}
-                                selectedCourseId={selectedCourse?.id ?? null}
-                                highlightRoles={relationshipHighlights.roles}
-                                completedCourseIds={completedCourseIds}
-                                onToggleCompleted={toggleCourseCompleted}
-                                onSelect={handleCourseSelect}
-                                courseLookup={lookup}
-                                draggable
-                                onCourseDragStart={(event, id) => beginDrag(event, id, term.id)}
-                                onCourseDragEnd={endDrag}
-                                currentTermId={term.id}
-                                moveOptions={plan.terms
-                                  .filter((option) => option.id !== term.id)
-                                  .map((option) => ({
-                                    id: option.id,
-                                    label: option.label,
-                                    disabled: !canPlaceCourse(plan, courseId, option.id, term.id),
-                                  }))}
-                                onMoveToTerm={(id, destTermId) =>
-                                  setPlan((current) => placeCourse(current, id, destTermId, term.id))
-                                }
-                                onRemoveFromPlan={(id) =>
-                                  setPlan((current) => removeCourseFromPlan(current, id, term.id))
-                                }
-                                showOfferingBadges
-                                offeringHistory={offeringHistories.get(courseId)}
-                                termSeason={season}
-                                swappedFromCode={swap?.originalCode}
-                                onUndoSwap={swap ? handleUndoSwap : undefined}
-                              />
-                            );
-                          })}
-                        </div>
-                      </article>
-                    );
-                  })}
-                </div>
-              </section>
-            ))}
-          </div>
+          <CustomTermGrid
+            plan={plan}
+            setPlan={setPlan}
+            drag={drag}
+            cardProps={cardProps}
+            offeringHistories={offeringHistories}
+            onUndoSwap={handleUndoSwap}
+          />
         </section>
 
         <CourseDetailsPanel
