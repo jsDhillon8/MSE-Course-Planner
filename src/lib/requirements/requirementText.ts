@@ -11,7 +11,7 @@ const EMPTY: SplitRequirementsText = { prerequisiteText: "", corequisiteText: ""
 /** Flatten bullet lists and SFU spacing into one "; "-separated line. */
 export function normalizeRequirementSection(text: string): string {
   return text
-    .split("\n")
+    .split(/\r?\n/)
     .map((line) => line.replace(/^\s*[-•*]\s*/, "").trim())
     .filter(Boolean)
     .join("; ")
@@ -59,14 +59,17 @@ function extractLabeledSection(description: string, label: "Prerequisite" | "Cor
   return normalizeRequirementSection(match[1]);
 }
 
-/** Move "X may be taken concurrently" courses from the prerequisite text to corequisites. */
+/**
+ * Move "X may be taken concurrently" phrases from the prerequisite text to corequisites.
+ * X is everything back to the previous sentence break or comma, e.g. "MSE 281 (or MATH 260)".
+ */
 function extractConcurrentCorequisites(text: string): SplitRequirementsText {
   const corequisites: string[] = [];
 
   let prerequisiteText = text.replace(
-    /([A-Z]{2,6}\s?\d{3}[A-Z]?)\s+may be taken concurrently/gi,
-    (_match, course) => {
-      corequisites.push(course);
+    /([^.;,]*?)\s+may be taken concurrently\.?/gi,
+    (_match, courses: string) => {
+      corequisites.push(courses.trim());
       return "";
     },
   );
@@ -91,7 +94,9 @@ export function resolveRequirementTexts(rawSource: string): SplitRequirementsTex
     result = { prerequisiteText: normalizeRequirementSection(source), corequisiteText: "" };
   }
 
-  const concurrent = extractConcurrentCorequisites(result.prerequisiteText);
+  // Advice such as "Recommended: MATH 240 ..." is not a requirement.
+  const withoutAdvice = result.prerequisiteText.replace(/\s*\bRecommended:[\s\S]*$/i, "");
+  const concurrent = extractConcurrentCorequisites(withoutAdvice);
 
   return {
     prerequisiteText: concurrent.prerequisiteText,

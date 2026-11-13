@@ -129,8 +129,9 @@ for (const { id, code, outline } of outlines) {
     credits: outline.units ?? previous?.credits ?? 0,
   });
 
-  const prereq = outline.prerequisites?.trim();
-  const coreq = outline.corequisites?.trim();
+  // Collapse SFU's stray line breaks ("MSE 320\r\n(or ENSC 382)") so they don't read as list breaks.
+  const prereq = outline.prerequisites?.replace(/\s+/g, " ").trim();
+  const coreq = outline.corequisites?.replace(/\s+/g, " ").trim();
   const text = [prereq && `Prerequisites: ${prereq}`, coreq && `Corequisites: ${coreq}`].filter(Boolean).join("\n");
   if (text) requirements[id] = text;
 }

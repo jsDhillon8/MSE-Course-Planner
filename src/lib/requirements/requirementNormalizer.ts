@@ -12,7 +12,10 @@ export interface NormalizedRequirements {
   corequisiteIds: Set<string>;
 }
 
-/** Full pipeline for one course: find the text, parse it, collect the course ids. */
+/**
+ * Full pipeline for one course: find the text, parse it, collect the course ids.
+ * A course listed as both (e.g. "MSE 250 ... may be taken concurrently") counts as a corequisite only.
+ */
 export function normalizeRequirementsFromText(
   rawSource: string,
   codeToId: Map<string, string>,
@@ -21,12 +24,11 @@ export function normalizeRequirementsFromText(
   const prerequisiteExpression = parsePrerequisiteExpression(prerequisiteText, codeToId);
   const corequisiteExpression = parsePrerequisiteExpression(corequisiteText, codeToId);
 
-  return {
-    prerequisiteExpression,
-    corequisiteExpression,
-    prerequisiteIds: collectCourseIds(prerequisiteExpression),
-    corequisiteIds: collectCourseIds(corequisiteExpression),
-  };
+  const corequisiteIds = collectCourseIds(corequisiteExpression);
+  const prerequisiteIds = collectCourseIds(prerequisiteExpression);
+  for (const id of corequisiteIds) prerequisiteIds.delete(id);
+
+  return { prerequisiteExpression, corequisiteExpression, prerequisiteIds, corequisiteIds };
 }
 
 export interface CourseRequirementsIndex {
@@ -70,12 +72,17 @@ export function buildCourseRequirementsIndex(
   for (const course of courseList) {
     const source = resolveRequirementsSource(course, apiRequirementsByCourseId);
     const normalized = normalizeRequirementsFromText(source, codeToId);
+    const prerequisiteIds = expandWithEquivalencies(normalized.prerequisiteIds, equivalencies);
+    const corequisiteIds = expandWithEquivalencies(normalized.corequisiteIds, equivalencies);
+    // A course never requires itself (SFU text sometimes names the course, e.g. "... concurrently with MATH 251").
+    prerequisiteIds.delete(course.id);
+    corequisiteIds.delete(course.id);
 
     cache.set(course.id, {
       prerequisiteExpression: normalized.prerequisiteExpression,
       corequisiteExpression: normalized.corequisiteExpression,
-      prerequisiteIds: expandWithEquivalencies(normalized.prerequisiteIds, equivalencies),
-      corequisiteIds: expandWithEquivalencies(normalized.corequisiteIds, equivalencies),
+      prerequisiteIds,
+      corequisiteIds,
     });
   }
 

@@ -40,7 +40,9 @@ export function buildCourseCodeIndex(courses: Course[]): Map<string, string> {
   (e.g. "MATH 151, 152 or 155 and PHYS 140" -> "MATH 151, MATH 152 or MATH 155 and PHYS 140")
 */
 export function expandDepartmentShorthand(text: string): string {
-  const tokenPattern = /\b([A-Za-z]{2,8})\s+(\d{1,3}[A-Za-z]?)|(?:\b(?:or|and|,)\s+)+(\d{1,3}[A-Za-z]?\b)/gi;
+  // "or"/"and" are never departments: "BUS 374 or 381" means "BUS 374 or BUS 381".
+  const tokenPattern =
+    /\b(?!(?:or|and)\b)([A-Za-z]{2,8})\s+(\d{1,3}[A-Za-z]?)|(?:\b(?:or|and|,)\s+)+(\d{1,3}[A-Za-z]?\b)/gi;
   
   let currentDept = "";
 

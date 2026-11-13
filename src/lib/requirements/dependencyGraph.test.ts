@@ -29,7 +29,7 @@ function check(name: string, actual: Iterable<string>, expected: string[]): void
 }
 
 // ── Spot checks ──
-check("MATH 152 needs MATH 151", graph.getPrerequisites("math152", false), ["math151"]);
+check("MATH 152 needs MATH 150 or 151", graph.getPrerequisites("math152", false), ["math150", "math151"]);
 check(
   "MSE 210 needs PHYS 141, MATH 150, MATH 151",
   graph.getPrerequisites("mse210", false),
@@ -37,19 +37,20 @@ check(
 );
 check("MSE 320 has corequisite MSE 212", graph.getCorequisites("mse320"), ["mse212"]);
 check(
-  "MATH 151 unlocks MATH 152, MATH 232, MSE 210",
+  "MATH 151 unlocks MATH 152, MATH 232, MSE 210, BUS 336, ECON 201",
   graph.getDependents("math151", false),
-  ["math152", "math232", "mse210"]
+  ["bus336", "econ201", "math152", "math232", "mse210"]
 );
 check(
   "MSE 381 full prerequisite chain",
   graph.getPrerequisites("mse381", true),
-  ["math151", "math152", "math232", "math251", "mse103", "mse250", "mse280", "mse281", "phys141"]
+  ["math150", "math151", "math152", "math232", "math251", "math260", "mse103", "mse280", "mse281"]
 );
+check("MSE 281 takes MSE 250 as a corequisite, not a prerequisite", graph.getCorequisites("mse281"), ["mse250"]);
 check(
   "Highlight roles for MSE 251 (direct)",
   [...graph.getHighlights("mse251", false).roles].map(([id, role]) => `${id}:${role}`),
-  ["mse251:selected", "mse250:prerequisite", "mse310:dependent", "mse352:dependent", "mse353:dependent"]
+  ["mse251:selected", "mse250:prerequisite", "mse310:dependent", "mse311:dependent", "mse352:dependent", "mse353:dependent"]
 );
 
 // ── Snapshot ──

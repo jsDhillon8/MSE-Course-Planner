@@ -12,6 +12,7 @@
     "preview": "vite preview",
     "server": "node server/index.js",
     "test:parse-equivalents": "tsx src/lib/parseEquivalents.test.ts",
+    "test:requirement-parsing": "tsx src/lib/requirements/requirementParsing.test.ts",
     "test:dependency-graph": "tsx src/lib/requirements/dependencyGraph.test.ts",
     "sync-data": "tsx scripts/sync-course-data.ts"
   },
