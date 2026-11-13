@@ -1299,6 +1299,10 @@ p.empty-note.historical-note {
   color: var(--text);
 }
 
+.rmp-stats dd.rmp-rating-value.error   { color: var(--danger); }
+.rmp-stats dd.rmp-rating-value.warn    { color: var(--warning); }
+.rmp-stats dd.rmp-rating-value.success { color: var(--success); }
+
 .rmp-profile-link {
   color: var(--primary);
   font-weight: 600;

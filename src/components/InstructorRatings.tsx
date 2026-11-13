@@ -10,6 +10,15 @@ function formatRating(value: number | null | undefined): string {
   return typeof value === "number" && value > 0 ? value.toFixed(1) : "–";
 }
 
+type RatingTone = "error" | "warn" | "success";
+
+/** 0–2.4 red, 2.5–3.4 yellow, 3.5–5 green (RMP ratings have one decimal). */
+function ratingTone(value: number): RatingTone {
+  if (value < 2.5) return "error";
+  if (value < 3.5) return "warn";
+  return "success";
+}
+
 function formatCommentDate(raw: string): string {
   // RMP sends "2026-04-13 23:01:57 +0000 UTC"
   const date = new Date(raw.slice(0, 10));
@@ -80,7 +89,9 @@ function InstructorRatingItem({ name, courseCode, equivalentCodes }: InstructorR
           <span className="live-badge warn">Possible match</span>
         )}
         {rmp.status === "success" && data && data.isExactNameMatch && data.professor.numRatings > 0 && (
-          <span className="live-badge success">{formatRating(data.professor.avgRating)} / 5</span>
+          <span className={`live-badge ${ratingTone(data.professor.avgRating)}`}>
+            {formatRating(data.professor.avgRating)} / 5
+          </span>
         )}
         {rmp.status === "not-found" && <span className="live-badge warn">Not on RMP</span>}
         {rmp.status === "error" && <span className="live-badge error">Unavailable</span>}
@@ -123,7 +134,9 @@ function InstructorRatingItem({ name, courseCode, equivalentCodes }: InstructorR
               <dl className="rmp-stats">
                 <div>
                   <dt>Rating</dt>
-                  <dd>{formatRating(data.professor.avgRating)} / 5</dd>
+                  <dd className={`rmp-rating-value ${ratingTone(data.professor.avgRating)}`}>
+                    {formatRating(data.professor.avgRating)} / 5
+                  </dd>
                 </div>
                 <div>
                   <dt>Difficulty</dt>
