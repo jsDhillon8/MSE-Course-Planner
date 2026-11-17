@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState, type ChangeEvent } from "react";
 import { CourseDetailsPanel } from "../../components/course-details/CourseDetailsPanel";
 import { AppHeader } from "../../components/layout/AppHeader";
 import { ProgressFooter } from "../../components/layout/ProgressFooter";
@@ -20,9 +20,12 @@ import {
   customPlanFromTemplate,
   findSwapForCourse,
   loadCustomPlan,
+  parsePlanFile,
   placedCourseIds,
+  PLAN_FILE_EXTENSION,
   planCourseLookup,
   saveCustomPlan,
+  serializePlanFile,
   termNameFromLabel,
 } from "../../lib/customPlan";
 import { courseDependencyGraph } from "../../lib/requirements/dependencyGraph";
@@ -43,6 +46,7 @@ export function CustomSchedulePage({ onOpenWelcome }: CustomSchedulePageProps) {
   const [selectedCourse, setSelectedCourse] = useState<Course | null>(null);
   const [recursiveHighlights, setRecursiveHighlights] = useState(true);
   const [templateSeed, setTemplateSeed] = useState(`${pageTemplates[0]?.id ?? ""}:A`);
+  const importInputRef = useRef<HTMLInputElement>(null);
 
   const {
     completedCourseIds,
@@ -165,10 +169,37 @@ export function CustomSchedulePage({ onOpenWelcome }: CustomSchedulePageProps) {
       "Reset your custom schedule to an empty Year 1–5 grid? This cannot be undone."
     );
     if (!confirmed) return;
-    const empty = createEmptyCustomPlan();
+    const empty = createEmptyCustomPlan(plan.programId, plan.curriculumId);
     setPlan(empty);
     clearCustomPlanStorage();
     saveCustomPlan(empty);
+  };
+
+  const handleExportPlan = () => {
+    const blob = new Blob([serializePlanFile(plan)], { type: "application/json" });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement("a");
+    link.href = url;
+    link.download = `${plan.programId}-${plan.curriculumId}${PLAN_FILE_EXTENSION}`;
+    link.click();
+    URL.revokeObjectURL(url);
+  };
+
+  const handleImportPlan = async (event: ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    event.target.value = "";
+    if (!file) return;
+
+    const result = parsePlanFile(await file.text());
+    if (!result.ok) {
+      window.alert(`Couldn't import "${file.name}". ${result.error}`);
+      return;
+    }
+    if (placed.size > 0 && !window.confirm(`Replace your current custom schedule with "${file.name}"?`)) {
+      return;
+    }
+    setSelectedCourse(null);
+    setPlan(result.plan);
   };
 
   const handleCourseSelect = (course: Course) => {
@@ -187,7 +218,7 @@ export function CustomSchedulePage({ onOpenWelcome }: CustomSchedulePageProps) {
   };
 
   return (
-    <div className="app-shell">
+    <div className="app-shell custom-shell">
       <AppHeader
         selectedPageId="custom"
         extraControls={
@@ -214,6 +245,23 @@ export function CustomSchedulePage({ onOpenWelcome }: CustomSchedulePageProps) {
             <button type="button" onClick={handleStartFromTemplate}>
               Start from template
             </button>
+            <button type="button" onClick={handleExportPlan} aria-label="Export plan to a file">
+              Export
+            </button>
+            <button
+              type="button"
+              onClick={() => importInputRef.current?.click()}
+              aria-label="Import plan from a file"
+            >
+              Import
+            </button>
+            <input
+              ref={importInputRef}
+              type="file"
+              accept=".json,application/json"
+              hidden
+              onChange={handleImportPlan}
+            />
             <button type="button" className="reset-progress-btn" onClick={handleResetSchedule}>
               Reset
             </button>

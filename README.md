@@ -56,9 +56,8 @@ Plans, priorities and design principles are in [ROADMAP.md](ROADMAP.md).
 
 | File | Edited by | Contents |
 |---|---|---|
-| `templates.json` | hand | Plan templates (courses per term, co-op variants) |
+| `programs/<id>.json` | hand | One file per program: its curricula (e.g. Pre/Post-Fall 2024), each with plan templates (courses per term, co-op variants), elective groups (course codes to sync, e.g. `technical`) and concentrations |
 | `placeholderCourses.json` | hand | Placeholder slots (COMP ELEC 1, CO-OP, ...) |
-| `electives.json` | hand | Extra course codes to sync, by category (e.g. `technical`) |
 | `equivalencyOverrides.json` | hand | Equivalency pairs to add, or to change the type of a generated pair |
 | `generated/*.json` | `npm run sync-data` | Courses, raw SFU requirement text, and equivalencies from outline notes |
 

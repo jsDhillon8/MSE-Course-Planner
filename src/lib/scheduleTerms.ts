@@ -9,7 +9,7 @@ import { CourseSlot, PageTemplate, TermPlan, VariantId } from "../types";
  * `terms`, which meant variant-supporting templates carried a redundant
  * top-level `terms` copy that had to be hand-kept in sync with variant "A" —
  * a common source of schedules quietly drifting out of date. Templates that
- * support variants should simply omit `terms` in templates.json and define
+ * support variants should simply omit `terms` in programs/*.json and define
  * every option under `termsByVariant` instead.
  */
 export function getActiveTerms(template: PageTemplate, variant: VariantId): TermPlan[] {

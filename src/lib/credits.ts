@@ -15,7 +15,7 @@ function isDev(): boolean {
  * alternative (which would over-count credits nobody actually earns twice).
  *
  * Assumption: alternatives within a choice slot carry equal credit weight
- * (true for every current pairing in courses.json/templates.json, e.g.
+ * (true for every current pairing in courses.json/programs/*.json, e.g.
  * BUS 343 / BUEC 232 are both 3 credits). Revisit if a future choice slot
  * ever mixes differently-weighted courses.
  */

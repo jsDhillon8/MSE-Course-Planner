@@ -1,4 +1,8 @@
 .status-rail {
+  /* Pinned to the bottom of the viewport; stays in flow so it never covers the last row. */
+  position: sticky;
+  bottom: 0;
+  z-index: 10;
   border-top: 1px solid var(--border);
   padding: 10px 16px;
   background: var(--surface);

@@ -2,7 +2,7 @@
  * Refreshes src/data/generated/ from the SFU Course Outlines API.
  * Run once a term:  npm run sync-data   then review `git diff` and run the tests.
  *
- * Courses synced: every real course in templates.json + electives.json + the current
+ * Courses synced: every real course in programs/*.json (templates + elective groups) + the current
  * generated/courses.json (so nothing is dropped). Placeholders (COMP ELEC 1, CO-OP, ...)
  * live in placeholderCourses.json and are never touched.
  *
@@ -16,13 +16,13 @@
  * If SFU has no outline for a course (not offered in the last 6 terms, or a request
  * failed), its previous generated data is kept and the course is listed as a warning.
  */
-import { readFileSync, writeFileSync } from "node:fs";
+import { readdirSync, readFileSync, writeFileSync } from "node:fs";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 import { fetchSharedOutline } from "../src/api/sfuOutlines";
 import { normalizeCourseCode, parseCourseCode } from "../src/lib/courseCodes";
 import { parseEquivalents } from "../src/lib/parseEquivalents";
-import type { Course, CourseEquivalency, PageTemplate, SharedOutlineFields } from "../src/types";
+import type { Course, CourseEquivalency, Program, SharedOutlineFields } from "../src/types";
 
 const DATA = join(dirname(fileURLToPath(import.meta.url)), "../src/data");
 const GENERATED = join(DATA, "generated");
@@ -35,9 +35,11 @@ const idFromCode = (code: string) => normalizeCourseCode(code).toLowerCase().rep
 const isRealCourse = (code: string) => /^[A-Z]{3,4} \d{3}[A-Z]?$/.test(normalizeCourseCode(code));
 
 // ── Inputs ──
-const templates = readJson<PageTemplate[]>(join(DATA, "templates.json"));
+const PROGRAMS = join(DATA, "programs");
+const programs = readdirSync(PROGRAMS)
+  .filter((file) => file.endsWith(".json"))
+  .map((file) => readJson<Program>(join(PROGRAMS, file)));
 const placeholders = readJson<CourseRow[]>(join(DATA, "placeholderCourses.json"));
-const electives = readJson<Record<string, string[]>>(join(DATA, "electives.json"));
 const previousCourses = readJson<CourseRow[]>(join(GENERATED, "courses.json"));
 const previousRequirements = readJson<Record<string, string>>(join(GENERATED, "courseRequirements.json"));
 const previousEquivalencies = readJson<CourseEquivalency[]>(join(GENERATED, "equivalencies.json"));
@@ -49,28 +51,34 @@ const previousById = new Map(previousCourses.map((c) => [c.id, c]));
 const toSync = new Map<string, string>();
 for (const c of previousCourses) toSync.set(c.id, c.code);
 
-for (const template of templates) {
-  const termLists = template.terms ? [template.terms] : Object.values(template.termsByVariant ?? {});
-  for (const terms of termLists) {
-    for (const term of terms) {
-      for (const slot of term.courseIds) {
-        for (const id of Array.isArray(slot) ? slot : [slot]) {
-          if (placeholderIds.has(id) || toSync.has(id)) continue;
-          console.warn(`! ${id} is in templates.json but has no course data; add it to electives.json or placeholderCourses.json`);
+for (const program of programs) {
+  for (const curriculum of program.curricula) {
+    const where = `${program.id}/${curriculum.id}`;
+    for (const group of curriculum.electiveGroups) {
+      for (const code of group.courseCodes) {
+        if (!isRealCourse(code)) {
+          console.warn(`! ${where} elective group "${group.id}": "${code}" is not a course code, skipped`);
+          continue;
+        }
+        const id = idFromCode(code);
+        if (!toSync.has(id)) toSync.set(id, normalizeCourseCode(code));
+      }
+    }
+    for (const template of curriculum.templates) {
+      const termLists = template.terms ? [template.terms] : Object.values(template.termsByVariant ?? {});
+      for (const terms of termLists) {
+        for (const term of terms) {
+          for (const slot of term.courseIds) {
+            for (const id of Array.isArray(slot) ? slot : [slot]) {
+              if (placeholderIds.has(id) || toSync.has(id)) continue;
+              console.warn(
+                `! ${id} is in ${where} template "${template.id}" but has no course data; add it to an elective group or placeholderCourses.json`
+              );
+            }
+          }
         }
       }
     }
-  }
-}
-
-for (const [category, codes] of Object.entries(electives)) {
-  for (const code of codes) {
-    if (!isRealCourse(code)) {
-      console.warn(`! electives.json (${category}): "${code}" is not a course code, skipped`);
-      continue;
-    }
-    const id = idFromCode(code);
-    if (!toSync.has(id)) toSync.set(id, normalizeCourseCode(code));
   }
 }
 

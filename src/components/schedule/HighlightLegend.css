@@ -22,8 +22,10 @@
   border-radius: 8px;
   background: var(--surface-muted);
   font-size: 0.82rem;
-  position:sticky; 
-  top:0;
+  /* Pinned while the grid scrolls; above the course cards (z-index 1), below the footer (10). */
+  position: sticky;
+  top: 0;
+  z-index: 5;
 }
 
 .highlight-legend h4 {
