@@ -18,7 +18,9 @@
  */
 
 var SHEET_NAME = "Reports";
-var HEADERS = ["Timestamp", "Summary", "Description", "Steps", "Page", "Theme", "Viewport", "User agent"];
+// Columns are written by position: don't insert/reorder columns A–I in the sheet.
+var HEADERS = ["Timestamp", "Summary", "Description", "Steps", "Page", "Theme", "Viewport", "User agent", "Status", "Notes"];
+var STATUSES = ["New", "Investigating", "Fixed", "Won't fix", "Duplicate"];
 var LIMITS = { summary: 150, description: 5000, steps: 3000, page: 300, theme: 20, viewport: 30, userAgent: 400 };
 var MAX_PER_MINUTE = 10; // global throttle across all users
 
@@ -44,6 +46,7 @@ function doPost(e) {
       clean(data.theme, LIMITS.theme),
       clean(data.viewport, LIMITS.viewport),
       clean(data.userAgent, LIMITS.userAgent),
+      "New", // Status
     ];
 
     var lock = LockService.getScriptLock();
@@ -109,4 +112,134 @@ function notify(summary, description, row) {
 
 function json(obj) {
   return ContentService.createTextOutput(JSON.stringify(obj)).setMimeType(ContentService.MimeType.JSON);
+}
+
+// ─── One-time sheet setup ─────────────────────────────────────────────────
+// Run manually from the editor (pick "setupSheet" in the function dropdown → Run).
+// Safe to re-run: it replaces only what it created and leaves your own formatting alone.
+
+var OVERVIEW_NAME = "Overview";
+var RULE_DONE = '=OR($I2="Fixed",$I2="Won\'t fix",$I2="Duplicate")';
+var RULE_NEW = '=OR($I2="New",AND($A2<>"",$I2=""))';
+
+function setupSheet() {
+  var sheet = getSheet();
+  setupNotesColumn(sheet);
+  setupStatusDropdown(sheet);
+  tagUntriagedAsNew();
+  setupConditionalFormatting(sheet);
+  if (!sheet.getFilter()) sheet.getRange(1, 1, sheet.getMaxRows(), HEADERS.length).createFilter();
+  setupOverview();
+  SpreadsheetApp.getActiveSpreadsheet().toast("Sheet setup complete.", "Bug reports", 5);
+}
+
+// Backfill: any existing report (has a timestamp) with an empty Status becomes "New".
+// New reports already get "New" in doPost; this catches rows from before that change.
+// Can also be run on its own from the function dropdown.
+function tagUntriagedAsNew() {
+  var sheet = getSheet();
+  var lastRow = sheet.getLastRow();
+  if (lastRow < 2) return 0;
+  var range = sheet.getRange(2, 1, lastRow - 1, 9);
+  var values = range.getValues();
+  var statuses = values.map(function (row) {
+    return [row[0] !== "" && row[8] === "" ? "New" : row[8]];
+  });
+  var changed = statuses.filter(function (s, i) { return s[0] !== values[i][8]; }).length;
+  if (changed > 0) sheet.getRange(2, 9, statuses.length, 1).setValues(statuses);
+  return changed;
+}
+
+function setupNotesColumn(sheet) {
+  var header = sheet.getRange(1, 10);
+  if (!header.getValue()) header.setValue("Notes");
+  sheet.setColumnWidth(10, 300);
+  sheet.getRange("J:J").setWrap(true).setVerticalAlignment("top");
+}
+
+// Only adds a dropdown if column I doesn't already have one (keeps your chip colours).
+function setupStatusDropdown(sheet) {
+  var range = sheet.getRange(2, 9, sheet.getMaxRows() - 1, 1);
+  if (range.getDataValidation()) return;
+  range.setDataValidation(
+    SpreadsheetApp.newDataValidation().requireValueInList(STATUSES, true).setAllowInvalid(false).build()
+  );
+}
+
+function setupConditionalFormatting(sheet) {
+  var range = sheet.getRange(2, 1, sheet.getMaxRows() - 1, HEADERS.length);
+  // Drop previous copies of our rules, keep any you added yourself.
+  var rules = sheet.getConditionalFormatRules().filter(function (rule) {
+    var cond = rule.getBooleanCondition();
+    var formula = cond && cond.getCriteriaValues()[0];
+    return formula !== RULE_DONE && formula !== RULE_NEW;
+  });
+  rules.push(
+    SpreadsheetApp.newConditionalFormatRule()
+      .whenFormulaSatisfied(RULE_DONE).setFontColor("#9aa0a6").setRanges([range]).build(),
+    SpreadsheetApp.newConditionalFormatRule()
+      .whenFormulaSatisfied(RULE_NEW).setBackground("#fff4cc").setRanges([range]).build()
+  );
+  sheet.setConditionalFormatRules(rules);
+}
+
+function setupOverview() {
+  var ss = SpreadsheetApp.getActiveSpreadsheet();
+  var sheet = ss.getSheetByName(OVERVIEW_NAME) || ss.insertSheet(OVERVIEW_NAME, 0);
+  sheet.getCharts().forEach(function (chart) { sheet.removeChart(chart); });
+  sheet.clear();
+
+  var R = "'" + SHEET_NAME + "'!";
+  sheet.getRange("A1").setValue("Bug report overview").setFontSize(16).setFontWeight("bold");
+
+  // Key numbers
+  var metrics = [
+    ["Metric", "Count"],
+    ["Total reports", "=COUNTA(" + R + "A2:A)"],
+    ["Untriaged (New)", "=COUNTIF(" + R + "I2:I,\"New\")+COUNTIFS(" + R + "A2:A,\"<>\"," + R + "I2:I,\"\")"],
+    ["Investigating", "=COUNTIF(" + R + "I2:I,\"Investigating\")"],
+    ["Fixed", "=COUNTIF(" + R + "I2:I,\"Fixed\")"],
+    ["Won't fix", "=COUNTIF(" + R + "I2:I,\"Won't fix\")"],
+    ["Duplicate", "=COUNTIF(" + R + "I2:I,\"Duplicate\")"],
+    ["Last 7 days", "=COUNTIF(" + R + "A2:A,\">=\"&(TODAY()-7))"],
+    ["Latest report", "=IFERROR(MAX(" + R + "A2:A),\"-\")"],
+  ];
+  sheet.getRange(3, 1, metrics.length, 2).setValues(metrics);
+  sheet.getRange("B11").setNumberFormat("mmm d, yyyy h:mm");
+
+  // Reports per page (feeds the chart)
+  sheet.getRange("D3").setFormula(
+    "=IFERROR(QUERY(" + R + "A:E,\"select E, count(A) where E is not null group by E " +
+      "order by count(A) desc label E 'Page', count(A) 'Reports'\",1),{\"Page\",\"Reports\"})"
+  );
+
+  // Styling
+  [sheet.getRange("A3:B3"), sheet.getRange("D3:E3")].forEach(function (header) {
+    header.setFontWeight("bold").setBackground("#e8eaed");
+  });
+  sheet.getRange("A4:A11").setFontColor("#5f6368");
+  sheet.getRange("B4:B10").setFontWeight("bold").setHorizontalAlignment("left");
+  sheet.getRange("A3:B11").setBorder(true, true, true, true, false, true, "#dadce0", SpreadsheetApp.BorderStyle.SOLID);
+  sheet.setColumnWidth(1, 160);
+  sheet.setColumnWidth(2, 140);
+  sheet.setColumnWidth(3, 30);
+  sheet.setColumnWidth(4, 260);
+  sheet.setColumnWidth(5, 80);
+  sheet.setFrozenRows(1);
+  sheet.setHiddenGridlines(true);
+
+  // Chart: reports per page
+  sheet.insertChart(
+    sheet.newChart()
+      .setChartType(Charts.ChartType.BAR)
+      .addRange(sheet.getRange("D3:E30"))
+      .setNumHeaders(1)
+      .setPosition(3, 7, 0, 0)
+      .setOption("title", "Reports by page")
+      .setOption("legend", { position: "none" })
+      .setOption("colors", ["#4285f4"])
+      .setOption("width", 520)
+      .setOption("height", 320)
+      .build()
+  );
 }
