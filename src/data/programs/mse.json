@@ -7,12 +7,74 @@
       "id": "post-2024",
       "label": "Post-Fall 2024",
       "electiveGroups": [
-        { "id": "technical", "label": "Technical Electives", "courseCodes": [] }
+        {
+          "id": "technical",
+          "label": "Technical Studies Electives",
+          "source": "mse-program-requirements",
+          "listLabel": "Group A",
+          "courseCodes": ["MSE 412", "MSE 413", "MSE 420", "MSE 421", "MSE 422", "MSE 423", "MSE 424", "MSE 425", "MSE 426", "MSE 427", "MSE 428", "MSE 429", "MSE 450", "MSE 451", "MSE 453", "MSE 454", "MSE 460", "MSE 480", "MSE 481", "MSE 483", "MSE 490", "MSE 491"],
+          "note": "At least 3 of the 4 technical electives must come from Group A. Group B: other 400-level engineering electives (taught by non-P.Eng. faculty, taken at other schools after an MSE appeal, or directed studies). MSE 490/491 count as Group A only when taught by MSE P.Eng. faculty; MSE 490 Technology Entrepreneurship is Group B."
+        },
+        {
+          "id": "complementary",
+          "label": "Complementary Studies Electives",
+          "source": "mse-program-requirements",
+          "courseCodes": [],
+          "note": "9 units (3 courses) of B-Hum and B-Soc breadth courses, at least one of each, from the SFU WQB certified list (src/data/calendar/wqb-courses.json) excluding Faculty of Applied Sciences courses."
+        },
+        {
+          "id": "business-concentration",
+          "label": "Business Concentration Electives",
+          "source": "mse-double-degree-post-2024",
+          "courseCodes": [],
+          "note": "Double degree only: at least four upper division courses in a business concentration, including at least three 400 division BUS courses of 3+ units (excluding BUS 478 and practicum courses); at least one of those at SFU."
+        }
       ],
-      "concentrations": [],
+      "concentrations": [
+        { "id": "agritech", "label": "Agriculture Technology (AgriTech)", "requiredCourses": ["BISC 106", "MSE 360", "MSE 460", "MSE 480", "SEE 351"], "technicalElectives": 2, "note": "At least one co-op work term must be an AgriTech-based placement." }
+      ],
+      "degrees": [
+        {
+          "id": "major",
+          "label": "Major (BASc)",
+          "source": "mse-major-post-2024",
+          "requiredCourses": ["CMPT 130", "MATH 152", "MATH 232", "MATH 251", "MSE 101W", "MSE 102", "MSE 103", "MSE 112", "MSE 152", "MSE 210", "MSE 212", "MSE 220", "MSE 222", "MSE 224", "MSE 250", "MSE 251", "MSE 252", "MSE 281", "MSE 282", "MSE 300", "MSE 310", "MSE 312", "MSE 320", "MSE 321", "MSE 323", "MSE 352", "MSE 353", "MSE 381", "MSE 402", "MSE 405W", "MSE 410", "MSE 411", "PHYS 141"],
+          "chooseOne": [
+            ["MATH 150", "MATH 151"],
+            ["CHEM 120", "CHEM 121"]
+          ],
+          "electives": [
+            { "groupId": "technical", "courses": 4, "minFromList": 3 },
+            { "groupId": "complementary", "courses": 3 }
+          ],
+          "coopTerms": 3,
+          "minimumUnits": 135,
+          "concentrationIds": ["agritech"]
+        },
+        {
+          "id": "double-degree",
+          "label": "MSE + Business Double Degree (BASc + BBA)",
+          "source": "mse-double-degree-post-2024",
+          "requiredCourses": ["BUS 232", "BUS 251", "BUS 254", "BUS 272", "BUS 312", "BUS 343", "BUS 360W", "BUS 393", "BUS 478", "CHEM 120", "CMPT 130", "MATH 151", "MATH 152", "MATH 232", "MATH 251", "MSE 101W", "MSE 102", "MSE 103", "MSE 112", "MSE 152", "MSE 210", "MSE 212", "MSE 220", "MSE 222", "MSE 224", "MSE 250", "MSE 251", "MSE 252", "MSE 281", "MSE 282", "MSE 310", "MSE 312", "MSE 320", "MSE 321", "MSE 323", "MSE 352", "MSE 353", "MSE 381", "MSE 402", "MSE 410", "MSE 411", "PHYS 141"],
+          "chooseOne": [
+            ["BUS 374", "BUS 381"],
+            ["ECON 103", "ECON 113"],
+            ["ECON 105", "ECON 115"],
+            ["BUS 207", "ECON 201"]
+          ],
+          "electives": [
+            { "groupId": "technical", "courses": 4, "minFromList": 3 },
+            { "groupId": "business-concentration", "courses": 4 }
+          ],
+          "coopTerms": 3,
+          "minimumUnits": 171,
+          "concentrationIds": ["agritech"]
+        }
+      ],
       "templates": [
         {
           "id": "post-2024-4-year",
+          "degreeId": "major",
           "title": "Recommended 4-Year Curriculum",
           "planLength": "4-year",
           "supportsVariants": false,
@@ -22,7 +84,7 @@
             {"id": "nc_4y_y1_s", "label": "Year 1 - Spring", "courseIds": ["math152", "math232", "phys141", "mse102", "mse152"]},
             {"id": "nc_4y_y1_u", "label": "Year 1 - Summer", "courseIds": ["mse101w", "mse112", "math251", "compElec2"]},
             {"id": "nc_4y_y2_f", "label": "Year 2 - Fall", "courseIds": ["mse210", "mse220", "mse224", "mse250", "mse281"]},
-            {"id": "nc_4y_y2_s", "label": "Year 2 - Spring", "courseIds": ["mse212", "mse222", "mse251", "mse252", "mse280"]},
+            {"id": "nc_4y_y2_s", "label": "Year 2 - Spring", "courseIds": ["mse212", "mse222", "mse251", "mse252", "mse282"]},
             {"id": "nc_4y_y2_u", "label": "Year 2 - Summer", "courseIds": ["coop"]},
             {"id": "nc_4y_y3_f", "label": "Year 3 - Fall", "courseIds": ["mse323", "mse310", "mse320", "techElec1", "compElec3"]},
             {"id": "nc_4y_y3_s", "label": "Year 3 - Spring", "courseIds": ["coop"]},
@@ -34,6 +96,7 @@
         },
         {
           "id": "post-2024-5-year",
+          "degreeId": "major",
           "title": "Recommended 5-Year Curriculum",
           "planLength": "5-year",
           "supportsVariants": true,
@@ -47,7 +110,7 @@
               {"id": "nc_a_y2_s", "label": "Year 2 - Spring", "courseIds": ["mse152", "mse212", "mse251"]},
               {"id": "nc_a_y2_u", "label": "Year 2 - Summer", "courseIds": ["coop"]},
               {"id": "nc_a_y3_f", "label": "Year 3 - Fall", "courseIds": ["coop"]},
-              {"id": "nc_a_y3_s", "label": "Year 3 - Spring", "courseIds": ["mse222", "mse252", "mse280", "compElec2"]},
+              {"id": "nc_a_y3_s", "label": "Year 3 - Spring", "courseIds": ["mse222", "mse252", "mse282", "compElec2"]},
               {"id": "nc_a_y3_u", "label": "Year 3 - Summer", "courseIds": ["mse300", "mse352", "mse353", "mse381"]},
               {"id": "nc_a_y4_f", "label": "Year 4 - Fall", "courseIds": ["mse210", "mse323", "mse310", "mse320"]},
               {"id": "nc_a_y4_s", "label": "Year 4 - Spring", "courseIds": ["mse402", "mse410", "techElec1", "techElec2"]},
@@ -61,7 +124,7 @@
               {"id": "nc_b_y1_s", "label": "Year 1 - Spring", "courseIds": ["math152", "math232", "phys141", "mse102"]},
               {"id": "nc_b_y1_u", "label": "Year 1 - Summer", "courseIds": ["compElec1", "math251", "mse101w", "mse112"]},
               {"id": "nc_b_y2_f", "label": "Year 2 - Fall", "courseIds": ["mse220", "mse224", "mse250", "mse281"]},
-              {"id": "nc_b_y2_s", "label": "Year 2 - Spring", "courseIds": ["mse152", "mse212", "mse251", "mse280"]},
+              {"id": "nc_b_y2_s", "label": "Year 2 - Spring", "courseIds": ["mse152", "mse212", "mse251", "mse282"]},
               {"id": "nc_b_y2_u", "label": "Year 2 - Summer", "courseIds": ["mse300", "mse381", "techElec1", "compElec2"]},
               {"id": "nc_b_y3_f", "label": "Year 3 - Fall", "courseIds": ["mse210", "mse323", "mse310", "mse320"]},
               {"id": "nc_b_y3_s", "label": "Year 3 - Spring", "courseIds": ["coop"]},
@@ -78,7 +141,7 @@
               {"id": "nc_c_y1_s", "label": "Year 1 - Spring", "courseIds": ["math152", "math232", "phys141", "mse102"]},
               {"id": "nc_c_y1_u", "label": "Year 1 - Summer", "courseIds": ["compElec1", "math251", "mse101w", "mse112"]},
               {"id": "nc_c_y2_f", "label": "Year 2 - Fall", "courseIds": ["mse220", "mse224", "mse250", "mse281"]},
-              {"id": "nc_c_y2_s", "label": "Year 2 - Spring", "courseIds": ["mse152", "mse212", "mse251", "mse280"]},
+              {"id": "nc_c_y2_s", "label": "Year 2 - Spring", "courseIds": ["mse152", "mse212", "mse251", "mse282"]},
               {"id": "nc_c_y2_u", "label": "Year 2 - Summer", "courseIds": ["mse381", "techElec1", "techElec2"]},
               {"id": "nc_c_y3_f", "label": "Year 3 - Fall", "courseIds": ["mse323", "mse320", "compElec2"]},
               {"id": "nc_c_y3_s", "label": "Year 3 - Spring", "courseIds": ["mse222", "mse252", "techElec3"]},
@@ -94,6 +157,7 @@
         },
         {
           "id": "double-degree-post-2024",
+          "degreeId": "double-degree",
           "title": "MSE + Business Double Degree (Post-Fall 2024)",
           "planLength": "5-year",
           "supportsVariants": false,
@@ -103,14 +167,14 @@
             {"id": "nc_dd_y1_s", "label": "Year 1 - Spring", "courseIds": ["math232", "math152", "phys141", "mse152", "mse102"]},
             {"id": "nc_dd_y1_u", "label": "Year 1 - Summer", "courseIds": ["math251", "mse101w", "mse112", ["econ103", "econ113"]]},
             {"id": "nc_dd_y2_f", "label": "Year 2 - Fall", "courseIds": ["mse224", "mse281", "mse220", "mse250", "mse210"]},
-            {"id": "nc_dd_y2_s", "label": "Year 2 - Spring", "courseIds": ["mse222", "mse212", "mse251", "mse280", "bus251"]},
+            {"id": "nc_dd_y2_s", "label": "Year 2 - Spring", "courseIds": ["mse222", "mse212", "mse251", "mse282", "bus251"]},
             {"id": "nc_dd_y2_u", "label": "Year 2 - Summer", "courseIds": ["bus393", "bus254", "bus272", "mse381"]},
             {"id": "nc_dd_y3_f", "label": "Year 3 - Fall", "courseIds": [["bus374", "bus381"], ["bus207", "econ201"], "bus343", "mse323", "bus232"]},
             {"id": "nc_dd_y3_s", "label": "Year 3 - Spring", "courseIds": ["bus312", "mse321", "busLElec1", "mse252"]},
             {"id": "nc_dd_y3_u", "label": "Year 3 - Summer", "courseIds": ["coop"]},
-            {"id": "nc_dd_y4_f", "label": "Year 4 - Fall", "courseIds": ["mse320", "mse380", "mse352", "mse310", "busElec1"]},
+            {"id": "nc_dd_y4_f", "label": "Year 4 - Fall", "courseIds": ["mse320", "mse352", "mse310", "busElec1"]},
             {"id": "nc_dd_y4_s", "label": "Year 4 - Spring", "courseIds": ["coop"]},
-            {"id": "nc_dd_y4_u", "label": "Year 4 - Summer", "courseIds": ["mse353", "mse311", "mse312", "bus360w", "busElec2"]},
+            {"id": "nc_dd_y4_u", "label": "Year 4 - Summer", "courseIds": ["mse353", "mse312", "bus360w", "busElec2"]},
             {"id": "nc_dd_y5_f", "label": "Year 5 - Fall", "courseIds": ["coop"]},
             {"id": "nc_dd_y5_s", "label": "Year 5 - Spring", "courseIds": ["mse410", "bus478", "techElec1", "techElec2", "mse402"]},
             {"id": "nc_dd_y5_u", "label": "Year 5 - Summer", "courseIds": ["mse411", "busElec3", "techElec3", "techElec4"]}
@@ -122,12 +186,73 @@
       "id": "pre-2024",
       "label": "Pre-Fall 2024",
       "electiveGroups": [
-        { "id": "technical", "label": "Technical Electives", "courseCodes": [] }
+        {
+          "id": "technical",
+          "label": "Technical Studies Electives",
+          "source": "mse-program-requirements",
+          "listLabel": "Group A",
+          "courseCodes": ["MSE 412", "MSE 413", "MSE 420", "MSE 421", "MSE 422", "MSE 423", "MSE 424", "MSE 425", "MSE 426", "MSE 427", "MSE 428", "MSE 429", "MSE 450", "MSE 451", "MSE 453", "MSE 454", "MSE 460", "MSE 480", "MSE 481", "MSE 483", "MSE 490", "MSE 491"],
+          "note": "At least 4 of the 6 technical electives must come from Group A. Group B: other 400-level engineering electives (taught by non-P.Eng. faculty, taken at other schools after an MSE appeal, or directed studies). MSE 490/491 count as Group A only when taught by MSE P.Eng. faculty; MSE 490 Technology Entrepreneurship is Group B."
+        },
+        {
+          "id": "complementary",
+          "label": "Complementary Studies Electives",
+          "source": "mse-program-requirements",
+          "courseCodes": [],
+          "note": "9 units (3 courses) of B-Hum and B-Soc breadth courses, at least one of each, from the SFU WQB certified list (src/data/calendar/wqb-courses.json) excluding Faculty of Applied Sciences courses. One complementary elective must be in the CEAB Central Issue, Methodology, and Thought Process category."
+        },
+        {
+          "id": "business-concentration",
+          "label": "Business Concentration Electives",
+          "source": "mse-double-degree-pre-2024",
+          "courseCodes": [],
+          "note": "Double degree only: at least four upper division courses in a business concentration, including at least three 400 division BUS courses of 3+ units (excluding BUS 478 and practicum courses); at least one of those at SFU."
+        }
       ],
-      "concentrations": [],
+      "concentrations": [
+        { "id": "agritech", "label": "Agriculture Technology (AgriTech)", "requiredCourses": ["BISC 106", "MSE 360", "MSE 460", "MSE 480", "SEE 351"], "waivedCourses": ["MSE 311"], "technicalElectives": 3, "note": "At least one co-op work term must be an AgriTech-based placement." }
+      ],
+      "degrees": [
+        {
+          "id": "major",
+          "label": "Major (BASc)",
+          "source": "mse-major-pre-2024",
+          "requiredCourses": ["CMPT 130", "MATH 152", "MATH 232", "MATH 251", "MATH 260", "MSE 100", "MSE 101W", "MSE 102", "MSE 110", "MSE 210", "MSE 211", "MSE 220", "MSE 221", "MSE 222", "MSE 223", "MSE 250", "MSE 251", "MSE 280", "MSE 300", "MSE 310", "MSE 311", "MSE 312", "MSE 320", "MSE 321", "MSE 352", "MSE 353", "MSE 380", "MSE 381", "MSE 402", "MSE 405W", "MSE 410", "MSE 411", "PHYS 140", "PHYS 141"],
+          "chooseOne": [
+            ["MATH 150", "MATH 151"],
+            ["CHEM 120", "CHEM 121"]
+          ],
+          "electives": [
+            { "groupId": "technical", "courses": 6, "minFromList": 4 },
+            { "groupId": "complementary", "courses": 3 }
+          ],
+          "coopTerms": 3,
+          "minimumUnits": 149,
+          "concentrationIds": ["agritech"]
+        },
+        {
+          "id": "double-degree",
+          "label": "MSE + Business Double Degree (BASc + BBA)",
+          "source": "mse-double-degree-pre-2024",
+          "requiredCourses": ["BUS 232", "BUS 251", "BUS 254", "BUS 272", "BUS 312", "BUS 343", "BUS 360W", "BUS 381", "BUS 393", "BUS 478", "CHEM 120", "CMPT 130", "MATH 151", "MATH 152", "MATH 232", "MATH 251", "MATH 260", "MSE 100", "MSE 101W", "MSE 102", "MSE 110", "MSE 210", "MSE 211", "MSE 220", "MSE 221", "MSE 222", "MSE 223", "MSE 250", "MSE 251", "MSE 280", "MSE 310", "MSE 311", "MSE 312", "MSE 320", "MSE 321", "MSE 352", "MSE 353", "MSE 380", "MSE 381", "MSE 402", "MSE 410", "MSE 411", "PHYS 140", "PHYS 141"],
+          "chooseOne": [
+            ["ECON 103", "ECON 113"],
+            ["ECON 105", "ECON 115"],
+            ["BUS 207", "ECON 201"]
+          ],
+          "electives": [
+            { "groupId": "technical", "courses": 6, "minFromList": 4 },
+            { "groupId": "business-concentration", "courses": 4 }
+          ],
+          "coopTerms": 3,
+          "minimumUnits": 185,
+          "concentrationIds": ["agritech"]
+        }
+      ],
       "templates": [
         {
           "id": "pre-2024-4-year",
+          "degreeId": "major",
           "title": "Pre-Fall 2024 4-Year Curriculum",
           "planLength": "4-year",
           "supportsVariants": false,
@@ -149,6 +274,7 @@
         },
         {
           "id": "pre-2024-5-year",
+          "degreeId": "major",
           "title": "Pre-Fall 2024 5-Year Curriculum",
           "planLength": "5-year",
           "supportsVariants": true,
@@ -209,6 +335,7 @@
         },
         {
           "id": "double-degree-pre-2024",
+          "degreeId": "double-degree",
           "title": "MSE + Business Double Degree (Pre-Fall 2024)",
           "planLength": "5-year",
           "supportsVariants": false,
@@ -221,14 +348,14 @@
             {"id": "nc_dd_y2_s", "label": "Year 2 - Spring", "courseIds": ["mse222", "mse210", "mse223", "bus393", "bus251", "bus272"]},
             {"id": "nc_dd_y2_u", "label": "Year 2 - Summer", "courseIds": ["coopOpt"]},
             {"id": "nc_dd_y3_f", "label": "Year 3 - Fall", "courseIds": ["bus254", "bus381", "bus207", "bus343", "mse321", "buec232"]},
-            {"id": "nc_dd_y3_s", "label": "Year 3 - Spring", "courseIds": ["bus312", "mse251", "mse280", "mse211", "busLElec1", "bus336"]},
+            {"id": "nc_dd_y3_s", "label": "Year 3 - Spring", "courseIds": ["bus312", "mse251", "mse280", "mse211", "busLElec1"]},
             {"id": "nc_dd_y3_u", "label": "Year 3 - Summer", "courseIds": ["coop"]},
             {"id": "nc_dd_y4_f", "label": "Year 4 - Fall", "courseIds": ["mse320", "mse380", "mse352", "mse310", "busElec1", "bus360w"]},
             {"id": "nc_dd_y4_s", "label": "Year 4 - Spring", "courseIds": ["coop"]},
             {"id": "nc_dd_y4_u", "label": "Year 4 - Summer", "courseIds": ["mse312", "mse381", "mse353", "mse311", "busElec2"]},
             {"id": "nc_dd_y5_f", "label": "Year 5 - Fall", "courseIds": ["coop"]},
-            {"id": "nc_dd_y5_s", "label": "Year 5 - Spring", "courseIds": ["mse410", "bus478", "techElec1", "techElec2", "mse402"]},
-            {"id": "nc_dd_y5_u", "label": "Year 5 - Summer", "courseIds": ["mse411", "busElec3", "techElec3", "techElec4"]}
+            {"id": "nc_dd_y5_s", "label": "Year 5 - Spring", "courseIds": ["mse410", "bus478", "techElec1", "techElec2", "mse402", "techElec5"]},
+            {"id": "nc_dd_y5_u", "label": "Year 5 - Summer", "courseIds": ["mse411", "busElec3", "techElec3", "techElec4", "techElec6"]}
           ]
         }
       ]

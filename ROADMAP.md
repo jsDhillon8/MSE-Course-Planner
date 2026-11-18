@@ -54,11 +54,11 @@ Full history in [CHANGELOG.md](CHANGELOG.md).
    - Saved plans become `{ version, programId, curriculumId, terms, customCourses, swaps }` (`customCourses` holds swapped-in equivalents that aren't in the course list).
    - Old saves (no version) are upgraded once when loaded.
    - Plan file import/export.
-3. **Prerequisite validation**
+3. **Prerequisite validation** ✅ Done (Nov 17, 2026)
    - Warning badges on placed courses whose prerequisites aren't met in an earlier term. Corequisites are allowed in the same term.
    - The details panel explains each warning and how to fix it, e.g. "MATH 251 needs MATH 152 in an earlier term".
    - Checked against the full prerequisite rules, so alternate prerequisites work automatically.
-4. **Local backup of degree requirements**
+4. **Local backup of degree requirements** ✅ Done (Nov 17, 2026)
    - For each program and curriculum era, store a local copy of the SFU calendar's degree requirements: required courses, elective groups and how many are needed, concentrations, and total credits.
    - Keep both the original calendar text (for reference) and a structured version the planner reads, each with its source link and the date it was copied.
    - The site always reads the local copy, so it keeps working if the SFU calendar changes or is unavailable, and students on an older curriculum still see the rules that apply to them.

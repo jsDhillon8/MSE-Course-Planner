@@ -1,0 +1,262 @@
+# Mechatronic Systems Engineering and Business Double Degree Program Major
+
+Bachelor of Applied Science and Bachelor of Business Administration
+
+This double-degree major program leads to a bachelor of applied science degree and a bachelor of business administration degree.
+
+## Admission Requirements
+
+Admission is normally via the mechatronic systems engineering major (MSE). Students are admitted based on a CGPA of 3.0 obtained on the first 30 units of the mechatronic systems engineering major plus ECON 105. Otherwise, MSE majors may later gain admission by meeting the competitive requirements for entry into the Beedie School of Business. Beedie business students may gain admission by meeting the internal transfer requirements of the mechatronic systems engineering major.
+
+## Co-operative Education Work Experience
+
+This double degree program requires the completion of a minimum of three mandatory engineering co-operative education work terms (MSE 293/294, MSE 393/394, and MSE 493/494*). Dual-degree students may also take up to two additional co-op terms in business (BUS 225, 325, 326, 327, 328). These additional co-op terms will NOT count towards the three mandatory engineering co-op terms.
+
+*
+For the agricultural technology (AgriTech) concentration, at least two of the co-op work terms must be on AgriTech-based placements.
+
+## Minimum Grade Requirements
+
+A minimum grade of C- is required in all courses that are used to fulfil mechatronic systems engineering program requirements.
+
+In addition to normal university grade point average requirements, the Beedie School of Business requires a minimum 2.30 overall SFU Business course grade point average for entry into all 300 and 400 division business courses.
+
+A minimum 2.30 overall SFU Business course grade point average is required for graduation from a business major, joint major, or double degree program.
+
+For a course to be accepted as fulfilling a prerequisite, or for a lower division requirement, or for a core course to be accepted in a student's program in business, a student must have obtained a minimum grade of C- (C minus).
+
+## Program Requirements
+
+Students complete all of
+
+BUS 232 - Business Statistics (3)
+
+BUS 251 - Financial Accounting I (3)
+
+BUS 254 - Managerial Accounting I (3)
+
+BUS 272 - Behaviour in Organizations (3)
+
+BUS 312 - Introduction to Finance (3)
+
+BUS 343 - Introduction to Marketing (3)
+
+BUS 360W - Business Communication (4)
+
+†
+
+BUS 381 - Introduction to Human Resource Management (3)
+
+BUS 393 - Commercial Law (3)
+
+BUS 478 - Strategy (3)
+
+**
+
+CHEM 120 - General Chemistry I (3)
+
+CMPT 130 - Introduction to Computer Programming I (3)
+
+MATH 151 - Calculus I (3)
+
+MATH 152 - Calculus II (3)
+
+MATH 232 - Applied Linear Algebra (3)
+
+MATH 251 - Calculus III (3)
+
+MATH 260 - Introduction to Ordinary Differential Equations (3)
+
+MSE 100 - Engineering Graphics and Design (3)
+
+MSE 101W - Process, Form, and Convention in Professional Genres (3)
+
+MSE 102 - Applied Science, Technology and Society (3)
+
+MSE 110 - Mechatronics Design I (3)
+
+MSE 210 - Engineering Measurement and Data Analysis (3)
+
+MSE 211 - Computational Methods for Engineers (3)
+
+MSE 220 - Engineering Materials (3)
+
+MSE 221 - Statics and Strength of Materials (4)
+
+MSE 222 - Kinematics and Dynamics of Rigid Bodies and Mechanisms (4)
+
+MSE 223 - Introduction to Fluid Mechanics (4)
+
+MSE 250 - Electric Circuits (4)
+
+MSE 251 - Electronic Circuits (4)
+
+MSE 280 - Linear Systems (3)
+
+MSE 310 - Sensors and Actuators (4)
+
+MSE 311 - Introduction to Microelectromechanical Systems (3)
+
+MSE 312 - Mechatronics Design II (4)
+
+*
+
+MSE 320 - Machine Design (4)
+
+MSE 321 - Engineering Thermodynamics and Heat Transfer (4)
+
+MSE 352 - Digital Logic and Microcontrollers (4)
+
+MSE 353 - Power Electronics and Electric Machinery (4)
+
+MSE 380 - Systems Modeling and Simulation (3)
+
+MSE 381 - Feedback Control Systems (4)
+
+*
+
+MSE 402 - Engineering Ethics, Law, and Professional Practice (2)
+
+MSE 410 - Capstone Design Technical Project I (3)
+
+MSE 411 - Capstone Design Technical Project II (3)
+
+PHYS 140 - Studio Physics - Mechanics and Modern Physics (4)
+
+PHYS 141 - Studio Physics - Optics, Electricity and Magnetism (4)
+
+and one of
+
+ECON 103 - Principles of Microeconomics (4)
+
+ECON 113 - Introduction to Microeconomics (3)
+
+and one of
+
+ECON 105 - Principles of Macroeconomics (4)
+
+ECON 115 - Introduction to Macroeconomics (3)
+
+and one of
+
+BUS 207 - Managerial Economics (3)
+
+ECON 201 - Microeconomic Theory I: Competitive Behavior (4)
+
+Prior approval by the director of the school is required if the student plans a term with fewer than 12 course units.
+
+*
+Strongly recommended to be completed concurrently.
+
+**
+To be completed at Simon Fraser University.
+
+†
+To be completed before the student's 75th unit and at Simon Fraser University in accordance with the WQB requirements.
+
+### Agriculture Technology (AgriTech) Concentration
+
+This concentration is for students who wish to specialize in agriculture technology.
+
+Students who choose this concentration will complete all of
+
+BISC 106 - Biological Systems for Engineers (3)
+
+MSE 360 - Introduction to Biosystems Engineering (3)
+
+MSE 460 - Precision AgriTech Engineering (3)
+
+MSE 480 - Manufacturing Systems (3)
+
+SEE 351 - Bioprocess Engineering Systems (3)
+
+Students do not need to complete the following from the program requirements
+
+MSE 311 - Introduction to Microelectromechanical Systems (3)
+
+Students also complete three mechatronic systems engineering elective courses selected from a pre-approved MSE electives list instead of six courses.
+
+### Business Concentration Elective Courses
+
+Students must complete at least four upper division courses in a business concentration including at least three 400 division BUS courses, each worth a minimum of three units (excluding BUS 478 and practicum courses). 400 division BUS courses worth zero units cannot be used to fulfil this requirement. At least one of these 400 division BUS courses must be completed at Simon Fraser University.
+
+### Business Concentration
+
+Students may choose to complete one or more business concentrations by meeting the concentration requirements listed on the business major page of the calendar.
+
+## Mechatronic Systems Engineering Elective Courses
+
+Students must also complete six mechatronic systems engineering elective courses selected from a pre-approved MSE electives list that is available at https://www.sfu.ca/mechatronics/current-students/undergraduate-students/undergraduate-program-requirements/technical-studies-electives.html .
+
+With undergraduate curriculum committee chair permission, students may replace one MSE elective with either a directed study or a special project laboratory course. Special topics courses that have been approved by the undergraduate curriculum committee chair and the director may be counted here.
+
+## Elective Course Requirements
+
+In addition to the courses listed above, students should consult an academic advisor to plan the remaining required elective courses.
+
+## Writing, Quantitative, and Breadth Requirements
+
+Students admitted to Simon Fraser University beginning in the fall 2006 term must meet writing, quantitative and breadth requirements as part of any degree program they may undertake. See Writing, Quantitative, and Breadth Requirements for university-wide information.
+
+### WQB Graduation Requirements
+
+#### A grade of C- or better is required to earn W, Q or B credit
+
+Requirement
+
+Units
+
+Notes
+
+W - Writing
+
+6
+
+Must include at least one upper division course, taken at Simon Fraser University within the student’s major subject
+
+Q - Quantitative
+
+6
+
+Q courses may be lower or upper division
+
+B - Breadth
+
+18
+
+Designated Breadth
+Must be outside the student’s major subject, and may be lower or upper division
+6 units Social Sciences: B-Soc
+6 units Humanities: B-Hum
+6 units Sciences: B-Sci
+
+6
+
+Additional Breadth
+6 units outside the student’s major subject (may or may not be B-designated courses, and will likely help fulfil individual degree program requirements)
+
+Students choosing to complete a joint major, joint honours, double major, two extended minors, an extended minor and a minor, or two minors may satisfy the breadth requirements (designated or not designated) with courses completed in either one or both program areas.
+
+## Business Career Passport Requirements
+
+Business Career Passport (BCP) is a mandatory program for Bachelor of Business Administration (BBA) students to kick-start their career.
+
+- Students admitted to the BBA program for the Fall 2017 term onwards are required to complete the program within 12 months of the start of their program.
+
+- Students admitted to the BBA program from the Fall 2012 term to the Summer 2017 term are required to complete the program prior to graduation.
+
+For more information, click here .
+
+## Residency Requirements
+
+For students in this double degree program, the general university requirements are modified by reduction of the Humanities (B-Hum) breadth requirement from six units to three units. The B-Hum should be taken during one of the optional co-op terms.
+
+The University’s residency requirement stipulates that, in most cases, total transfer and course challenge credit may not exceed 60 units, and may not include more than 15 units as upper division work.
+
+At least half of the program’s total units must be earned through Simon Fraser University study.
+
+At least two thirds of the program’s total upper division units must be earned through Simon Fraser University study.
+
+At least two thirds of the upper division units in the courses of a school offering (or joint offering) a program must be earned through that school at Simon Fraser University.
+
+Back To Top

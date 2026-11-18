@@ -1,0 +1,251 @@
+# Mechatronic Systems Engineering Major
+
+Bachelor of Applied Science
+
+This program, located at Surrey campus, leads to a bachelor of applied science degree.
+
+## Admission Requirements
+
+The program begins each fall term. However, admitted students may enter in any term.
+
+For detailed university admission requirements, visit www.students.sfu.ca/admission . For more detailed School of Mechatronic Systems Engineering admission information, visit www.sfu.ca/mechatronics , or send an email to asadvise@sfu.ca .
+
+### Minimum Admission Requirements
+
+Applicants must be eligible for university admission, must submit a university application, and must have successfully completed the following high school courses: physics 12, mathematics 12, chemistry 12, and English 12.
+
+### External Transfer from Another Post-Secondary Institution
+
+Admission is competitive. A minimum of 24 units of transferable coursework is required, including:
+
+- at least one mathematics course chosen from Math 152 and 232 (or 240);
+
+- at least one computing course chosen from CMPT 130, 135 (or 128; or (125 and 127)) and 225;
+
+- at least one physics course chosen from PHYS 140 (or 120) and 141 (or 121)
+
+Please see www.sfu.ca/students/admission/admission-requirements.html for further information.
+
+Simon Fraser University students who wish to transfer to Mechatronic Systems Engineering must meet the following requirements.
+
+### Internal Transfer from Another Simon Fraser University Program
+
+- a CGPA of at least 2.67 (B-)
+
+- enrollment in at least 12 units in the term prior to admission
+
+- no more than five repeats
+
+- meeting high school admission requirements
+
+Former MSE students wishing to gain re-entry to the MSE program require, at minimum
+
+- completion of at least 100 units
+
+- a term GPA of at least 2.67 (B-) in each of the two preceding terms
+
+- a minimum CGPA of 2.0
+
+- enrollment in at least 12 units in the term prior to admission, six of which must be from the Faculty of Science or the Faculty of Applied Sciences
+
+## Minimum Grade Requirement
+
+A minimum grade of C- is required in all courses that are used to fulfil mechatronic systems engineering program requirements.
+
+## Minimum Grade Point Averages
+
+The program requires a cumulative grade point average (CGPA) and an upper division grade point average (UDGPA) each of at least 2.0 in accordance with University graduation requirements.
+
+## Co-operative Education Work Experience
+
+MSE students normally complete three mandatory co-op terms in industry (MSE 293, 393, 493*). They may participate in additional work terms but are encouraged to seek diversity in their experience. The three mandatory work terms may include one special co-op term (MSE 294, 394, 494*). Special co-op may include, but is not restricted to, self-directed, entrepreneurial, service or research co-op work terms. Permission of the MSE co-op office is required.
+
+MSE students also have an opportunity to participate in research co-op terms, where they gain experience in an academic, research and/or lab setting at SFU. Ideally, at least two of the three mandatory work terms should be completed in industry unless compelling justification for research co-op is made. Students wishing to take three research co-ops should seek prior approval from the UCC Chair for their third research co-op.
+
+An optional non-technical work term (MSE 193) is also available which is often completed after the first two study terms. MSE 193 does not count toward the mandatory three co-op terms requirement.
+
+*
+For the agricultural technology (AgriTech) concentration, at least one of the co-op work terms must be on AgriTech-based placements.
+
+## Program Requirements
+
+Students complete all of
+
+CMPT 130 - Introduction to Computer Programming I (3)
+
+MATH 152 - Calculus II (3)
+
+MATH 232 - Applied Linear Algebra (3)
+
+MATH 251 - Calculus III (3)
+
+MSE 101W - Process, Form, and Convention in Professional Genres (3)
+
+MSE 102 - Applied Science, Technology and Society (3)
+
+MSE 103 - Statics and Dynamics (3)
+
+MSE 112 - Mechatronic Design Studio I (3)
+
+MSE 152 - Digital Computing Fundamentals (3)
+
+MSE 210 - Engineering Measurement and Data Analysis (3)
+
+MSE 212 - Mechatronic Design Studio II (3)
+
+MSE 220 - Engineering Materials (3)
+
+MSE 222 - Kinematics and Dynamics of Rigid Bodies and Mechanisms (4)
+
+MSE 224 - Strength of Materials (3)
+
+MSE 250 - Electric Circuits (4)
+
+MSE 251 - Electronic Circuits (4)
+
+MSE 252 - Fundamentals of Digital Logic and PLCs (3)
+
+MSE 281 - Modelling of Mechatronic Systems (3)
+
+MSE 282 - Signals and Systems (3)
+
+MSE 300 - The Business of Engineering I (3)
+
+MSE 310 - Sensors and Actuators (3)
+
+MSE 312 - Mechatronic Design Studio III (3)
+
+*
+
+MSE 320 - Machine Design (4)
+
+MSE 321 - Engineering Thermodynamics and Heat Transfer (4)
+
+MSE 323 - Introduction to Fluid Mechanics (4)
+
+MSE 352 - Sequential Logic and Microcontrollers (3)
+
+MSE 353 - Power Electronics and Electric Machinery (4)
+
+MSE 381 - Feedback Control Systems (4)
+
+*
+
+MSE 402 - Engineering Ethics, Law, and Professional Practice (2)
+
+MSE 405W - The Business of Engineering II, Entrepreneurship for Engineers (4)
+
+MSE 410 - Capstone Design Technical Project I (3)
+
+MSE 411 - Capstone Design Technical Project II (3)
+
+PHYS 141 - Studio Physics - Optics, Electricity and Magnetism (4)
+
+and one of
+
+MATH 150 - Calculus I with Review (4)
+
+MATH 151 - Calculus I (3)
+
+and one of
+
+CHEM 120 - General Chemistry I (3)
+
+CHEM 121 - General Chemistry and Laboratory I (4)
+
+Prior approval by the director of the school is required if the student plans a term with fewer than 12 course units.
+
+*
+strongly recommended to be completed concurrently
+
+## Complementary Studies Elective Courses
+
+### Elective Course Requirements
+
+MSE students must complete nine units (or three courses) of breadth courses with at least one course in each B-Soc and B-Hum category. At least one course (three units) chosen from the complementary studies electives found at https://www.sfu.ca/fas/study/current-students/school-of-mechatronic-systems-engineering/undergraduates/program-requirements.html#complementary .
+
+## Mechatronic Systems Engineering Elective Courses
+
+Students must also complete four mechatronic systems engineering elective courses selected from a pre-approved MSE electives list that is available at https://www.sfu.ca/fas/study/current-students/school-of-mechatronic-systems-engineering/undergraduates/program-requirements.html#technical .
+
+With undergraduate curriculum committee chair permission, students may replace one MSE elective with either a directed study or a special project laboratory course. Special topics courses that have been approved by the undergraduate curriculum committee chair and the director may be counted here.
+
+### Agriculture Technology (AgriTech) Concentration
+
+This concentration is for students who wish to specialize in agriculture technology.
+
+Students who choose this concentration will complete all of
+
+BISC 106 - Biological Systems for Engineers (3)
+
+MSE 360 - Introduction to Biosystems Engineering (3)
+
+MSE 460 - Precision AgriTech Engineering (3)
+
+MSE 480 - Manufacturing Systems (3)
+
+SEE 351 - Bioprocess Engineering Systems (3)
+
+Students also complete two mechatronic systems engineering elective courses selected from a pre-approved MSE electives list instead of four courses.
+
+## Writing, Quantitative, and Breadth Requirements
+
+Students admitted to Simon Fraser University beginning in the fall 2006 term must meet writing, quantitative and breadth requirements as part of any degree program they may undertake. See Writing, Quantitative, and Breadth Requirements for university-wide information.
+
+### WQB Graduation Requirements
+
+#### A grade of C- or better is required to earn W, Q or B credit
+
+Requirement
+
+Units
+
+Notes
+
+W - Writing
+
+6
+
+Must include at least one upper division course, taken at Simon Fraser University within the student's major subject; two courses (minimum three units each)
+
+Q - Quantitative
+
+6
+
+Q courses may be lower or upper division; two courses (total six units or more)
+
+B - Breadth
+
+18
+
+Designated Breadth
+
+Must be outside the student's major subject, and may be lower or upper division:
+
+Two courses (total six units or more) Social Sciences: B-Soc
+
+Two courses (total six units or more) Humanities: B-Hum
+
+Two courses (total six units or more) Sciences: B-Sci
+
+6
+
+Additional Breadth
+
+Two courses (total six units or more) outside the student's major subject (may or may not be B-designated courses, and will likely help fulfil individual degree program requirements).
+
+Students choosing to complete a joint major, joint honours, double major, two extended minors, an extended minor and a minor, or two minors may satisfy the breadth requirements (designated or not designated) with courses completed in either one or both program areas.
+
+## Residency Requirements and Transfer Credit
+
+- At least half of the program's total units must be earned through Simon Fraser University study.
+
+- At least two thirds of the program's total upper division units must be earned through Simon Fraser University study.
+
+Please see Faculty of Applied Sciences Residency Requirements for further information.
+
+## Elective Courses
+
+In addition to the courses listed above, students should consult an academic advisor to plan the remaining required elective courses.
+
+Back To Top

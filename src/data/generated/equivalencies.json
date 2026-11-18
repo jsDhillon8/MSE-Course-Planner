@@ -6,5 +6,7 @@
   { "sourceCourseId": "mse112", "equivalentCourseId": "mse110", "equivalencyType": "full" },
   { "sourceCourseId": "mse224", "equivalentCourseId": "mse221", "equivalencyType": "full" },
   { "sourceCourseId": "mse323", "equivalentCourseId": "mse223", "equivalencyType": "full" },
-  { "sourceCourseId": "bus232", "equivalentCourseId": "buec232", "equivalencyType": "full" }
+  { "sourceCourseId": "bus232", "equivalentCourseId": "buec232", "equivalencyType": "full" },
+  { "sourceCourseId": "mse429", "equivalentCourseId": "mse490", "equivalencyType": "full" },
+  { "sourceCourseId": "mse282", "equivalentCourseId": "mse280", "equivalencyType": "full" }
 ]

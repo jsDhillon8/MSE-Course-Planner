@@ -66,6 +66,8 @@ export interface TermPlan {
 export interface TemplateDefinition {
   id: string;
   title: string;
+  /** The degree (in the same curriculum) this schedule completes, e.g. "major". */
+  degreeId: string;
   planLength: PlanLength;
   supportsVariants: boolean;
   availableVariants: VariantId[];
@@ -91,18 +93,65 @@ export interface PageTemplate extends TemplateDefinition {
   curriculumId: string;
 }
 
-/** A named list of courses a student picks from (e.g. technical electives). */
+/**
+ * A named list of courses a student picks from (e.g. technical electives). How many
+ * a degree needs is in `DegreeRequirements.electives`.
+ */
 export interface ElectiveGroup {
   id: string;
   label: string;
-  /** SFU course codes, e.g. "MSE 450". `npm run sync-data` fetches each one. */
+  /** Id of the page in src/data/calendar/sources.json this group was copied from. */
+  source?: string;
+  /** Name of the listed courses when the group also allows unlisted ones, e.g. "Group A". */
+  listLabel?: string;
+  /** SFU course codes, e.g. "MSE 450". `npm run sync-data` fetches each one. Empty when the rule is descriptive. */
   courseCodes: string[];
+  /** The rule in words, for anything the list can't express. */
+  note?: string;
 }
 
-/** An optional specialization within a curriculum (e.g. Agritech). Requirements come in Phase 3. */
+/** An optional specialization within a curriculum (e.g. AgriTech). */
 export interface Concentration {
   id: string;
   label: string;
+  /** Extra courses the concentration requires (SFU course codes). */
+  requiredCourses?: string[];
+  /** Program courses the concentration replaces. */
+  waivedCourses?: string[];
+  /** Technical electives needed with this concentration (instead of the degree's usual count). */
+  technicalElectives?: number;
+  note?: string;
+}
+
+/** One elective requirement of a degree, e.g. four technical electives, at least three from Group A. */
+export interface DegreeElectiveRequirement {
+  groupId: string;
+  courses: number;
+  /** At least this many must come from the group's `courseCodes` list. */
+  minFromList?: number;
+}
+
+/**
+ * A degree's requirements as listed in the SFU calendar, copied locally (see
+ * src/data/calendar/). The site reads this copy, never the live calendar.
+ */
+export interface DegreeRequirements {
+  id: string;
+  label: string;
+  /** Id of the calendar page in src/data/calendar/sources.json. */
+  source: string;
+  /** "Students complete all of" (SFU course codes). */
+  requiredCourses: string[];
+  /** Each "and one of" list. */
+  chooseOne: string[][];
+  electives: DegreeElectiveRequirement[];
+  coopTerms: number;
+  /**
+   * Units from the listed requirements (3 per elective course, smallest option of each
+   * "one of"). The calendar doesn't state a total; advisors plan any remaining electives.
+   */
+  minimumUnits: number;
+  concentrationIds: string[];
 }
 
 /**
@@ -114,7 +163,21 @@ export interface Curriculum {
   label: string;
   electiveGroups: ElectiveGroup[];
   concentrations: Concentration[];
+  /** Degrees in this curriculum (e.g. Major, Double Degree), each with its calendar requirements. */
+  degrees: DegreeRequirements[];
   templates: TemplateDefinition[];
+}
+
+/** One page copied into the local requirements backup (src/data/calendar/sources.json). */
+export interface CalendarSource {
+  id: string;
+  title: string;
+  kind: "calendar-program" | "page" | "wqb";
+  url: string;
+  /** e.g. "2027/spring" for calendar pages */
+  calendarTerm: string | null;
+  /** Local date (YYYY-MM-DD) of the copy in src/data/calendar/text/. */
+  copiedOn: string | null;
 }
 
 /** A degree program. Courses and equivalencies are shared across all programs. */
