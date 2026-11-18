@@ -6,7 +6,7 @@ import { InstructorRatings } from "./InstructorRatings";
 import { Course, OfferedSection, SharedOutlineFields } from "../../types";
 import { buildCourseCodeIndex, isPlaceholderCourse, normalizeCourseCode } from "../../lib/courseCodes";
 import { parseEquivalents } from "../../lib/parseEquivalents";
-import type { PlanRequirementWarning } from "../../lib/requirements/planValidation";
+import type { PlanRequirementNote, PlanRequirementWarning } from "../../lib/requirements/planValidation";
 
 const courseIdByCode = buildCourseCodeIndex(courses);
 
@@ -269,6 +269,8 @@ interface CourseDetailsPanelProps {
   onSwapIntoPlan?: (box: EquivalentBox) => void | Promise<void>;
   /** Unmet prerequisites/corequisites of the selected course where it sits in the plan. */
   requirementWarnings?: PlanRequirementWarning[];
+  /** Soft notes, e.g. rules the current outline adds for an old-curriculum plan. */
+  requirementNotes?: PlanRequirementNote[];
 }
 
 export function CourseDetailsPanel({
@@ -276,6 +278,7 @@ export function CourseDetailsPanel({
   swapEnabled = false,
   onSwapIntoPlan,
   requirementWarnings = [],
+  requirementNotes = [],
 }: CourseDetailsPanelProps) {
   const [selectedEquivalentCode, setSelectedEquivalentCode] = useState<string | null>(null);
   const [swapBusyCode, setSwapBusyCode] = useState<string | null>(null);
@@ -377,6 +380,16 @@ export function CourseDetailsPanel({
                     <strong>{warning.message}</strong>
                     <span>{warning.fix}</span>
                   </li>
+                ))}
+              </ul>
+            </section>
+          )}
+
+          {requirementNotes.length > 0 && (
+            <section className="requirement-notes" aria-label="Prerequisite notes">
+              <ul>
+                {requirementNotes.map((note) => (
+                  <li key={note.message}>{note.message}</li>
                 ))}
               </ul>
             </section>

@@ -8,7 +8,7 @@ import { ScheduleSlotCard } from "../../components/schedule/ScheduleSlotCard";
 import { courseById, pageTemplates } from "../../data";
 import { useCourseProgress } from "../../hooks/useCourseProgress";
 import { computeCompletedCredits, computeTotalCurriculumCredits } from "../../lib/credits";
-import { courseDependencyGraph } from "../../lib/requirements/dependencyGraph";
+import { getCourseDependencyGraph } from "../../lib/requirements/dependencyGraph";
 import { formatCurriculum } from "../../lib/formatCurriculum";
 import { getActiveTerms, groupTermsByYear } from "../../lib/scheduleTerms";
 import { Course, TermPlan, VariantId } from "../../types";
@@ -46,8 +46,12 @@ export function PlannerPage({ onOpenWelcome }: PlannerPageProps) {
   }, []);
 
   const relationshipHighlights = useMemo(
-    () => courseDependencyGraph.getHighlights(selectedCourse?.id ?? null, recursiveHighlights),
-    [selectedCourse?.id, recursiveHighlights]
+    () =>
+      getCourseDependencyGraph(template.programId, template.curriculumId).getHighlights(
+        selectedCourse?.id ?? null,
+        recursiveHighlights
+      ),
+    [selectedCourse?.id, recursiveHighlights, template.programId, template.curriculumId]
   );
 
   const terms = useMemo<TermPlan[]>(() => getActiveTerms(template, variant), [template, variant]);

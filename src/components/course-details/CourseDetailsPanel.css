@@ -368,3 +368,20 @@ p.empty-note.historical-note {
 .requirement-warnings li span {
   color: var(--text-muted);
 }
+
+/* Soft notes (not warnings), e.g. extra rules in the current outline for old-curriculum plans */
+.requirement-notes {
+  margin: 12px 0;
+  padding: 8px 12px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  font-size: 0.8rem;
+  color: var(--text-muted);
+}
+
+.requirement-notes ul {
+  margin: 0;
+  padding-left: 18px;
+  display: grid;
+  gap: 4px;
+}

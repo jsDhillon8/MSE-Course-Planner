@@ -25,8 +25,8 @@ import {
   serializePlanFile,
   termNameFromLabel,
 } from "../../lib/customPlan";
-import { courseDependencyGraph } from "../../lib/requirements/dependencyGraph";
-import { validatePlanRequirements } from "../../lib/requirements/planValidation";
+import { getCourseDependencyGraph } from "../../lib/requirements/dependencyGraph";
+import { checkPlanRequirements } from "../../lib/requirements/planValidation";
 import { Course, CourseHighlightRole, VariantId } from "../../types";
 import type { SharedCourseCardProps } from "./courseCardProps";
 import { CoursePicker } from "./CoursePicker";
@@ -116,18 +116,19 @@ export function CustomSchedulePage({ onOpenWelcome }: CustomSchedulePageProps) {
     : null;
 
   const relationshipHighlights = useMemo(() => {
-    const highlights = courseDependencyGraph.getHighlights(highlightSourceId, recursiveHighlights);
+    const graph = getCourseDependencyGraph(plan.programId, plan.curriculumId);
+    const highlights = graph.getHighlights(highlightSourceId, recursiveHighlights);
     if (!selectedCourse || selectedCourse.id === highlightSourceId) return highlights;
 
     const roles = new Map<string, CourseHighlightRole>(highlights.roles);
     roles.delete(highlightSourceId ?? "");
     roles.set(selectedCourse.id, "selected");
     return { roles };
-  }, [highlightSourceId, recursiveHighlights, selectedCourse]);
+  }, [highlightSourceId, recursiveHighlights, selectedCourse, plan.programId, plan.curriculumId]);
 
-  const requirementWarnings = useMemo(
-    () => validatePlanRequirements(plan.terms, plan.swaps, lookup),
-    [plan.terms, plan.swaps, lookup]
+  const { warnings: requirementWarnings, notes: requirementNotes } = useMemo(
+    () => checkPlanRequirements(plan.terms, plan.swaps, lookup, plan.programId, plan.curriculumId),
+    [plan.terms, plan.swaps, lookup, plan.programId, plan.curriculumId]
   );
 
   const curriculumCourseIds = useMemo(
@@ -348,6 +349,7 @@ export function CustomSchedulePage({ onOpenWelcome }: CustomSchedulePageProps) {
             selectedCourse={selectedCourse}
             swapEnabled={selectedInPlan}
             requirementWarnings={selectedCourse ? requirementWarnings.get(selectedCourse.id) : undefined}
+            requirementNotes={selectedCourse ? requirementNotes.get(selectedCourse.id) : undefined}
             onSwapIntoPlan={handleSwapIntoPlan}
           />
         </PulloutPanel>

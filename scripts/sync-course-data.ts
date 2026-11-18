@@ -12,7 +12,11 @@
  *   generated/courseRequirements.json  raw SFU prerequisite/corequisite text per course
  *   generated/equivalencies.json       "may not take for further credit" pairs from outline notes,
  *                                      limited to courses in the course list, type "full".
- *                                      Use equivalencyOverrides.json to change a type or add pairs.
+ *   generated/courseRequirementsByOutlineTerm.json
+ *                                      older prerequisite text for curricula with an `outlineTerm`
+ *                                      (e.g. pre-Fall 2024 = "2024/spring"): the program's own
+ *                                      courses (MSE) only, from that term or the latest offering
+ *                                      in the terms before it. Other departments keep current rules.
  *
  * If SFU has no outline for a course (not offered in the last 6 terms, or a request
  * failed), its previous generated data is kept and the course is listed as a warning.
@@ -20,14 +24,16 @@
 import { readdirSync, readFileSync, writeFileSync } from "node:fs";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
-import { fetchSharedOutline } from "../src/api/sfuOutlines";
+import { fetchSectionsForTerm, fetchSharedOutline, resolveOfferedSections } from "../src/api/sfuOutlines";
 import { normalizeCourseCode, parseCourseCode } from "../src/lib/courseCodes";
 import { parseEquivalents } from "../src/lib/parseEquivalents";
-import type { Course, CourseEquivalency, Program, SharedOutlineFields } from "../src/types";
+import type { Course, CourseEquivalency, Program, SharedOutlineFields, TermName } from "../src/types";
 
 const DATA = join(dirname(fileURLToPath(import.meta.url)), "../src/data");
 const GENERATED = join(DATA, "generated");
 const CONCURRENCY = 4;
+/** How many terms before an `outlineTerm` to search when the course wasn't offered in it. */
+const OUTLINE_LOOKBACK = 5;
 
 type CourseRow = Pick<Course, "id" | "code" | "title" | "credits">;
 
@@ -44,6 +50,9 @@ const placeholders = readJson<CourseRow[]>(join(DATA, "placeholderCourses.json")
 const previousCourses = readJson<CourseRow[]>(join(GENERATED, "courses.json"));
 const previousRequirements = readJson<Record<string, string>>(join(GENERATED, "courseRequirements.json"));
 const previousEquivalencies = readJson<CourseEquivalency[]>(join(GENERATED, "equivalencies.json"));
+const previousByOutlineTerm = readJson<Record<string, Record<string, string>>>(
+  join(GENERATED, "courseRequirementsByOutlineTerm.json")
+);
 
 const placeholderIds = new Set(placeholders.map((c) => c.id));
 const previousById = new Map(previousCourses.map((c) => [c.id, c]));
@@ -91,6 +100,21 @@ for (const program of programs) {
   }
 }
 
+/** outlineTerm → departments whose courses use that term's rules (each program's own courses). */
+const outlineTermDepts = new Map<string, Set<string>>();
+for (const program of programs) {
+  for (const curriculum of program.curricula) {
+    if (!curriculum.outlineTerm) continue;
+    if (!/^\d{4}\/(spring|summer|fall)$/.test(curriculum.outlineTerm)) {
+      console.warn(`! ${program.id}/${curriculum.id} outlineTerm "${curriculum.outlineTerm}" should look like "2024/spring", skipped`);
+      continue;
+    }
+    const depts = outlineTermDepts.get(curriculum.outlineTerm) ?? new Set<string>();
+    depts.add(program.shortName.toUpperCase());
+    outlineTermDepts.set(curriculum.outlineTerm, depts);
+  }
+}
+
 // ── Fetch ──
 async function mapLimited<T, R>(items: T[], limit: number, fn: (item: T) => Promise<R>): Promise<R[]> {
   const results: R[] = new Array(items.length);
@@ -125,7 +149,68 @@ const outlines = await mapLimited(entries, CONCURRENCY, async ([id, code]) => {
   return { id, code, outline };
 });
 
+/** "2024/spring" plus the `count` terms before it, newest first. */
+function termsFrom(outlineTerm: string, count: number): string[] {
+  const order: TermName[] = ["spring", "summer", "fall"];
+  const [yearText, termText] = outlineTerm.split("/");
+  let year = Number(yearText);
+  let index = order.indexOf(termText as TermName);
+  const terms = [outlineTerm];
+  for (let i = 0; i < count; i++) {
+    index -= 1;
+    if (index < 0) {
+      index = order.length - 1;
+      year -= 1;
+    }
+    terms.push(`${year}/${order[index]}`);
+  }
+  return terms;
+}
+
+/** The outline from `outlineTerm`, or the latest offering in the terms before it. */
+async function fetchOutlineAsOf(code: string, outlineTerm: string): Promise<SharedOutlineFields | null> {
+  const parsed = parseCourseCode(code);
+  if (!parsed) return null;
+  const dept = parsed.dept.toLowerCase();
+  const number = parsed.number.toLowerCase();
+  for (const term of termsFrom(outlineTerm, OUTLINE_LOOKBACK)) {
+    try {
+      const sections = await fetchSectionsForTerm(term, dept, number);
+      if (!sections) continue;
+      const resolved = await resolveOfferedSections(dept, number, [sections]);
+      if (resolved) return resolved.sharedOutline;
+    } catch {
+      // Try the next older term.
+    }
+  }
+  return null;
+}
+
+const olderEntries = [...outlineTermDepts].flatMap(([outlineTerm, depts]) =>
+  entries
+    .filter(([, code]) => depts.has(parseCourseCode(code)?.dept.toUpperCase() ?? ""))
+    .map(([id, code]) => ({ outlineTerm, id, code }))
+);
+if (olderEntries.length) {
+  console.log(`Fetching ${olderEntries.length} older outlines (${[...outlineTermDepts.keys()].join(", ")})...`);
+}
+done = 0;
+const olderOutlines = await mapLimited(olderEntries, CONCURRENCY, async (entry) => {
+  const outline = await fetchOutlineAsOf(entry.code, entry.outlineTerm);
+  done += 1;
+  if (done % 10 === 0 || done === olderEntries.length) console.log(`  ${done}/${olderEntries.length}`);
+  return { ...entry, outline };
+});
+
 // ── Build outputs ──
+/** "Prerequisites: ...\nCorequisites: ..." from an outline, or "" when it lists neither. */
+function requirementTextFrom(outline: SharedOutlineFields): string {
+  // Collapse SFU's stray line breaks ("MSE 320\r\n(or ENSC 382)") so they don't read as list breaks.
+  const prereq = outline.prerequisites?.replace(/\s+/g, " ").trim();
+  const coreq = outline.corequisites?.replace(/\s+/g, " ").trim();
+  return [prereq && `Prerequisites: ${prereq}`, coreq && `Corequisites: ${coreq}`].filter(Boolean).join("\n");
+}
+
 const missing: string[] = [];
 const courses: CourseRow[] = [];
 const requirements: Record<string, string> = {};
@@ -146,11 +231,18 @@ for (const { id, code, outline } of outlines) {
     credits: outline.units ?? previous?.credits ?? 0,
   });
 
-  // Collapse SFU's stray line breaks ("MSE 320\r\n(or ENSC 382)") so they don't read as list breaks.
-  const prereq = outline.prerequisites?.replace(/\s+/g, " ").trim();
-  const coreq = outline.corequisites?.replace(/\s+/g, " ").trim();
-  const text = [prereq && `Prerequisites: ${prereq}`, coreq && `Corequisites: ${coreq}`].filter(Boolean).join("\n");
+  const text = requirementTextFrom(outline);
   if (text) requirements[id] = text;
+}
+
+/** Older rules. A course with no older outline found keeps its previous entry, or uses current rules. */
+const byOutlineTerm: Record<string, Record<string, string>> = {};
+const olderMissing: string[] = [];
+for (const { outlineTerm, id, code, outline } of olderOutlines) {
+  const termEntries = (byOutlineTerm[outlineTerm] ??= {});
+  const text = outline ? requirementTextFrom(outline) : previousByOutlineTerm[outlineTerm]?.[id];
+  if (!outline) olderMissing.push(`${code} (${outlineTerm})`);
+  if (text) termEntries[id] = text;
 }
 
 const knownIds = new Set(courses.map((c) => c.id));
@@ -179,6 +271,7 @@ const arrayFile = (rows: object[]) => (rows.length ? `[\n${rows.map((r) => `  ${
 writeFileSync(join(GENERATED, "courses.json"), arrayFile(courses));
 writeFileSync(join(GENERATED, "courseRequirements.json"), `${JSON.stringify(requirements, null, 2)}\n`);
 writeFileSync(join(GENERATED, "equivalencies.json"), arrayFile(equivalencies));
+writeFileSync(join(GENERATED, "courseRequirementsByOutlineTerm.json"), `${JSON.stringify(byOutlineTerm, null, 2)}\n`);
 
 // ── Summary ──
 const changed = (a: unknown, b: unknown) => JSON.stringify(a) !== JSON.stringify(b);
@@ -193,4 +286,9 @@ if (added.length) console.log(`Added courses: ${added.join(", ")}`);
 if (updated.length) console.log(`Title/credits changed: ${updated.join(", ")}`);
 if (reqChanged.length) console.log(`Requirement text changed: ${reqChanged.join(", ")}`);
 if (missing.length) console.log(`No SFU outline found (kept previous data): ${missing.join(", ")}`);
+for (const [outlineTerm, termEntries] of Object.entries(byOutlineTerm)) {
+  const differs = Object.keys(termEntries).filter((id) => termEntries[id] !== requirements[id]);
+  console.log(`${outlineTerm} rules: ${Object.keys(termEntries).length} courses, ${differs.length} differ from current outlines.`);
+}
+if (olderMissing.length) console.log(`No older outline found (current rules used): ${olderMissing.join(", ")}`);
 console.log("\nNext: review `git diff src/data/generated`, then run `npm run test:dependency-graph`.");

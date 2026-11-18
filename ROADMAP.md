@@ -66,7 +66,7 @@ Full history in [CHANGELOG.md](CHANGELOG.md).
    - Phase 3 features (electives, Agritech) and the beta release check against the calendar both use this data.
 
 ## Phase 2: Course List Expansion + Equivalents
-1. **Curriculum-era prerequisites:** old-curriculum students stay on the old rules and resolve conflicts by appeal, so pre-2024 plans are checked against the pre-Fall 2024 outlines.
+1. **Curriculum-era prerequisites** ✅ Done (Nov 17, 2026): old-curriculum students stay on the old rules and resolve conflicts by appeal, so pre-2024 plans are checked against the pre-Fall 2024 outlines.
    - Each curriculum names an `outlineTerm` (e.g. `2024/spring`); `sync-data` stores the old rules for that curriculum's MSE courses separately. Other departments (MATH, BUS, ...) keep their current rules.
    - Validation and relationship highlights use the plan's curriculum rules. Clears the "MSE 222 needs MSE 103" style warnings on pre-2024 plans.
    - Where the current outline asks for more, show a soft note (not a warning), e.g. "Current SFU outline also lists MSE 252; old-curriculum students usually resolve this through a prerequisite appeal."

@@ -4,6 +4,11 @@ What's new in the SFU MSE Course Navigator, newest first. Upcoming work is in [R
 
 ---
 
+## November 17, 2026 - Unreleased
+- **Pre-Fall 2024 plans are checked against the old MSE prerequisites** (the Spring 2024 outlines), so old-curriculum plans no longer show warnings like "MSE 222 needs MSE 103". Courses from other departments (MATH, PHYS, BUS, ...) still use their current rules.
+- Where the current SFU outline asks for more than the old one, the course details panel shows a soft note instead of a warning, e.g. "Current SFU outline also lists MSE 252; old-curriculum students usually resolve this through a prerequisite appeal."
+- Relationship highlights also follow your curriculum's prerequisites.
+
 ## November 17, 2026 - Prerequisite checks and degree requirements (0.1.7)
 - **Degree requirements from the SFU calendar** are now kept in the planner: required courses, "one of" choices, technical electives (Group A), complementary and business electives, and the AgriTech concentration, for both curricula and for the Major and the Double Degree. Each comes with its source link and the date it was copied.
 - Technical electives from Group A (e.g. MSE 450, MSE 481), the AgriTech courses (BISC 106, MSE 360, SEE 351) and MSE 282 can now be added to a custom schedule, and Group A electives count toward graduation.

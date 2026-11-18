@@ -59,8 +59,7 @@ Plans, priorities and design principles are in [ROADMAP.md](ROADMAP.md).
 | `programs/<id>.json` | hand | One file per program: its curricula (e.g. Pre/Post-Fall 2024), each with degree requirements (Major, Double Degree), elective groups (e.g. `technical` Group A), concentrations (AgriTech) and plan templates (courses per term, co-op variants). Requirements are written from the local calendar copy below |
 | `calendar/` | `npm run calendar:update` | Local copy of SFU's degree requirements: `sources.json` (each page's link and copy date), `text/` (the pages' wording) and `wqb-courses.json` (WQB certified courses). The site never reads SFU's calendar directly |
 | `placeholderCourses.json` | hand | Placeholder slots (COMP ELEC 1, CO-OP, ...) |
-| `equivalencyOverrides.json` | hand | Equivalency pairs to add, or to change the type of a generated pair |
-| `generated/*.json` | `npm run sync-data` | Courses, raw SFU requirement text, and equivalencies from outline notes |
+| `generated/*.json` | `npm run sync-data` | Courses, raw SFU requirement text, and equivalencies from outline notes. `courseRequirementsByOutlineTerm.json` holds older MSE rules for curricula with an `outlineTerm` (pre-Fall 2024 uses `2024/spring`), so those plans are checked against the outlines that applied to them |
 
 When a new SFU calendar is published, run `npm run calendar:check` to see what changed compared with the local copy. To move to the new calendar, change the URLs in `calendar/sources.json` if needed, run `npm run calendar:update`, update the degree requirements in `programs/<id>.json` to match, and run `npm run test:requirements` (checks `programs/<id>.json` against the saved wording, and every recommended plan against its degree).
 

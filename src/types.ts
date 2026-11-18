@@ -161,6 +161,11 @@ export interface DegreeRequirements {
 export interface Curriculum {
   id: string;
   label: string;
+  /**
+   * SFU outline term whose prerequisite rules apply to this curriculum's program courses
+   * (e.g. "2024/spring" for pre-Fall 2024 students). Unset = current outlines.
+   */
+  outlineTerm?: string;
   electiveGroups: ElectiveGroup[];
   concentrations: Concentration[];
   /** Degrees in this curriculum (e.g. Major, Double Degree), each with its calendar requirements. */

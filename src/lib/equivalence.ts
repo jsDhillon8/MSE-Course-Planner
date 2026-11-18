@@ -2,7 +2,7 @@ import { courseEquivalencies } from "../data";
 
 /**
  * Course id → ids that count as the same course: SFU's "may not take for further
- * credit" pairs and the hand-edited overrides, both directions, excluding
+ * credit" pairs, both directions, excluding
  * elective-only pairs.
  */
 export const equivalentsById: Map<string, Set<string>> = (() => {
