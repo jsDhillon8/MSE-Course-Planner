@@ -1,0 +1,237 @@
+# Mechatronic Systems Engineering Undergraduates
+
+Mechatronic Systems Engineering students integrates cyber and physical realms, turning theory into practice with hands-on experiences to create technology for social good.
+
+Program Requirements
+
+Policies
+
+Forms
+
+Student Resources
+
+Capstone Projects
+
+Co-op
+
+Scholarships & Awards
+
+Frequently Asked Questions
+
+## Undergraduate Program Requirements
+
+MSE undergraduate students should be familiar with their program requirements - below are program details related to the curriculum, course schedule and sequencing, pre-approved electives, technical electives and concentration options.
+
+A student’s program requirements are determined by the term in which they were admitted to the MSE program.
+
+Students must obtain prior approval by sending online MSE Appeal Form before enrolling in any course that falls outside their academic program requirements if they intend to receive credit for it.
+
+#### Are you a Future Student?
+
+Explore Programs
+
+#### Navigation:
+
+- MSE Program Curriculum
+
+- Technical Studies Electives
+
+- Pre-approved Complementary Study Electives
+
+- Agri-Tech Concentration
+
+## MSE Undergraduate Program Curriculum
+
+The MSE undergraduate program provides a four-year curriculum that details the courses necessary for successful completion of the degree program.
+
+We also offer five-year degree options designed to provide students with a more flexible curriculum, allowing them to reduce their workload. Below is a curriculum table outlining the courses required to successfully complete this program in five years.
+
+### NEW! Fall 2024 Curriculum Reform
+
+The curriculum reform has been designed to provide an improved experience for students in MSE, to provide more industry-ready skills and increase the likelihood that students will graduate in a timely manner as 14 fewer credits are required to graduate.
+
+The main changes to the curriculum, compared to the pre-Fall 2024 curriculum are available here.
+
+### For Students Transitioning To The New Curriculum And Transfer Student (applies only to Pre-Fall 2024 Admits)
+
+#### MSE 103 AND ONLINE STATICS UPGRADE COURSE
+
+Students may request a waiver for MSE 103 if they meet both of the following conditions:
+
+- Have completed PHYS 140 (equivalent to PHYS 120 + PHYS 132), and
+
+- Have completed the self-paced online Statics Upgrade Course on Canvas.
+
+#### MSE 221/224 EQUIVALENCY
+
+Students who already have credit for MSE 221 (or SEE 221), may request a waiver for MSE 224.
+
+Students who have NOT taken MSE 221, may complete:
+
+- MSE 224, and
+
+- Either MSE 103 or the online Statics Upgrade Course on Canvas.
+
+Once completed, an appeal for a waiver of MSE 221 must be submitted.
+
+### Fall 2024 Program Requirements
+
+4-Year Curriculum
+
+5-Year Flexible Curriculum
+
+### Pre-Fall 2024 Program Requirements
+
+4-Year Curriculum
+
+5-Year Flexible Curriculum
+
+Important Notes:
+
+- Mechatronic Systems Engineering students must finish three mandatory co-op terms before graduation.
+
+- MSE students must complete nine (9) units or three (3) courses of social science and humanity breadth courses (B-Soc and B-Hum) with at least one course in each B-Soc and B-Hum category. Complementary elective course must be selected from pre-Approved Complementary Electives list.
+
+- MSE 4XX = Technical Studies Elective (can be selected from the list of Technical Studies Electives )
+
+- Pre-Fall 2024 admits must complete six (6) courses from the list of Technical Studies Electives .
+
+- Starting Fall 2024, new admits must complete four (4) courses from the list of Technical Studies Electives .
+
+- Please visit go.sfu.ca for list of coures offered in a particular semester.
+
+## Technical Studies Electives
+
+The School of Mechatronic Systems Engineering has changed the policy with regards to engineering electives. They are divided into two groups: A and B
+
+### Group A:
+
+- MSE 412, MSE 413, MSE 420, MSE 421, MSE 422, MSE 423, MSE 424, MSE 425, MSE 426, MSE 427, MSE 428, MSE 429, MSE 450, MSE 451, MSE 453, MSE 454, MSE 460, MSE 480, MSE 481, MSE 483, MSE 490, MSE 491
+
+#### Remarks:
+
+- If any of these courses are taught by sessional lectures who do not have P. Eng., the course is moved to group B.
+
+- MSE 490, 491 and MSE 492 are counted in group A, if they are taught by MSE P. Eng. Faculty members.
+
+- MSE 490: ST: Technology Entrepreneurship is counted as a group B course.
+
+### Group B:
+
+- 400-level engineering elective courses that are taught by faculty members who have yet to obtain their professional status; engineering elective courses taught by non-P. Eng. Faculty members; 400 level courses taken at other schools (after appeal to MSE); and Directed Studies (MSE or outside)
+
+- MSE students following the pre-Fall 2024 curriculum must take at least four engineering electives from Group A. They can take the other two courses from Group B.
+
+- MSE students admitted starting in Fall 2024, or those who transitioned to the Fall 2024 curriculum, are required to complete four engineering electives. At least three of these electives must be selected from Group A.
+
+### ENGINEERING ELECTIVE OFFERING
+
+The MSE engineering electives will be offered in accordance with the two year plan and the posted course offering maybe subject to change. Please check goSFU to confirm offering and class schedule.
+
+#### * Fall 2026
+
+- MSE 412
+
+- MSE 420
+
+- MSE 422
+
+- MSE 426
+
+- MSE 490 ST Tech-E
+
+#### * Spring 2027
+
+- MSE 413
+
+- MSE 451*
+
+- MSE 452
+
+- MSE 460
+
+- MSE 483
+
+* MSE 491 under the title " Advanced Electronic Circuits " may not take this course for further credit.
+
+#### * Summer 2027
+
+- MSE 421
+
+- MSE 426
+
+- MSE 450
+
+- MSE 454
+
+- MSE 480
+
+#### * Fall 2027
+
+- MSE 412
+
+- MSE 420
+
+- MSE 481
+
+- MSE 490
+
+- MSE 490 ST Tech-E
+
+#### * Spring 2028
+
+- MSE 413
+
+- MSE 429
+
+- MSE 451*
+
+- MSE 453
+
+- MSE 480
+
+- MSE 483
+
+- MSE 491
+
+*MSE 491 under the title " Advanced Electronic Circuits " may not take this course for further credit.
+
+#### * Summer 2028
+
+- MSE 426
+
+- MSE 429
+
+- MSE 450
+
+- MSE 452
+
+- MSE 454
+
+- MSE 481
+
+- MSE 491
+
+* Course offerings may be subject to change.
+
+For MSE 490, MSE 491 and MSE 492 Special Topic, please refer to the course description including prerequisites by clicking the button below.
+
+Special Topic Courses
+
+## Pre-Approved Complementary Study Electives
+
+MSE students must complete 9 units (or 3 courses) of breadth courses (B-Hum and B-Soc) with at least one course in each B-Soc and B-Hum category. All courses designated as B-Hum or B-Soc from the SFU Certified Breadth List , with the exception of those under the Faculty of Applied Sciences, are valid.
+
+MSE second degree students are considered to have met the comlementary electives requirement of the program. As per University policy, students admitted to second degrees are exempt from all of the Breadth requirements, the lower-division W course, and one Q course. The remaining W and Q courses must be a minimum of 3 credits each; the W course must be upper-division and within the major, while the Q course may be upper- or lower-division. Second degree students must meet the FAL and FAN prerequisites in order to enrol in W and Q courses. Second degree students who have met WQB requirements in a first degree at Simon Fraser Unviersity are still required to meet this UD W and Q requirement for the second degree.
+
+IMPORTANT: Students are advised to visit the following link for SFU Breadth courses to double check the designation of courses for B-Hum or B-Soc as they might change from time to time:
+
+WQB CERTIFIED COURSES
+
+## Agri-Tech Concentration
+
+Our Agritech concentration equips you with the skills and knowledge for a career focused on advancing agricultural practices. By integrating cutting-edge technologies such as artificial intelligence (AI), robotics and remote sensing , you will gain hands-on experience to support the evolving demands of the global agricultural ecosystem.
+
+Click the button below to learn more about the detailed curriculum, career prospects, declaration process and more.
+
+Learn more

@@ -2,7 +2,8 @@
  * Refreshes src/data/generated/ from the SFU Course Outlines API.
  * Run once a term:  npm run sync-data   then review `git diff` and run the tests.
  *
- * Courses synced: every real course in programs/*.json (templates + elective groups) + the current
+ * Courses synced: every real course in programs/*.json (templates, elective groups, degree
+ * requirements and concentrations from the local calendar copy) + the current
  * generated/courses.json (so nothing is dropped). Placeholders (COMP ELEC 1, CO-OP, ...)
  * live in placeholderCourses.json and are never touched.
  *
@@ -54,15 +55,23 @@ for (const c of previousCourses) toSync.set(c.id, c.code);
 for (const program of programs) {
   for (const curriculum of program.curricula) {
     const where = `${program.id}/${curriculum.id}`;
-    for (const group of curriculum.electiveGroups) {
-      for (const code of group.courseCodes) {
+    const addCodes = (codes: string[] | undefined, label: string) => {
+      for (const code of codes ?? []) {
         if (!isRealCourse(code)) {
-          console.warn(`! ${where} elective group "${group.id}": "${code}" is not a course code, skipped`);
+          console.warn(`! ${where} ${label}: "${code}" is not a course code, skipped`);
           continue;
         }
         const id = idFromCode(code);
         if (!toSync.has(id)) toSync.set(id, normalizeCourseCode(code));
       }
+    };
+    for (const group of curriculum.electiveGroups) addCodes(group.courseCodes, `elective group "${group.id}"`);
+    for (const degree of curriculum.degrees ?? []) {
+      addCodes(degree.requiredCourses, `degree "${degree.id}"`);
+      for (const options of degree.chooseOne) addCodes(options, `degree "${degree.id}"`);
+    }
+    for (const concentration of curriculum.concentrations) {
+      addCodes(concentration.requiredCourses, `concentration "${concentration.id}"`);
     }
     for (const template of curriculum.templates) {
       const termLists = template.terms ? [template.terms] : Object.values(template.termsByVariant ?? {});

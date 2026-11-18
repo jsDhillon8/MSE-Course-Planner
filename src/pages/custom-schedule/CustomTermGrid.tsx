@@ -11,6 +11,7 @@ import {
   termNameFromLabel,
 } from "../../lib/customPlan";
 import { useOfferingHistories } from "../../hooks/useOfferingHistories";
+import type { PlanRequirementWarning } from "../../lib/requirements/planValidation";
 import { groupTermsByYear } from "../../lib/scheduleTerms";
 import type { SharedCourseCardProps } from "./courseCardProps";
 import type { CourseDrag } from "./useCourseDrag";
@@ -22,10 +23,22 @@ interface CustomTermGridProps {
   cardProps: SharedCourseCardProps;
   offeringHistories: ReturnType<typeof useOfferingHistories>;
   onUndoSwap: (courseId: string) => void;
+  requirementWarnings: Map<string, PlanRequirementWarning[]>;
+  /** Placed courses that don't count toward graduation, with the reason. */
+  notCountingReasons: Map<string, string>;
 }
 
 /** Year rows of term columns; each term is a drop target with a credit count. */
-export function CustomTermGrid({ plan, setPlan, drag, cardProps, offeringHistories, onUndoSwap }: CustomTermGridProps) {
+export function CustomTermGrid({
+  plan,
+  setPlan,
+  drag,
+  cardProps,
+  offeringHistories,
+  onUndoSwap,
+  requirementWarnings,
+  notCountingReasons,
+}: CustomTermGridProps) {
   const { dragging, hoverTarget, setHoverTarget, keepDrag, dropOnTerm, termDropState, beginDrag, endDrag } = drag;
   const lookup = cardProps.courseLookup ?? {};
   const termsByYear = useMemo(() => groupTermsByYear(plan.terms), [plan.terms]);
@@ -111,6 +124,8 @@ export function CustomTermGrid({ plan, setPlan, drag, cardProps, offeringHistori
                           termSeason={season}
                           swappedFromCode={swap?.originalCode}
                           onUndoSwap={swap ? onUndoSwap : undefined}
+                          requirementWarnings={requirementWarnings.get(courseId)}
+                          notCountingReason={notCountingReasons.get(courseId)}
                         />
                       );
                     })}

@@ -4,15 +4,12 @@ import { AppHeader } from "../../components/layout/AppHeader";
 import { ProgressFooter } from "../../components/layout/ProgressFooter";
 import { HighlightLegend } from "../../components/schedule/HighlightLegend";
 import { formatOfferingWarning, offeringWarningLevel } from "../../components/schedule/ScheduleSlotCard";
-import { pageTemplates } from "../../data";
+import { getCurriculumCourseIds, pageTemplates } from "../../data";
 import { useCourseProgress } from "../../hooks/useCourseProgress";
 import { useOfferingHistories } from "../../hooks/useOfferingHistories";
 import { isPlaceholderCourse } from "../../lib/courseCodes";
-import {
-  computeCompletedCredits,
-  computeTotalCurriculumCredits,
-  TERM_CREDIT_WARN_THRESHOLD,
-} from "../../lib/credits";
+import { summarizePlanCredits, TERM_CREDIT_WARN_THRESHOLD } from "../../lib/credits";
+import { equivalentsById } from "../../lib/equivalence";
 import {
   clearCustomPlanStorage,
   createEmptyCustomPlan,
@@ -29,11 +26,13 @@ import {
   termNameFromLabel,
 } from "../../lib/customPlan";
 import { courseDependencyGraph } from "../../lib/requirements/dependencyGraph";
+import { validatePlanRequirements } from "../../lib/requirements/planValidation";
 import { Course, CourseHighlightRole, VariantId } from "../../types";
 import type { SharedCourseCardProps } from "./courseCardProps";
 import { CoursePicker } from "./CoursePicker";
 import "./CustomSchedulePage.css";
 import { CustomTermGrid } from "./CustomTermGrid";
+import { PulloutPanel, usePulloutState } from "./PulloutPanel";
 import { useCourseDrag } from "./useCourseDrag";
 import { useEquivalentSwap } from "./useEquivalentSwap";
 
@@ -47,6 +46,8 @@ export function CustomSchedulePage({ onOpenWelcome }: CustomSchedulePageProps) {
   const [recursiveHighlights, setRecursiveHighlights] = useState(true);
   const [templateSeed, setTemplateSeed] = useState(`${pageTemplates[0]?.id ?? ""}:A`);
   const importInputRef = useRef<HTMLInputElement>(null);
+  const [pickerOpen, togglePicker] = usePulloutState("mse-planner:custom-picker-panel");
+  const [detailsOpen, toggleDetails] = usePulloutState("mse-planner:custom-details-panel");
 
   const {
     completedCourseIds,
@@ -124,15 +125,30 @@ export function CustomSchedulePage({ onOpenWelcome }: CustomSchedulePageProps) {
     return { roles };
   }, [highlightSourceId, recursiveHighlights, selectedCourse]);
 
-  const totalCurriculumCredits = useMemo(
-    () => computeTotalCurriculumCredits(plan.terms, lookup),
-    [plan.terms, lookup]
+  const requirementWarnings = useMemo(
+    () => validatePlanRequirements(plan.terms, plan.swaps, lookup),
+    [plan.terms, plan.swaps, lookup]
   );
 
-  const completedCredits = useMemo(
-    () => computeCompletedCredits(plan.terms, completedCourseIds, lookup),
-    [plan.terms, completedCourseIds, lookup]
+  const curriculumCourseIds = useMemo(
+    () => getCurriculumCourseIds(plan.programId, plan.curriculumId),
+    [plan.programId, plan.curriculumId]
   );
+
+  const creditSummary = useMemo(
+    () =>
+      summarizePlanCredits(
+        plan.terms,
+        plan.swaps,
+        completedCourseIds,
+        lookup,
+        curriculumCourseIds,
+        equivalentsById
+      ),
+    [plan.terms, plan.swaps, completedCourseIds, lookup, curriculumCourseIds]
+  );
+  const totalCurriculumCredits = creditSummary.graduationCredits;
+  const completedCredits = creditSummary.completedGraduationCredits;
 
   const totalCompleted = completedCredits + transferCredits;
   const completionPercent =
@@ -270,8 +286,20 @@ export function CustomSchedulePage({ onOpenWelcome }: CustomSchedulePageProps) {
         onOpenWelcome={onOpenWelcome}
       />
 
-      <main className="planner-layout custom-layout">
-        <CoursePicker plan={plan} setPlan={setPlan} placed={placed} drag={drag} cardProps={cardProps} />
+      <main
+        className={`planner-layout custom-layout${pickerOpen ? "" : " picker-closed"}${
+          detailsOpen ? "" : " details-closed"
+        }`}
+      >
+        <PulloutPanel
+          id="custom-course-picker"
+          side="left"
+          label="Course picker"
+          open={pickerOpen}
+          onToggle={togglePicker}
+        >
+          <CoursePicker plan={plan} setPlan={setPlan} placed={placed} drag={drag} cardProps={cardProps} />
+        </PulloutPanel>
 
         <section className="grid-panel">
           <h2>Custom Schedule</h2>
@@ -287,14 +315,14 @@ export function CustomSchedulePage({ onOpenWelcome }: CustomSchedulePageProps) {
           />
 
           {offeringWarnings.length > 0 && (
-            <aside className="schedule-warnings" aria-label="Offering warnings">
-              <h3>Offering warnings</h3>
+            <details className="schedule-warnings">
+              <summary>Offering warnings ({offeringWarnings.length})</summary>
               <ul>
                 {offeringWarnings.map((warning) => (
                   <li key={warning}>{warning}</li>
                 ))}
               </ul>
-            </aside>
+            </details>
           )}
 
           <CustomTermGrid
@@ -304,14 +332,25 @@ export function CustomSchedulePage({ onOpenWelcome }: CustomSchedulePageProps) {
             cardProps={cardProps}
             offeringHistories={offeringHistories}
             onUndoSwap={handleUndoSwap}
+            requirementWarnings={requirementWarnings}
+            notCountingReasons={creditSummary.notCountingReasons}
           />
         </section>
 
-        <CourseDetailsPanel
-          selectedCourse={selectedCourse}
-          swapEnabled={selectedInPlan}
-          onSwapIntoPlan={handleSwapIntoPlan}
-        />
+        <PulloutPanel
+          id="custom-course-details"
+          side="right"
+          label="Course details"
+          open={detailsOpen}
+          onToggle={toggleDetails}
+        >
+          <CourseDetailsPanel
+            selectedCourse={selectedCourse}
+            swapEnabled={selectedInPlan}
+            requirementWarnings={selectedCourse ? requirementWarnings.get(selectedCourse.id) : undefined}
+            onSwapIntoPlan={handleSwapIntoPlan}
+          />
+        </PulloutPanel>
       </main>
 
       <ProgressFooter
@@ -320,6 +359,7 @@ export function CustomSchedulePage({ onOpenWelcome }: CustomSchedulePageProps) {
         totalCompleted={totalCompleted}
         totalCurriculumCredits={totalCurriculumCredits}
         completionPercent={completionPercent}
+        extraCredits={creditSummary.extraCredits}
         onTransferCreditsChange={handleTransferCreditsChange}
         onTransferCreditsKeyDown={handleTransferCreditsKeyDown}
         onResetProgress={handleResetProgress}

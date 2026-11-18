@@ -1,6 +1,7 @@
 // Parsing checks on real SFU requirement wording. Run: npm run test:requirement-parsing
 // Only courses in the app's course list are recognised (e.g. PHYS 121 and MATH 154 are not).
 import { courses } from "../../data";
+import type { PrerequisiteExpression } from "../../types";
 import { buildCourseCodeIndex } from "../courseCodes";
 import { normalizeRequirementsFromText } from "./requirementNormalizer";
 
@@ -11,6 +12,9 @@ interface Case {
   co?: string[];
   /** Expected type of the top-level prerequisite expression, when it matters. */
   preType?: "course" | "and" | "or";
+  /** Expected and/or tree, written like "and(or(math150, math151), bus232)", when the structure matters. */
+  preTree?: string;
+  coTree?: string;
 }
 
 const CASES: Case[] = [
@@ -45,6 +49,20 @@ const CASES: Case[] = [
       "Prerequisites: MATH 150 or MATH 151, with a minimum grade of C-; or MATH 154 or MATH 157, with a minimum grade of B.",
     pre: ["math150", "math151"],
     preType: "or",
+  },
+  {
+    name: "BUS 232: Oxford-comma list 'A, B, C, or D' is one 'or'",
+    input: "Corequisites: MATH 150, MATH 151, MATH 154, or MATH 157, with a minimum grade of C-; 15 units.",
+    pre: [],
+    co: ["math150", "math151"],
+    coTree: "or(math150, math151)",
+  },
+  {
+    name: "BUS 336: two Oxford-comma 'or' lists joined by ';' are both required",
+    input:
+      "Prerequisites: MATH 150, MATH 151, MATH 154, or MATH 157, with a minimum grade of C-; BUS 232, ECON 233, STAT 270, or STAT 271, with a minimum grade of C-; 45 units.",
+    pre: ["math150", "math151", "bus232"],
+    preTree: "and(or(math150, math151), bus232)",
   },
   {
     name: "MSE 381: '(or X)' with a course outside the list",
@@ -93,6 +111,8 @@ const CASES: Case[] = [
 ];
 
 const codeToId = buildCourseCodeIndex(courses);
+const tree = (node: PrerequisiteExpression | null): string =>
+  !node ? "none" : node.type === "course" ? node.courseId : `${node.type}(${node.items.map(tree).join(", ")})`;
 const sorted = (ids: Iterable<string>) => [...ids].sort().join(", ");
 const failures: string[] = [];
 
@@ -108,6 +128,13 @@ for (const testCase of CASES) {
   }
   if (testCase.preType && result.prerequisiteExpression?.type !== testCase.preType) {
     problems.push(`expression type "${result.prerequisiteExpression?.type}", expected "${testCase.preType}"`);
+  }
+
+  if (testCase.preTree && tree(result.prerequisiteExpression) !== testCase.preTree) {
+    problems.push(`prerequisite tree ${tree(result.prerequisiteExpression)}, expected ${testCase.preTree}`);
+  }
+  if (testCase.coTree && tree(result.corequisiteExpression) !== testCase.coTree) {
+    problems.push(`corequisite tree ${tree(result.corequisiteExpression)}, expected ${testCase.coTree}`);
   }
 
   if (problems.length) failures.push(`✗ ${testCase.name}\n    ${problems.join("\n    ")}`);

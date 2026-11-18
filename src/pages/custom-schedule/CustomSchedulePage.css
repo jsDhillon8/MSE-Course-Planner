@@ -1,5 +1,96 @@
 .custom-layout {
-  grid-template-columns: minmax(220px, 280px) 1fr 320px;
+  --picker-column: minmax(220px, 280px);
+  --details-column: 320px;
+  grid-template-columns: var(--picker-column) minmax(0, 1fr) var(--details-column);
+}
+
+.custom-layout.picker-closed {
+  --picker-column: 36px;
+}
+
+.custom-layout.details-closed {
+  --details-column: 36px;
+}
+
+/* ── Pull-out side panels ── */
+.pullout {
+  position: relative;
+  min-height: 0;
+  display: grid;
+  grid-template-rows: minmax(0, 1fr);
+}
+
+.pullout-body:not([hidden]) {
+  min-height: 0;
+  display: grid;
+  grid-template-rows: minmax(0, 1fr);
+}
+
+.pullout-hide {
+  position: absolute;
+  top: 14px;
+  right: 14px;
+  z-index: 2;
+  border: 1px solid var(--border);
+  background: var(--surface);
+  color: var(--text-muted);
+  border-radius: 6px;
+  padding: 2px 8px;
+  font-size: 0.75rem;
+  cursor: pointer;
+}
+
+.pullout-hide:hover {
+  border-color: var(--primary);
+  color: var(--text);
+}
+
+.pullout-rail {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 8px;
+  padding: 14px 0;
+  writing-mode: vertical-rl;
+  border: none;
+  background: var(--surface);
+  color: var(--text-muted);
+  font-size: 0.8rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color var(--transition-fast), color var(--transition-fast);
+}
+
+.pullout-left .pullout-rail {
+  border-right: 1px solid var(--border);
+}
+
+.pullout-right .pullout-rail {
+  border-left: 1px solid var(--border);
+}
+
+.pullout-rail:hover {
+  background: var(--surface-muted);
+  color: var(--text);
+}
+
+.pullout-rail:focus-visible,
+.pullout-hide:focus-visible {
+  outline: 2px solid var(--primary);
+  outline-offset: -2px;
+}
+
+/* Single-column layout: a closed panel becomes a full-width bar. */
+@media (max-width: 1000px) {
+  .pullout-rail {
+    writing-mode: horizontal-tb;
+    padding: 10px 16px;
+    border: none;
+    border-top: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+  }
 }
 
 /*
@@ -19,9 +110,9 @@
     overflow: hidden;
   }
 
-  .custom-layout > .picker-panel,
+  .custom-layout .picker-panel,
   .custom-layout > .grid-panel,
-  .custom-layout > .details-panel {
+  .custom-layout .details-panel {
     min-height: 0;
     overflow-y: auto;
     overscroll-behavior: contain;
@@ -31,28 +122,28 @@
   }
 
   /* Safari and older Chromium. */
-  .custom-layout > .picker-panel::-webkit-scrollbar,
+  .custom-layout .picker-panel::-webkit-scrollbar,
   .custom-layout > .grid-panel::-webkit-scrollbar,
-  .custom-layout > .details-panel::-webkit-scrollbar {
+  .custom-layout .details-panel::-webkit-scrollbar {
     width: 8px;
   }
 
-  .custom-layout > .picker-panel::-webkit-scrollbar-thumb,
+  .custom-layout .picker-panel::-webkit-scrollbar-thumb,
   .custom-layout > .grid-panel::-webkit-scrollbar-thumb,
-  .custom-layout > .details-panel::-webkit-scrollbar-thumb {
+  .custom-layout .details-panel::-webkit-scrollbar-thumb {
     background: var(--border);
     border-radius: 4px;
   }
 
-  .custom-layout > .picker-panel::-webkit-scrollbar-thumb:hover,
+  .custom-layout .picker-panel::-webkit-scrollbar-thumb:hover,
   .custom-layout > .grid-panel::-webkit-scrollbar-thumb:hover,
-  .custom-layout > .details-panel::-webkit-scrollbar-thumb:hover {
+  .custom-layout .details-panel::-webkit-scrollbar-thumb:hover {
     background: var(--text-subtle);
   }
 
-  .custom-layout > .picker-panel::-webkit-scrollbar-track,
+  .custom-layout .picker-panel::-webkit-scrollbar-track,
   .custom-layout > .grid-panel::-webkit-scrollbar-track,
-  .custom-layout > .details-panel::-webkit-scrollbar-track {
+  .custom-layout .details-panel::-webkit-scrollbar-track {
     background: transparent;
   }
 }
@@ -155,14 +246,15 @@
   padding: 10px 12px;
 }
 
-.schedule-warnings h3 {
-  margin: 0 0 6px;
+.schedule-warnings summary {
   font-size: 0.85rem;
+  font-weight: 700;
   color: var(--warning);
+  cursor: pointer;
 }
 
 .schedule-warnings ul {
-  margin: 0;
+  margin: 6px 0 0;
   padding-left: 18px;
   font-size: 0.8rem;
   color: var(--text-muted);

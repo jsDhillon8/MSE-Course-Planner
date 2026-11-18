@@ -14,7 +14,12 @@
     "test:parse-equivalents": "tsx src/lib/parseEquivalents.test.ts",
     "test:requirement-parsing": "tsx src/lib/requirements/requirementParsing.test.ts",
     "test:dependency-graph": "tsx src/lib/requirements/dependencyGraph.test.ts",
-    "sync-data": "tsx scripts/sync-course-data.ts"
+    "test:plan-validation": "tsx src/lib/requirements/planValidation.test.ts",
+    "test:credits": "tsx src/lib/credits.test.ts",
+    "test:requirements": "tsx scripts/calendar/requirements.test.ts",
+    "sync-data": "tsx scripts/sync-course-data.ts",
+    "calendar:check": "tsx scripts/calendar-backup.ts",
+    "calendar:update": "tsx scripts/calendar-backup.ts --update"
   },
   "dependencies": {
     "cors": "^2.8.6",

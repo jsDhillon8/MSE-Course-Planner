@@ -1,0 +1,4909 @@
+[
+  {
+    "code": "ARAB 100",
+    "title": "Introductory Arabic I",
+    "units": 3,
+    "designations": [
+      "B-Hum"
+    ],
+    "faculty": "Faculty of Arts and Social Sciences"
+  },
+  {
+    "code": "ARAB 110",
+    "title": "Introductory Arabic II",
+    "units": 3,
+    "designations": [
+      "B-Hum"
+    ],
+    "faculty": "Faculty of Arts and Social Sciences"
+  },
+  {
+    "code": "ARCH 100",
+    "title": "Ancient Peoples and Places",
+    "units": 3,
+    "designations": [
+      "B-Soc"
+    ],
+    "faculty": "Faculty of Environment"
+  },
+  {
+    "code": "ARCH 101",
+    "title": "Reconstructing the Human Past",
+    "units": 3,
+    "designations": [
+      "B-Soc"
+    ],
+    "faculty": "Faculty of Environment"
+  },
+  {
+    "code": "ARCH 105",
+    "title": "The Past in the Present: Archaeology in Popular Culture",
+    "units": 3,
+    "designations": [
+      "B-Soc"
+    ],
+    "faculty": "Faculty of Environment"
+  },
+  {
+    "code": "ARCH 131",
+    "title": "Human Origins",
+    "units": 3,
+    "designations": [
+      "B-Soc"
+    ],
+    "faculty": "Faculty of Environment"
+  },
+  {
+    "code": "ARCH 222",
+    "title": "Uncovering the Secrets of the Dead",
+    "units": 3,
+    "designations": [
+      "B-Sci"
+    ],
+    "faculty": "Faculty of Environment"
+  },
+  {
+    "code": "ARCH 226",
+    "title": "Shamans, Sacrifices and Psychedelics",
+    "units": 3,
+    "designations": [
+      "B-Hum",
+      "B-Soc"
+    ],
+    "faculty": "Faculty of Environment"
+  },
+  {
+    "code": "ARCH 249",
+    "title": "Museums and Society",
+    "units": 3,
+    "designations": [
+      "B-Hum"
+    ],
+    "faculty": "Faculty of Environment"
+  },
+  {
+    "code": "ARCH 252",
+    "title": "Ancient Egypt and Africa",
+    "units": 3,
+    "designations": [
+      "B-Hum",
+      "B-Soc"
+    ],
+    "faculty": "Faculty of Environment"
+  },
+  {
+    "code": "ARCH 272W",
+    "title": "Archaeology of the Old World",
+    "units": 4,
+    "designations": [
+      "W",
+      "B-Soc"
+    ],
+    "faculty": "Faculty of Environment"
+  },
+  {
+    "code": "ARCH 273",
+    "title": "Archaeology of the New World",
+    "units": 3,
+    "designations": [
+      "B-Soc"
+    ],
+    "faculty": "Faculty of Environment"
+  },
+  {
+    "code": "ARCH 285",
+    "title": "Archaeological Science",
+    "units": 4,
+    "designations": [
+      "Q",
+      "B-Sci"
+    ],
+    "faculty": "Faculty of Environment"
+  },
+  {
+    "code": "ARCH 286",
+    "title": "Cultural Heritage Management",
+    "units": 3,
+    "designations": [
+      "B-Hum"
+    ],
+    "faculty": "Faculty of Environment"
+  },
+  {
+    "code": "ARCH 301",
+    "title": "Ancient Visual Art",
+    "units": 3,
+    "designations": [
+      "B-Hum"
+    ],
+    "faculty": "Faculty of Environment"
+  },
+  {
+    "code": "ARCH 376",
+    "title": "Quantitative Methods in Archaeology",
+    "units": 4,
+    "designations": [
+      "Q"
+    ],
+    "faculty": "Faculty of Environment"
+  },
+  {
+    "code": "ARCH 471W",
+    "title": "Archaeological Theory",
+    "units": 4,
+    "designations": [
+      "W"
+    ],
+    "faculty": "Faculty of Environment"
+  },
+  {
+    "code": "BISC 100",
+    "title": "Introduction to Biology",
+    "units": 4,
+    "designations": [
+      "B-Sci"
+    ],
+    "faculty": "Faculty of Science"
+  },
+  {
+    "code": "BISC 101",
+    "title": "General Biology",
+    "units": 4,
+    "designations": [
+      "B-Sci"
+    ],
+    "faculty": "Faculty of Science"
+  },
+  {
+    "code": "BISC 102",
+    "title": "General Biology",
+    "units": 4,
+    "designations": [
+      "B-Sci"
+    ],
+    "faculty": "Faculty of Science"
+  },
+  {
+    "code": "BISC 113",
+    "title": "Biology in Everyday Life",
+    "units": 3,
+    "designations": [
+      "B-Sci"
+    ],
+    "faculty": "Faculty of Science"
+  },
+  {
+    "code": "BISC 302W",
+    "title": "Genetic Analysis",
+    "units": 3,
+    "designations": [
+      "W"
+    ],
+    "faculty": "Faculty of Science"
+  },
+  {
+    "code": "BISC 360W",
+    "title": "Techniques in Ecology and Evolution",
+    "units": 3,
+    "designations": [
+      "W"
+    ],
+    "faculty": "Faculty of Science"
+  },
+  {
+    "code": "BISC 371",
+    "title": "Special Topics in Biology for Non-Majors",
+    "units": 3,
+    "designations": [
+      "B-Sci"
+    ],
+    "faculty": "Faculty of Science"
+  },
+  {
+    "code": "BISC 407",
+    "title": "Population Dynamics",
+    "units": 3,
+    "designations": [
+      "Q"
+    ],
+    "faculty": "Faculty of Science"
+  },
+  {
+    "code": "BISC 440W",
+    "title": "Biodiversity",
+    "units": 3,
+    "designations": [
+      "W"
+    ],
+    "faculty": "Faculty of Science"
+  },
+  {
+    "code": "BISC 492W",
+    "title": "Research Reporting",
+    "units": 5,
+    "designations": [
+      "W"
+    ],
+    "faculty": "Faculty of Science"
+  },
+  {
+    "code": "BISC 497W",
+    "title": "Undergraduate Research (Writing Intensive)",
+    "units": 3,
+    "designations": [
+      "W"
+    ],
+    "faculty": "Faculty of Science"
+  },
+  {
+    "code": "BPK 110",
+    "title": "Human Nutrition: Current Issues",
+    "units": 3,
+    "designations": [
+      "B-Sci"
+    ],
+    "faculty": "Faculty of Science"
+  },
+  {
+    "code": "BPK 140",
+    "title": "Contemporary Health Issues",
+    "units": 3,
+    "designations": [
+      "B-Sci"
+    ],
+    "faculty": "Faculty of Science"
+  },
+  {
+    "code": "BPK 180W",
+    "title": "Introduction to Ergonomics",
+    "units": 3,
+    "designations": [
+      "W"
+    ],
+    "faculty": "Faculty of Science"
+  },
+  {
+    "code": "BPK 201",
+    "title": "Biomechanics",
+    "units": 3,
+    "designations": [
+      "Q"
+    ],
+    "faculty": "Faculty of Science"
+  },
+  {
+    "code": "BPK 304",
+    "title": "Inquiry and Measurement in Biomedical Physiology and Kinesiology",
+    "units": 3,
+    "designations": [
+      "W",
+      "Q"
+    ],
+    "faculty": "Faculty of Science"
+  },
+  {
+    "code": "BPK 304W",
+    "title": "Inquiry and Measurement in Biomedical Physiology & Kinesiology",
+    "units": 3,
+    "designations": [
+      "W",
+      "Q"
+    ],
+    "faculty": "Faculty of Science"
+  },
+  {
+    "code": "BPK 408W",
+    "title": "Cellular Physiology Laboratory",
+    "units": 3,
+    "designations": [
+      "W"
+    ],
+    "faculty": "Faculty of Science"
+  },
+  {
+    "code": "BPK 410",
+    "title": "Biomechanics Laboratory",
+    "units": 4,
+    "designations": [
+      "Q"
+    ],
+    "faculty": "Faculty of Science"
+  },
+  {
+    "code": "BUS 200",
+    "title": "Business Fundamentals",
+    "units": 3,
+    "designations": [
+      "B-Soc"
+    ],
+    "faculty": "Beedie School of Business"
+  },
+  {
+    "code": "BUS 207",
+    "title": "Managerial Economics",
+    "units": 3,
+    "designations": [
+      "Q"
+    ],
+    "faculty": "Beedie School of Business"
+  },
+  {
+    "code": "BUS 217W",
+    "title": "Critical Thinking in Business",
+    "units": 3,
+    "designations": [
+      "W"
+    ],
+    "faculty": "Beedie School of Business"
+  },
+  {
+    "code": "BUS 221",
+    "title": "Personal Finance",
+    "units": 3,
+    "designations": [
+      "Q"
+    ],
+    "faculty": "Beedie School of Business"
+  },
+  {
+    "code": "BUS 232",
+    "title": "Data and Decisions I",
+    "units": 3,
+    "designations": [
+      "Q"
+    ],
+    "faculty": "Beedie School of Business"
+  },
+  {
+    "code": "BUS 233",
+    "title": "Introduction to Business Law and Ethics",
+    "units": 3,
+    "designations": [
+      "B-Soc"
+    ],
+    "faculty": "Beedie School of Business"
+  },
+  {
+    "code": "BUS 238",
+    "title": "Introduction to Entrepreneurship and Innovation",
+    "units": 3,
+    "designations": [
+      "B-Soc"
+    ],
+    "faculty": "Beedie School of Business"
+  },
+  {
+    "code": "BUS 240",
+    "title": "Introduction to Innovation",
+    "units": 3,
+    "designations": [
+      "B-Soc"
+    ],
+    "faculty": "Beedie School of Business"
+  },
+  {
+    "code": "BUS 251",
+    "title": "Financial Accounting I",
+    "units": 3,
+    "designations": [
+      "Q"
+    ],
+    "faculty": "Beedie School of Business"
+  },
+  {
+    "code": "BUS 254",
+    "title": "Managerial Accounting I",
+    "units": 3,
+    "designations": [
+      "Q"
+    ],
+    "faculty": "Beedie School of Business"
+  },
+  {
+    "code": "BUS 312",
+    "title": "Introduction to Finance",
+    "units": 3,
+    "designations": [
+      "Q"
+    ],
+    "faculty": "Beedie School of Business"
+  },
+  {
+    "code": "BUS 315",
+    "title": "Investments",
+    "units": 3,
+    "designations": [
+      "Q"
+    ],
+    "faculty": "Beedie School of Business"
+  },
+  {
+    "code": "BUS 336",
+    "title": "Data and Decisions II",
+    "units": 3,
+    "designations": [
+      "Q"
+    ],
+    "faculty": "Beedie School of Business"
+  },
+  {
+    "code": "BUS 360W",
+    "title": "Business Communication",
+    "units": 4,
+    "designations": [
+      "W"
+    ],
+    "faculty": "Beedie School of Business"
+  },
+  {
+    "code": "CA 117",
+    "title": "Modern Art History",
+    "units": 3,
+    "designations": [
+      "B-Hum"
+    ],
+    "faculty": "Faculty of Communication, Art and Technology"
+  },
+  {
+    "code": "CA 127",
+    "title": "History of Dance: From the 20th Century to the Present",
+    "units": 3,
+    "designations": [
+      "B-Hum"
+    ],
+    "faculty": "Faculty of Communication, Art and Technology"
+  },
+  {
+    "code": "CA 135",
+    "title": "Introduction to Cinema",
+    "units": 3,
+    "designations": [
+      "B-Hum"
+    ],
+    "faculty": "Faculty of Communication, Art and Technology"
+  },
+  {
+    "code": "CA 136",
+    "title": "The History and Aesthetics of Cinema l",
+    "units": 3,
+    "designations": [
+      "B-Hum"
+    ],
+    "faculty": "Faculty of Communication, Art and Technology"
+  },
+  {
+    "code": "CA 137",
+    "title": "The History and Aesthetics of Cinema ll",
+    "units": 3,
+    "designations": [
+      "B-Hum"
+    ],
+    "faculty": "Faculty of Communication, Art and Technology"
+  },
+  {
+    "code": "CA 140",
+    "title": "Contexts in Creative Music and Sound Practice",
+    "units": 3,
+    "designations": [
+      "B-Hum"
+    ],
+    "faculty": "Faculty of Communication, Art and Technology"
+  },
+  {
+    "code": "CA 142",
+    "title": "Music Appreciation in the 21st Century",
+    "units": 3,
+    "designations": [
+      "B-Hum"
+    ],
+    "faculty": "Faculty of Communication, Art and Technology"
+  },
+  {
+    "code": "CA 149",
+    "title": "Sound",
+    "units": 3,
+    "designations": [
+      "Q"
+    ],
+    "faculty": "Faculty of Communication, Art and Technology"
+  },
+  {
+    "code": "CA 217",
+    "title": "Introduction to Performance Studies",
+    "units": 3,
+    "designations": [
+      "B-Hum"
+    ],
+    "faculty": "Faculty of Communication, Art and Technology"
+  },
+  {
+    "code": "CA 228W",
+    "title": "Dance Aesthetics",
+    "units": 3,
+    "designations": [
+      "W"
+    ],
+    "faculty": "Faculty of Communication, Art and Technology"
+  },
+  {
+    "code": "CA 247",
+    "title": "Fixed Media Lab",
+    "units": 3,
+    "designations": [
+      "Q"
+    ],
+    "faculty": "Faculty of Communication, Art and Technology"
+  },
+  {
+    "code": "CA 257W",
+    "title": "Context of Theatre l",
+    "units": 3,
+    "designations": [
+      "W",
+      "B-Hum"
+    ],
+    "faculty": "Faculty of Communication, Art and Technology"
+  },
+  {
+    "code": "CA 319W",
+    "title": "Critical Writing in the Arts",
+    "units": 3,
+    "designations": [
+      "W"
+    ],
+    "faculty": "Faculty of Communication, Art and Technology"
+  },
+  {
+    "code": "CA 338W",
+    "title": "Screenwriting ll",
+    "units": 3,
+    "designations": [
+      "W"
+    ],
+    "faculty": "Faculty of Communication, Art and Technology"
+  },
+  {
+    "code": "CA 357W",
+    "title": "Context of Theatre ll",
+    "units": 3,
+    "designations": [
+      "W",
+      "B-Hum"
+    ],
+    "faculty": "Faculty of Communication, Art and Technology"
+  },
+  {
+    "code": "CA 386",
+    "title": "Film Music: An Overview of the Relationship between Music and Moving Pictures",
+    "units": 3,
+    "designations": [
+      "B-Hum"
+    ],
+    "faculty": "Faculty of Communication, Art and Technology"
+  },
+  {
+    "code": "CHEM 110",
+    "title": "Introductory Chemistry",
+    "units": 3,
+    "designations": [
+      "Q",
+      "B-Sci"
+    ],
+    "faculty": "Faculty of Science"
+  },
+  {
+    "code": "CHEM 111",
+    "title": "Introductory Chemistry and Laboratory",
+    "units": 4,
+    "designations": [
+      "Q",
+      "B-Sci"
+    ],
+    "faculty": "Faculty of Science"
+  },
+  {
+    "code": "CHEM 115",
+    "title": "Introductory Chemistry Laboratory",
+    "units": 1,
+    "designations": [
+      "Q"
+    ],
+    "faculty": "Faculty of Science"
+  },
+  {
+    "code": "CHEM 120",
+    "title": "General Chemistry l",
+    "units": 3,
+    "designations": [
+      "Q",
+      "B-Sci"
+    ],
+    "faculty": "Faculty of Science"
+  },
+  {
+    "code": "CHEM 121",
+    "title": "General Chemistry and Laboratory l",
+    "units": 4,
+    "designations": [
+      "Q",
+      "B-Sci"
+    ],
+    "faculty": "Faculty of Science"
+  },
+  {
+    "code": "CHEM 122",
+    "title": "General Chemistry ll",
+    "units": 2,
+    "designations": [
+      "Q"
+    ],
+    "faculty": "Faculty of Science"
+  },
+  {
+    "code": "CHEM 125",
+    "title": "General Chemistry Laboratory l",
+    "units": 1,
+    "designations": [
+      "Q",
+      "B-Sci"
+    ],
+    "faculty": "Faculty of Science"
+  },
+  {
+    "code": "CHEM 126",
+    "title": "General Chemistry Laboratory ll",
+    "units": 2,
+    "designations": [
+      "Q"
+    ],
+    "faculty": "Faculty of Science"
+  },
+  {
+    "code": "CHEM 180",
+    "title": "The Chemistry of Life",
+    "units": 3,
+    "designations": [
+      "Q"
+    ],
+    "faculty": "Faculty of Science"
+  },
+  {
+    "code": "CHEM 210",
+    "title": "Introduction to Analytical Chemistry",
+    "units": 2,
+    "designations": [
+      "Q"
+    ],
+    "faculty": "Faculty of Science"
+  },
+  {
+    "code": "CHEM 216",
+    "title": "Introduction to Analytical Chemistry Laboratory",
+    "units": 2,
+    "designations": [
+      "Q"
+    ],
+    "faculty": "Faculty of Science"
+  },
+  {
+    "code": "CHEM 236W",
+    "title": "Inorganic Chemistry Laboratory",
+    "units": 3,
+    "designations": [
+      "W"
+    ],
+    "faculty": "Faculty of Science"
+  },
+  {
+    "code": "CHEM 366",
+    "title": "Physical Chemistry Laboratory ll",
+    "units": 3,
+    "designations": [
+      "W",
+      "Q"
+    ],
+    "faculty": "Faculty of Science"
+  },
+  {
+    "code": "CHEM 366W",
+    "title": "Physical Chemistry Laboratory I",
+    "units": 3,
+    "designations": [
+      "W",
+      "Q"
+    ],
+    "faculty": "Faculty of Science"
+  },
+  {
+    "code": "CHEM 373",
+    "title": "Green Chemistry: Science with Conscience",
+    "units": 3,
+    "designations": [
+      "B-Sci"
+    ],
+    "faculty": "Faculty of Science"
+  },
+  {
+    "code": "CHIN 100",
+    "title": "Mandarin Chinese I",
+    "units": 3,
+    "designations": [
+      "B-Hum"
+    ],
+    "faculty": "Faculty of Arts and Social Sciences"
+  },
+  {
+    "code": "CHIN 110",
+    "title": "Mandarin Chinese II",
+    "units": 3,
+    "designations": [
+      "B-Hum"
+    ],
+    "faculty": "Faculty of Arts and Social Sciences"
+  },
+  {
+    "code": "CHIN 190",
+    "title": "Heritage Mandarin Chinese I",
+    "units": 3,
+    "designations": [
+      "B-Hum"
+    ],
+    "faculty": "Faculty of Arts and Social Sciences"
+  },
+  {
+    "code": "CHIN 191",
+    "title": "Heritage Mandarin Chinese II",
+    "units": 3,
+    "designations": [
+      "B-Hum"
+    ],
+    "faculty": "Faculty of Arts and Social Sciences"
+  },
+  {
+    "code": "CHIN 330",
+    "title": "Intermediate Chinese for Business I",
+    "units": 3,
+    "designations": [
+      "B-Hum"
+    ],
+    "faculty": "Faculty of Arts and Social Sciences"
+  },
+  {
+    "code": "CMNS 110",
+    "title": "Introduction to Communication Studies",
+    "units": 3,
+    "designations": [
+      "B-Soc"
+    ],
+    "faculty": "Faculty of Communication, Art and Technology"
+  },
+  {
+    "code": "CMNS 120W",
+    "title": "Creativity and Communication Across Media",
+    "units": 3,
+    "designations": [
+      "W"
+    ],
+    "faculty": "Faculty of Communication, Art and Technology"
+  },
+  {
+    "code": "CMNS 201W",
+    "title": "Empirical Communication Research Methods",
+    "units": 4,
+    "designations": [
+      "W",
+      "Q"
+    ],
+    "faculty": "Faculty of Communication, Art and Technology"
+  },
+  {
+    "code": "CMNS 226",
+    "title": "Digital Storytelling for Public Engagement",
+    "units": 4,
+    "designations": [
+      "B-Hum"
+    ],
+    "faculty": "Faculty of Communication, Art and Technology"
+  },
+  {
+    "code": "CMNS 240",
+    "title": "The Political Economy of Communication",
+    "units": 3,
+    "designations": [
+      "B-Soc"
+    ],
+    "faculty": "Faculty of Communication, Art and Technology"
+  },
+  {
+    "code": "CMNS 258",
+    "title": "History of Sound",
+    "units": 3,
+    "designations": [
+      "B-Soc"
+    ],
+    "faculty": "Faculty of Communication, Art and Technology"
+  },
+  {
+    "code": "CMNS 304W",
+    "title": "Communication in Everyday Life",
+    "units": 4,
+    "designations": [
+      "W"
+    ],
+    "faculty": "Faculty of Communication, Art and Technology"
+  },
+  {
+    "code": "CMNS 315",
+    "title": "Topics in Media, Difference, and Intersectional Identities",
+    "units": 4,
+    "designations": [
+      "B-Hum"
+    ],
+    "faculty": "Faculty of Communication, Art and Technology"
+  },
+  {
+    "code": "CMNS 455W",
+    "title": "Feminist Approaches to Science and Technology",
+    "units": 4,
+    "designations": [
+      "W"
+    ],
+    "faculty": "Faculty of Communication, Art and Technology"
+  },
+  {
+    "code": "CMNS 457W",
+    "title": "Migration and Media",
+    "units": 4,
+    "designations": [
+      "W"
+    ],
+    "faculty": "Faculty of Communication, Art and Technology"
+  },
+  {
+    "code": "CMPT 105W",
+    "title": "Social Issues and Communication Strategies in Computing Science",
+    "units": 3,
+    "designations": [
+      "W"
+    ],
+    "faculty": "Faculty of Applied Sciences"
+  },
+  {
+    "code": "CMPT 120",
+    "title": "Introduction to Computing Science and Programming l",
+    "units": 3,
+    "designations": [
+      "Q",
+      "B-Sci"
+    ],
+    "faculty": "Faculty of Applied Sciences"
+  },
+  {
+    "code": "CMPT 125",
+    "title": "Introduction to Computing Science and Programming ll",
+    "units": 3,
+    "designations": [
+      "Q"
+    ],
+    "faculty": "Faculty of Applied Sciences"
+  },
+  {
+    "code": "CMPT 130",
+    "title": "Introduction to Computer Programming l",
+    "units": 3,
+    "designations": [
+      "Q",
+      "B-Sci"
+    ],
+    "faculty": "Faculty of Applied Sciences"
+  },
+  {
+    "code": "CMPT 135",
+    "title": "Introduction to Computer Programming ll",
+    "units": 3,
+    "designations": [
+      "Q"
+    ],
+    "faculty": "Faculty of Applied Sciences"
+  },
+  {
+    "code": "CMPT 225",
+    "title": "Data Structures and Programming",
+    "units": 3,
+    "designations": [
+      "Q"
+    ],
+    "faculty": "Faculty of Applied Sciences"
+  },
+  {
+    "code": "CMPT 376W",
+    "title": "Technical Writing and Group Dynamics",
+    "units": 3,
+    "designations": [
+      "W"
+    ],
+    "faculty": "Faculty of Applied Sciences"
+  },
+  {
+    "code": "COGS 100",
+    "title": "Exploring the Mind",
+    "units": 3,
+    "designations": [
+      "B-Hum",
+      "B-Sci"
+    ],
+    "faculty": "Faculty of Arts and Social Sciences"
+  },
+  {
+    "code": "COGS 110",
+    "title": "Learning to Learn: the Art and Science of Hacking your Brain",
+    "units": 3,
+    "designations": [
+      "B-Hum",
+      "B-Soc"
+    ],
+    "faculty": "Faculty of Arts and Social Sciences"
+  },
+  {
+    "code": "COGS 315",
+    "title": "Formal Methods",
+    "units": 3,
+    "designations": [
+      "Q"
+    ],
+    "faculty": "Faculty of Arts and Social Sciences"
+  },
+  {
+    "code": "CRIM 101",
+    "title": "Introduction to Criminology",
+    "units": 3,
+    "designations": [
+      "B-Soc"
+    ],
+    "faculty": "Faculty of Arts and Social Sciences"
+  },
+  {
+    "code": "CRIM 104",
+    "title": "Sociological Explanations of Criminal and Deviant Behaviour",
+    "units": 3,
+    "designations": [
+      "B-Soc"
+    ],
+    "faculty": "Faculty of Arts and Social Sciences"
+  },
+  {
+    "code": "CRIM 131",
+    "title": "Introduction to the Criminal Justice System",
+    "units": 3,
+    "designations": [
+      "B-Soc"
+    ],
+    "faculty": "Faculty of Arts and Social Sciences"
+  },
+  {
+    "code": "CRIM 135",
+    "title": "Introduction to Canadian Law and Legal Institutions",
+    "units": 3,
+    "designations": [
+      "B-Soc"
+    ],
+    "faculty": "Faculty of Arts and Social Sciences"
+  },
+  {
+    "code": "CRIM 300W",
+    "title": "Current Theories and Perspectives in Criminology",
+    "units": 3,
+    "designations": [
+      "W"
+    ],
+    "faculty": "Faculty of Arts and Social Sciences"
+  },
+  {
+    "code": "CRIM 315",
+    "title": "Restorative Justice",
+    "units": 4,
+    "designations": [
+      "B-Soc"
+    ],
+    "faculty": "Faculty of Arts and Social Sciences"
+  },
+  {
+    "code": "CRIM 320",
+    "title": "Quantitative Research Methods in Criminology",
+    "units": 3,
+    "designations": [
+      "Q"
+    ],
+    "faculty": "Faculty of Arts and Social Sciences"
+  },
+  {
+    "code": "CRIM 355",
+    "title": "The Forensic Sciences",
+    "units": 3,
+    "designations": [
+      "B-Soc"
+    ],
+    "faculty": "Faculty of Arts and Social Sciences"
+  },
+  {
+    "code": "EASC 101",
+    "title": "Dynamic Earth",
+    "units": 3,
+    "designations": [
+      "B-Sci"
+    ],
+    "faculty": "Faculty of Science"
+  },
+  {
+    "code": "EASC 103",
+    "title": "The Rise and Fall of the Dinosaurs",
+    "units": 3,
+    "designations": [
+      "B-Sci"
+    ],
+    "faculty": "Faculty of Science"
+  },
+  {
+    "code": "EASC 104",
+    "title": "Geohazards: The Earth in Turmoil",
+    "units": 3,
+    "designations": [
+      "B-Sci"
+    ],
+    "faculty": "Faculty of Science"
+  },
+  {
+    "code": "EASC 106",
+    "title": "Earth Through Time",
+    "units": 3,
+    "designations": [
+      "B-Sci"
+    ],
+    "faculty": "Faculty of Science"
+  },
+  {
+    "code": "EASC 108",
+    "title": "Exploring the Solar System",
+    "units": 3,
+    "designations": [
+      "B-Sci"
+    ],
+    "faculty": "Faculty of Science"
+  },
+  {
+    "code": "EASC 207",
+    "title": "Introduction to Applied Geophysics",
+    "units": 3,
+    "designations": [
+      "Q"
+    ],
+    "faculty": "Faculty of Science"
+  },
+  {
+    "code": "EASC 208",
+    "title": "Introduction to Geochemistry",
+    "units": 3,
+    "designations": [
+      "Q"
+    ],
+    "faculty": "Faculty of Science"
+  },
+  {
+    "code": "EASC 209W",
+    "title": "Environmental Geoscience",
+    "units": 4,
+    "designations": [
+      "W"
+    ],
+    "faculty": "Faculty of Science"
+  },
+  {
+    "code": "EASC 304",
+    "title": "Hydrogeology",
+    "units": 3,
+    "designations": [
+      "Q"
+    ],
+    "faculty": "Faculty of Science"
+  },
+  {
+    "code": "EASC 305",
+    "title": "Quantitative Methods for the Earth Sciences",
+    "units": 3,
+    "designations": [
+      "Q"
+    ],
+    "faculty": "Faculty of Science"
+  },
+  {
+    "code": "EASC 305W",
+    "title": "Quantitative Methods for the Earth Sciences",
+    "units": 3,
+    "designations": [
+      "W",
+      "Q"
+    ],
+    "faculty": "Faculty of Science"
+  },
+  {
+    "code": "EASC 307",
+    "title": "Applied Geophysics",
+    "units": 3,
+    "designations": [
+      "Q"
+    ],
+    "faculty": "Faculty of Science"
+  },
+  {
+    "code": "EASC 313",
+    "title": "Introduction to Soil and Rock Engineering",
+    "units": 3,
+    "designations": [
+      "Q"
+    ],
+    "faculty": "Faculty of Science"
+  },
+  {
+    "code": "EASC 314",
+    "title": "Principles of Glaciology",
+    "units": 3,
+    "designations": [
+      "Q"
+    ],
+    "faculty": "Faculty of Science"
+  },
+  {
+    "code": "EASC 410",
+    "title": "Groundwater Contamination and Transport",
+    "units": 3,
+    "designations": [
+      "Q"
+    ],
+    "faculty": "Faculty of Science"
+  },
+  {
+    "code": "EASC 413",
+    "title": "Engineering Geology and Resource Geotechnics",
+    "units": 3,
+    "designations": [
+      "Q"
+    ],
+    "faculty": "Faculty of Science"
+  },
+  {
+    "code": "EASC 415",
+    "title": "Groundwater Modelling",
+    "units": 3,
+    "designations": [
+      "Q"
+    ],
+    "faculty": "Faculty of Science"
+  },
+  {
+    "code": "ECON 102",
+    "title": "The World Economy",
+    "units": 3,
+    "designations": [
+      "B-Soc"
+    ],
+    "faculty": "Faculty of Arts and Social Sciences"
+  },
+  {
+    "code": "ECON 103",
+    "title": "Principles of Microeconomics",
+    "units": 4,
+    "designations": [
+      "Q",
+      "B-Soc"
+    ],
+    "faculty": "Faculty of Arts and Social Sciences"
+  },
+  {
+    "code": "ECON 104",
+    "title": "Economics and Government",
+    "units": 3,
+    "designations": [
+      "B-Soc"
+    ],
+    "faculty": "Faculty of Arts and Social Sciences"
+  },
+  {
+    "code": "ECON 105",
+    "title": "Principles of Macroeconomics",
+    "units": 4,
+    "designations": [
+      "Q",
+      "B-Soc"
+    ],
+    "faculty": "Faculty of Arts and Social Sciences"
+  },
+  {
+    "code": "ECON 113",
+    "title": "Introduction to Microeconomics",
+    "units": 3,
+    "designations": [
+      "Q",
+      "B-Soc"
+    ],
+    "faculty": "Faculty of Arts and Social Sciences"
+  },
+  {
+    "code": "ECON 115",
+    "title": "Introduction to Macroeconomics",
+    "units": 3,
+    "designations": [
+      "Q",
+      "B-Soc"
+    ],
+    "faculty": "Faculty of Arts and Social Sciences"
+  },
+  {
+    "code": "ECON 201",
+    "title": "Microeconomic Theory I: Competitive Behaviour",
+    "units": 4,
+    "designations": [
+      "Q"
+    ],
+    "faculty": "Faculty of Arts and Social Sciences"
+  },
+  {
+    "code": "ECON 220W",
+    "title": "Economics in the News",
+    "units": 4,
+    "designations": [
+      "W"
+    ],
+    "faculty": "Faculty of Arts and Social Sciences"
+  },
+  {
+    "code": "ECON 260",
+    "title": "Environmental Economics",
+    "units": 3,
+    "designations": [
+      "Q"
+    ],
+    "faculty": "Faculty of Arts and Social Sciences"
+  },
+  {
+    "code": "ECON 280",
+    "title": "Introduction to Labour Economics",
+    "units": 3,
+    "designations": [
+      "Q"
+    ],
+    "faculty": "Faculty of Arts and Social Sciences"
+  },
+  {
+    "code": "ECON 355W",
+    "title": "Economic Development",
+    "units": 4,
+    "designations": [
+      "W"
+    ],
+    "faculty": "Faculty of Arts and Social Sciences"
+  },
+  {
+    "code": "ECON 390",
+    "title": "Public Policy",
+    "units": 3,
+    "designations": [
+      "Q"
+    ],
+    "faculty": "Faculty of Arts and Social Sciences"
+  },
+  {
+    "code": "ECON 427W",
+    "title": "Law and Economics",
+    "units": 3,
+    "designations": [
+      "W"
+    ],
+    "faculty": "Faculty of Arts and Social Sciences"
+  },
+  {
+    "code": "ECON 448W",
+    "title": "Economics of Crime",
+    "units": 3,
+    "designations": [
+      "W"
+    ],
+    "faculty": "Faculty of Arts and Social Sciences"
+  },
+  {
+    "code": "ECON 499W",
+    "title": "Honours Seminar in Economics",
+    "units": 6,
+    "designations": [
+      "W"
+    ],
+    "faculty": "Faculty of Arts and Social Sciences"
+  },
+  {
+    "code": "EDUC 100W",
+    "title": "Selected Questions and Issues in Education",
+    "units": 3,
+    "designations": [
+      "W"
+    ],
+    "faculty": "Faculty of Education"
+  },
+  {
+    "code": "EDUC 211",
+    "title": "Mathematical Experience l: Numbers and Beyond",
+    "units": 3,
+    "designations": [
+      "Q",
+      "B-Sci"
+    ],
+    "faculty": "Faculty of Education"
+  },
+  {
+    "code": "EDUC 212",
+    "title": "Mathematical Experience ll: Shape and Space",
+    "units": 3,
+    "designations": [
+      "Q",
+      "B-Sci"
+    ],
+    "faculty": "Faculty of Education"
+  },
+  {
+    "code": "EDUC 220",
+    "title": "Introduction to Educational Psychology",
+    "units": 3,
+    "designations": [
+      "B-Soc"
+    ],
+    "faculty": "Faculty of Education"
+  },
+  {
+    "code": "EDUC 311",
+    "title": "Foundations in Indigenous Education, Language and Culture",
+    "units": 3,
+    "designations": [
+      "B-Hum"
+    ],
+    "faculty": "Faculty of Education"
+  },
+  {
+    "code": "EDUC 313",
+    "title": "Numeracy and Society",
+    "units": 3,
+    "designations": [
+      "Q"
+    ],
+    "faculty": "Faculty of Education"
+  },
+  {
+    "code": "EDUC 352W",
+    "title": "Building on Reflective Practice",
+    "units": 4,
+    "designations": [
+      "W"
+    ],
+    "faculty": "Faculty of Education"
+  },
+  {
+    "code": "EDUC 375",
+    "title": "Struggle with Mathematics: Sources and Recovery",
+    "units": 3,
+    "designations": [
+      "Q"
+    ],
+    "faculty": "Faculty of Education"
+  },
+  {
+    "code": "EDUC 401W",
+    "title": "Introduction to Classroom Teaching",
+    "units": 8,
+    "designations": [
+      "W"
+    ],
+    "faculty": "Faculty of Education"
+  },
+  {
+    "code": "EDUC 402W",
+    "title": "Studies of Educational Theory and Practice",
+    "units": 7,
+    "designations": [
+      "W"
+    ],
+    "faculty": "Faculty of Education"
+  },
+  {
+    "code": "EDUC 411",
+    "title": "Investigations in Mathematics for Secondary Teachers",
+    "units": 3,
+    "designations": [
+      "Q"
+    ],
+    "faculty": "Faculty of Education"
+  },
+  {
+    "code": "EDUC 415",
+    "title": "Designs for Learning: Secondary Mathematics",
+    "units": 4,
+    "designations": [
+      "Q"
+    ],
+    "faculty": "Faculty of Education"
+  },
+  {
+    "code": "EDUC 475",
+    "title": "Designs for Learning: Elementary Mathematics",
+    "units": 4,
+    "designations": [
+      "Q"
+    ],
+    "faculty": "Faculty of Education"
+  },
+  {
+    "code": "ENGL 111",
+    "title": "Literary Classics",
+    "units": 3,
+    "designations": [
+      "W",
+      "B-Hum"
+    ],
+    "faculty": "Faculty of Arts and Social Sciences"
+  },
+  {
+    "code": "ENGL 111W",
+    "title": "Literary Classics",
+    "units": 3,
+    "designations": [
+      "W",
+      "B-Hum"
+    ],
+    "faculty": "Faculty of Arts and Social Sciences"
+  },
+  {
+    "code": "ENGL 112",
+    "title": "Literature Now",
+    "units": 3,
+    "designations": [
+      "W",
+      "B-Hum"
+    ],
+    "faculty": "Faculty of Arts and Social Sciences"
+  },
+  {
+    "code": "ENGL 112W",
+    "title": "Literature Now",
+    "units": 3,
+    "designations": [
+      "W",
+      "B-Hum"
+    ],
+    "faculty": "Faculty of Arts and Social Sciences"
+  },
+  {
+    "code": "ENGL 113",
+    "title": "Literature and Performance",
+    "units": 3,
+    "designations": [
+      "W",
+      "B-Hum"
+    ],
+    "faculty": "Faculty of Arts and Social Sciences"
+  },
+  {
+    "code": "ENGL 113W",
+    "title": "Literature and Performance",
+    "units": 3,
+    "designations": [
+      "W",
+      "B-Hum"
+    ],
+    "faculty": "Faculty of Arts and Social Sciences"
+  },
+  {
+    "code": "ENGL 114",
+    "title": "Language and Purpose",
+    "units": 3,
+    "designations": [
+      "W",
+      "B-Hum"
+    ],
+    "faculty": "Faculty of Arts and Social Sciences"
+  },
+  {
+    "code": "ENGL 114W",
+    "title": "Language and Purpose",
+    "units": 3,
+    "designations": [
+      "W",
+      "B-Hum"
+    ],
+    "faculty": "Faculty of Arts and Social Sciences"
+  },
+  {
+    "code": "ENGL 115",
+    "title": "Literature and Culture",
+    "units": 3,
+    "designations": [
+      "W",
+      "B-Hum"
+    ],
+    "faculty": "Faculty of Arts and Social Sciences"
+  },
+  {
+    "code": "ENGL 115W",
+    "title": "Literature and Culture",
+    "units": 3,
+    "designations": [
+      "W",
+      "B-Hum"
+    ],
+    "faculty": "Faculty of Arts and Social Sciences"
+  },
+  {
+    "code": "ENGL 199W",
+    "title": "Writing to Persuade",
+    "units": 3,
+    "designations": [
+      "W"
+    ],
+    "faculty": "Faculty of Arts and Social Sciences"
+  },
+  {
+    "code": "ENGL 202",
+    "title": "The Environmental Imagination",
+    "units": 3,
+    "designations": [
+      "B-Hum"
+    ],
+    "faculty": "Faculty of Arts and Social Sciences"
+  },
+  {
+    "code": "ENGL 204",
+    "title": "Reading Sexuality and Gender",
+    "units": 3,
+    "designations": [
+      "B-Hum"
+    ],
+    "faculty": "Faculty of Arts and Social Sciences"
+  },
+  {
+    "code": "ENGL 209",
+    "title": "Race, Borders, Empire",
+    "units": 3,
+    "designations": [
+      "B-Hum"
+    ],
+    "faculty": "Faculty of Arts and Social Sciences"
+  },
+  {
+    "code": "ENGL 210",
+    "title": "Reading and Writing Identities",
+    "units": 3,
+    "designations": [
+      "B-Hum"
+    ],
+    "faculty": "Faculty of Arts and Social Sciences"
+  },
+  {
+    "code": "ENGL 211",
+    "title": "The Place of the Past",
+    "units": 3,
+    "designations": [
+      "B-Hum"
+    ],
+    "faculty": "Faculty of Arts and Social Sciences"
+  },
+  {
+    "code": "ENGL 213",
+    "title": "Reading Across Media",
+    "units": 3,
+    "designations": [
+      "B-Hum"
+    ],
+    "faculty": "Faculty of Arts and Social Sciences"
+  },
+  {
+    "code": "ENGL 272",
+    "title": "Creative Reading",
+    "units": 3,
+    "designations": [
+      "B-Hum"
+    ],
+    "faculty": "Faculty of Arts and Social Sciences"
+  },
+  {
+    "code": "ENGL 383",
+    "title": "Studies in Popular Literature and Culture",
+    "units": 3,
+    "designations": [
+      "B-Hum"
+    ],
+    "faculty": "Faculty of Arts and Social Sciences"
+  },
+  {
+    "code": "ENGL 398",
+    "title": "Major Authors for Non-Majors",
+    "units": 3,
+    "designations": [
+      "B-Hum"
+    ],
+    "faculty": "Faculty of Arts and Social Sciences"
+  },
+  {
+    "code": "ENGL 400W",
+    "title": "Seminar in Advanced Old English",
+    "units": 4,
+    "designations": [
+      "W"
+    ],
+    "faculty": "Faculty of Arts and Social Sciences"
+  },
+  {
+    "code": "ENGL 411W",
+    "title": "Seminar in Literature and Race",
+    "units": 4,
+    "designations": [
+      "W"
+    ],
+    "faculty": "Faculty of Arts and Social Sciences"
+  },
+  {
+    "code": "ENGL 413W",
+    "title": "Seminar in Literature and Environment",
+    "units": 4,
+    "designations": [
+      "W"
+    ],
+    "faculty": "Faculty of Arts and Social Sciences"
+  },
+  {
+    "code": "ENGL 414W",
+    "title": "Seminar in Literature and History",
+    "units": 4,
+    "designations": [
+      "W"
+    ],
+    "faculty": "Faculty of Arts and Social Sciences"
+  },
+  {
+    "code": "ENGL 415W",
+    "title": "Seminar in Media, Culture and Performance",
+    "units": 4,
+    "designations": [
+      "W"
+    ],
+    "faculty": "Faculty of Arts and Social Sciences"
+  },
+  {
+    "code": "ENGL 417W",
+    "title": "Seminar in Gender, Sexuality and Literature",
+    "units": 4,
+    "designations": [
+      "W"
+    ],
+    "faculty": "Faculty of Arts and Social Sciences"
+  },
+  {
+    "code": "ENGL 418W",
+    "title": "Seminar in Critical Theory",
+    "units": 4,
+    "designations": [
+      "W"
+    ],
+    "faculty": "Faculty of Arts and Social Sciences"
+  },
+  {
+    "code": "ENGL 431W",
+    "title": "Seminar in Indigenous Literatures",
+    "units": 4,
+    "designations": [
+      "W"
+    ],
+    "faculty": "Faculty of Arts and Social Sciences"
+  },
+  {
+    "code": "ENGL 432W",
+    "title": "Seminar in Canadian Literature",
+    "units": 4,
+    "designations": [
+      "W"
+    ],
+    "faculty": "Faculty of Arts and Social Sciences"
+  },
+  {
+    "code": "ENGL 433W",
+    "title": "Seminar in British Literature",
+    "units": 4,
+    "designations": [
+      "W"
+    ],
+    "faculty": "Faculty of Arts and Social Sciences"
+  },
+  {
+    "code": "ENGL 437W",
+    "title": "Seminar in American Literatures",
+    "units": 4,
+    "designations": [
+      "W"
+    ],
+    "faculty": "Faculty of Arts and Social Sciences"
+  },
+  {
+    "code": "ENGL 439W",
+    "title": "Seminar in World Literatures in English",
+    "units": 4,
+    "designations": [
+      "W"
+    ],
+    "faculty": "Faculty of Arts and Social Sciences"
+  },
+  {
+    "code": "ENGL 443W",
+    "title": "Seminar in Literatures of Diaspora and Migration",
+    "units": 4,
+    "designations": [
+      "W"
+    ],
+    "faculty": "Faculty of Arts and Social Sciences"
+  },
+  {
+    "code": "ENGL 470W",
+    "title": "Seminar in the English Language",
+    "units": 4,
+    "designations": [
+      "W"
+    ],
+    "faculty": "Faculty of Arts and Social Sciences"
+  },
+  {
+    "code": "ENGL 472W",
+    "title": "Seminar in Advanced Creative Writing",
+    "units": 4,
+    "designations": [
+      "W"
+    ],
+    "faculty": "Faculty of Arts and Social Sciences"
+  },
+  {
+    "code": "ENGL 474W",
+    "title": "Seminar in North American Poetry and Poetics",
+    "units": 4,
+    "designations": [
+      "W"
+    ],
+    "faculty": "Faculty of Arts and Social Sciences"
+  },
+  {
+    "code": "ENGL 475W",
+    "title": "Seminar in Rhetoric",
+    "units": 4,
+    "designations": [
+      "W"
+    ],
+    "faculty": "Faculty of Arts and Social Sciences"
+  },
+  {
+    "code": "ENGL 493W",
+    "title": "Seminar in Special Topics",
+    "units": 4,
+    "designations": [
+      "W"
+    ],
+    "faculty": "Faculty of Arts and Social Sciences"
+  },
+  {
+    "code": "ENSC 105W",
+    "title": "Process, Form, and Convention in Professional Genres",
+    "units": 3,
+    "designations": [
+      "W"
+    ],
+    "faculty": "Faculty of Applied Sciences"
+  },
+  {
+    "code": "ENSC 220",
+    "title": "Electric Circuits I",
+    "units": 3,
+    "designations": [
+      "Q"
+    ],
+    "faculty": "Faculty of Applied Sciences"
+  },
+  {
+    "code": "ENSC 225",
+    "title": "Microelectronics I",
+    "units": 3,
+    "designations": [
+      "Q"
+    ],
+    "faculty": "Faculty of Applied Sciences"
+  },
+  {
+    "code": "ENSC 405W",
+    "title": "Capstone A: Project Design, Management, and Documentation",
+    "units": 3,
+    "designations": [
+      "W"
+    ],
+    "faculty": "Faculty of Applied Sciences"
+  },
+  {
+    "code": "EVSC 100",
+    "title": "Introduction to Environmental Science",
+    "units": 3,
+    "designations": [
+      "B-Sci"
+    ],
+    "faculty": "Faculty of Environment"
+  },
+  {
+    "code": "EVSC 201W",
+    "title": "Environmental Science in Practice",
+    "units": 3,
+    "designations": [
+      "W"
+    ],
+    "faculty": "Faculty of Environment"
+  },
+  {
+    "code": "EVSC 490W",
+    "title": "Environmental Science Thesis II",
+    "units": 4,
+    "designations": [
+      "W"
+    ],
+    "faculty": "Faculty of Environment"
+  },
+  {
+    "code": "FREN 101",
+    "title": "Elementary French I",
+    "units": 3,
+    "designations": [
+      "B-Hum"
+    ],
+    "faculty": "Faculty of Arts and Social Sciences"
+  },
+  {
+    "code": "FREN 102",
+    "title": "Elementary French II",
+    "units": 3,
+    "designations": [
+      "B-Hum"
+    ],
+    "faculty": "Faculty of Arts and Social Sciences"
+  },
+  {
+    "code": "FREN 201",
+    "title": "Intermediate French I : Cultures and Communication",
+    "units": 3,
+    "designations": [
+      "B-Hum"
+    ],
+    "faculty": "Faculty of Arts and Social Sciences"
+  },
+  {
+    "code": "FREN 202",
+    "title": "Intermediate French II: Cultures and Communication",
+    "units": 3,
+    "designations": [
+      "B-Hum"
+    ],
+    "faculty": "Faculty of Arts and Social Sciences"
+  },
+  {
+    "code": "FREN 245",
+    "title": "Introduction to Literary Studies",
+    "units": 3,
+    "designations": [
+      "B-Hum"
+    ],
+    "faculty": "Faculty of Arts and Social Sciences"
+  },
+  {
+    "code": "FREN 301W",
+    "title": "Advanced Writing",
+    "units": 3,
+    "designations": [
+      "W"
+    ],
+    "faculty": "Faculty of Arts and Social Sciences"
+  },
+  {
+    "code": "GA 101",
+    "title": "Introduction to Global Asia",
+    "units": 3,
+    "designations": [
+      "B-Hum",
+      "B-Soc"
+    ],
+    "faculty": "Faculty of Arts and Social Sciences"
+  },
+  {
+    "code": "GA 210",
+    "title": "How Asia Became Global: Empire, Migration, and Globalization in the Making of Modern Asia",
+    "units": 3,
+    "designations": [
+      "B-Hum"
+    ],
+    "faculty": "Faculty of Arts and Social Sciences"
+  },
+  {
+    "code": "GA 211",
+    "title": "Asian Migrations Across the Globe",
+    "units": 3,
+    "designations": [
+      "B-Hum"
+    ],
+    "faculty": "Faculty of Arts and Social Sciences"
+  },
+  {
+    "code": "GEOG 100",
+    "title": "Our World: Introducing Human Geography",
+    "units": 3,
+    "designations": [
+      "B-Hum",
+      "B-Soc"
+    ],
+    "faculty": "Faculty of Environment"
+  },
+  {
+    "code": "GEOG 104",
+    "title": "Climate Change, Water and Society",
+    "units": 3,
+    "designations": [
+      "B-Soc",
+      "B-Sci"
+    ],
+    "faculty": "Faculty of Environment"
+  },
+  {
+    "code": "GEOG 111",
+    "title": "Earth Systems",
+    "units": 3,
+    "designations": [
+      "B-Sci"
+    ],
+    "faculty": "Faculty of Environment"
+  },
+  {
+    "code": "GEOG 118",
+    "title": "The Water Planet",
+    "units": 3,
+    "designations": [
+      "B-Sci"
+    ],
+    "faculty": "Faculty of Environment"
+  },
+  {
+    "code": "GEOG 150",
+    "title": "Digital Earth",
+    "units": 3,
+    "designations": [
+      "B-Sci"
+    ],
+    "faculty": "Faculty of Environment"
+  },
+  {
+    "code": "GEOG 161",
+    "title": "Urban Change: An Introduction to Dynamic Places",
+    "units": 3,
+    "designations": [
+      "B-Hum",
+      "B-Soc"
+    ],
+    "faculty": "Faculty of Environment"
+  },
+  {
+    "code": "GEOG 162",
+    "title": "Canada",
+    "units": 3,
+    "designations": [
+      "B-Soc"
+    ],
+    "faculty": "Faculty of Environment"
+  },
+  {
+    "code": "GEOG 213",
+    "title": "Introduction to Geomorphology",
+    "units": 3,
+    "designations": [
+      "Q",
+      "B-Sci"
+    ],
+    "faculty": "Faculty of Environment"
+  },
+  {
+    "code": "GEOG 214",
+    "title": "Weather and Climate",
+    "units": 3,
+    "designations": [
+      "Q"
+    ],
+    "faculty": "Faculty of Environment"
+  },
+  {
+    "code": "GEOG 221",
+    "title": "Economic Worlds",
+    "units": 3,
+    "designations": [
+      "B-Soc"
+    ],
+    "faculty": "Faculty of Environment"
+  },
+  {
+    "code": "GEOG 241",
+    "title": "People, Place, Society",
+    "units": 3,
+    "designations": [
+      "B-Soc"
+    ],
+    "faculty": "Faculty of Environment"
+  },
+  {
+    "code": "GEOG 251",
+    "title": "Quantitative Geography",
+    "units": 3,
+    "designations": [
+      "Q"
+    ],
+    "faculty": "Faculty of Environment"
+  },
+  {
+    "code": "GEOG 253",
+    "title": "Introduction to Remote Sensing",
+    "units": 3,
+    "designations": [
+      "Q"
+    ],
+    "faculty": "Faculty of Environment"
+  },
+  {
+    "code": "GEOG 255",
+    "title": "Geographic Information Science l",
+    "units": 3,
+    "designations": [
+      "Q"
+    ],
+    "faculty": "Faculty of Environment"
+  },
+  {
+    "code": "GEOG 261",
+    "title": "Encountering the City",
+    "units": 3,
+    "designations": [
+      "B-Soc"
+    ],
+    "faculty": "Faculty of Environment"
+  },
+  {
+    "code": "GEOG 266W",
+    "title": "Geography in Practice",
+    "units": 3,
+    "designations": [
+      "W"
+    ],
+    "faculty": "Faculty of Environment"
+  },
+  {
+    "code": "GEOG 311",
+    "title": "Hydrology",
+    "units": 4,
+    "designations": [
+      "Q"
+    ],
+    "faculty": "Faculty of Environment"
+  },
+  {
+    "code": "GEOG 312",
+    "title": "Geography of Natural Hazards",
+    "units": 4,
+    "designations": [
+      "B-Soc",
+      "B-Sci"
+    ],
+    "faculty": "Faculty of Environment"
+  },
+  {
+    "code": "GEOG 313",
+    "title": "River Geomorphology",
+    "units": 4,
+    "designations": [
+      "Q"
+    ],
+    "faculty": "Faculty of Environment"
+  },
+  {
+    "code": "GEOG 314",
+    "title": "The Climate System",
+    "units": 4,
+    "designations": [
+      "Q"
+    ],
+    "faculty": "Faculty of Environment"
+  },
+  {
+    "code": "GEOG 316",
+    "title": "Global Biogeochemical and Water Cycles",
+    "units": 4,
+    "designations": [
+      "Q"
+    ],
+    "faculty": "Faculty of Environment"
+  },
+  {
+    "code": "GEOG 352",
+    "title": "Spatial Analysis",
+    "units": 4,
+    "designations": [
+      "Q"
+    ],
+    "faculty": "Faculty of Environment"
+  },
+  {
+    "code": "GEOG 353",
+    "title": "Advanced Remote Sensing",
+    "units": 4,
+    "designations": [
+      "Q"
+    ],
+    "faculty": "Faculty of Environment"
+  },
+  {
+    "code": "GEOG 362W",
+    "title": "Gentrification and Urban Change",
+    "units": 4,
+    "designations": [
+      "W"
+    ],
+    "faculty": "Faculty of Environment"
+  },
+  {
+    "code": "GEOG 364",
+    "title": "Cities and Crisis",
+    "units": 4,
+    "designations": [
+      "B-Hum"
+    ],
+    "faculty": "Faculty of Environment"
+  },
+  {
+    "code": "GEOG 389W",
+    "title": "Nature and Society",
+    "units": 4,
+    "designations": [
+      "W"
+    ],
+    "faculty": "Faculty of Environment"
+  },
+  {
+    "code": "GEOG 412W",
+    "title": "Glacial Processes and Environments",
+    "units": 4,
+    "designations": [
+      "W"
+    ],
+    "faculty": "Faculty of Environment"
+  },
+  {
+    "code": "GEOG 453",
+    "title": "Theoretical and Applied Remote Sensing",
+    "units": 4,
+    "designations": [
+      "W",
+      "Q"
+    ],
+    "faculty": "Faculty of Environment"
+  },
+  {
+    "code": "GEOG 455W",
+    "title": "Theoretical and Applied GIS",
+    "units": 4,
+    "designations": [
+      "W",
+      "Q"
+    ],
+    "faculty": "Faculty of Environment"
+  },
+  {
+    "code": "GERM 100",
+    "title": "Introductory German I",
+    "units": 3,
+    "designations": [
+      "B-Hum"
+    ],
+    "faculty": "Faculty of Arts and Social Sciences"
+  },
+  {
+    "code": "GERM 110",
+    "title": "Introductory German II",
+    "units": 3,
+    "designations": [
+      "B-Hum"
+    ],
+    "faculty": "Faculty of Arts and Social Sciences"
+  },
+  {
+    "code": "GERO 101",
+    "title": "Aging and Society",
+    "units": 3,
+    "designations": [
+      "B-Soc"
+    ],
+    "faculty": "Faculty of Arts and Social Sciences"
+  },
+  {
+    "code": "GERO 204",
+    "title": "Health and Illness in Later Life",
+    "units": 3,
+    "designations": [
+      "B-Soc"
+    ],
+    "faculty": "Faculty of Arts and Social Sciences"
+  },
+  {
+    "code": "GERO 300",
+    "title": "Introduction to Gerontology",
+    "units": 3,
+    "designations": [
+      "B-Soc"
+    ],
+    "faculty": "Faculty of Arts and Social Sciences"
+  },
+  {
+    "code": "GERO 302",
+    "title": "Health Promotion and Aging",
+    "units": 3,
+    "designations": [
+      "B-Soc"
+    ],
+    "faculty": "Faculty of Arts and Social Sciences"
+  },
+  {
+    "code": "GRK 100",
+    "title": "Introductory Modern Greek I",
+    "units": 3,
+    "designations": [
+      "B-Hum"
+    ],
+    "faculty": "Faculty of Arts and Social Sciences"
+  },
+  {
+    "code": "GRK 111",
+    "title": "Introductory Modern Greek II",
+    "units": 3,
+    "designations": [
+      "B-Hum"
+    ],
+    "faculty": "Faculty of Arts and Social Sciences"
+  },
+  {
+    "code": "GSWS 100",
+    "title": "Sex Talk: Introduction to Contemporary Issues in Sexuality Studies",
+    "units": 3,
+    "designations": [
+      "B-Hum"
+    ],
+    "faculty": "Faculty of Arts and Social Sciences"
+  },
+  {
+    "code": "GSWS 101",
+    "title": "Gender Talk",
+    "units": 3,
+    "designations": [
+      "B-Soc"
+    ],
+    "faculty": "Faculty of Arts and Social Sciences"
+  },
+  {
+    "code": "GSWS 102",
+    "title": "Feminist Action",
+    "units": 3,
+    "designations": [
+      "B-Hum",
+      "B-Soc"
+    ],
+    "faculty": "Faculty of Arts and Social Sciences"
+  },
+  {
+    "code": "GSWS 398W",
+    "title": "Feminist Currents",
+    "units": 4,
+    "designations": [
+      "W"
+    ],
+    "faculty": "Faculty of Arts and Social Sciences"
+  },
+  {
+    "code": "GSWS 399",
+    "title": "Gender, Sex and Numbers",
+    "units": 4,
+    "designations": [
+      "Q"
+    ],
+    "faculty": "Faculty of Arts and Social Sciences"
+  },
+  {
+    "code": "HIST 130",
+    "title": "Introduction to Global History",
+    "units": 3,
+    "designations": [
+      "B-Hum",
+      "B-Soc"
+    ],
+    "faculty": "Faculty of Arts and Social Sciences"
+  },
+  {
+    "code": "HIST 132",
+    "title": "Global Environmental History",
+    "units": 3,
+    "designations": [
+      "B-Soc"
+    ],
+    "faculty": "Faculty of Arts and Social Sciences"
+  },
+  {
+    "code": "HIST 135W",
+    "title": "Capitalism and the Making of the Modern World",
+    "units": 3,
+    "designations": [
+      "W"
+    ],
+    "faculty": "Faculty of Arts and Social Sciences"
+  },
+  {
+    "code": "HIST 138",
+    "title": "Centuries of Genocide",
+    "units": 3,
+    "designations": [
+      "B-Hum",
+      "B-Soc"
+    ],
+    "faculty": "Faculty of Arts and Social Sciences"
+  },
+  {
+    "code": "HIST 146",
+    "title": "Africa After the Transatlantic Slave Trade",
+    "units": 3,
+    "designations": [
+      "B-Hum"
+    ],
+    "faculty": "Faculty of Arts and Social Sciences"
+  },
+  {
+    "code": "HIST 151",
+    "title": "The Modern Middle East",
+    "units": 3,
+    "designations": [
+      "B-Hum"
+    ],
+    "faculty": "Faculty of Arts and Social Sciences"
+  },
+  {
+    "code": "HIST 200",
+    "title": "Making History: Introduction to Historical Research",
+    "units": 3,
+    "designations": [
+      "B-Hum",
+      "B-Soc"
+    ],
+    "faculty": "Faculty of Arts and Social Sciences"
+  },
+  {
+    "code": "HIST 204",
+    "title": "The Social History of Canada",
+    "units": 3,
+    "designations": [
+      "B-Hum"
+    ],
+    "faculty": "Faculty of Arts and Social Sciences"
+  },
+  {
+    "code": "HIST 206",
+    "title": "Imperial Japan (ca.1868-1952)",
+    "units": 3,
+    "designations": [
+      "B-Hum"
+    ],
+    "faculty": "Faculty of Arts and Social Sciences"
+  },
+  {
+    "code": "HIST 214",
+    "title": "Quebec Society, Culture and Politics",
+    "units": 3,
+    "designations": [
+      "W",
+      "B-Hum"
+    ],
+    "faculty": "Faculty of Arts and Social Sciences"
+  },
+  {
+    "code": "HIST 214W",
+    "title": "Quebec Society, Culture and Politics",
+    "units": 3,
+    "designations": [
+      "W",
+      "B-Hum"
+    ],
+    "faculty": "Faculty of Arts and Social Sciences"
+  },
+  {
+    "code": "HIST 215",
+    "title": "The Making of the British Isles",
+    "units": 3,
+    "designations": [
+      "B-Hum"
+    ],
+    "faculty": "Faculty of Arts and Social Sciences"
+  },
+  {
+    "code": "HIST 223",
+    "title": "Early Modern Europe, 1500-1789",
+    "units": 3,
+    "designations": [
+      "B-Hum"
+    ],
+    "faculty": "Faculty of Arts and Social Sciences"
+  },
+  {
+    "code": "HIST 231",
+    "title": "History of Africa to the 19th Century: From Ancient Times to the Slave Trade",
+    "units": 3,
+    "designations": [
+      "B-Hum"
+    ],
+    "faculty": "Faculty of Arts and Social Sciences"
+  },
+  {
+    "code": "HIST 236",
+    "title": "Japan from 1603 to 1867",
+    "units": 3,
+    "designations": [
+      "B-Hum"
+    ],
+    "faculty": "Faculty of Arts and Social Sciences"
+  },
+  {
+    "code": "HIST 243",
+    "title": "A Brief History of Modern India",
+    "units": 3,
+    "designations": [
+      "B-Hum"
+    ],
+    "faculty": "Faculty of Arts and Social Sciences"
+  },
+  {
+    "code": "HIST 252",
+    "title": "Islamic India",
+    "units": 3,
+    "designations": [
+      "B-Hum"
+    ],
+    "faculty": "Faculty of Arts and Social Sciences"
+  },
+  {
+    "code": "HIST 254",
+    "title": "China to 1800",
+    "units": 3,
+    "designations": [
+      "B-Hum"
+    ],
+    "faculty": "Faculty of Arts and Social Sciences"
+  },
+  {
+    "code": "HIST 255",
+    "title": "China Since 1800",
+    "units": 3,
+    "designations": [
+      "B-Hum"
+    ],
+    "faculty": "Faculty of Arts and Social Sciences"
+  },
+  {
+    "code": "HIST 371",
+    "title": "The Asia-Pacific War in Modern Japanese History",
+    "units": 4,
+    "designations": [
+      "B-Hum"
+    ],
+    "faculty": "Faculty of Arts and Social Sciences"
+  },
+  {
+    "code": "HIST 407W",
+    "title": "Problems in Modern British History",
+    "units": 4,
+    "designations": [
+      "W"
+    ],
+    "faculty": "Faculty of Arts and Social Sciences"
+  },
+  {
+    "code": "HIST 417W",
+    "title": "Problems in Modern French History",
+    "units": 4,
+    "designations": [
+      "W"
+    ],
+    "faculty": "Faculty of Arts and Social Sciences"
+  },
+  {
+    "code": "HIST 419W",
+    "title": "Problems in Modern Russian History",
+    "units": 4,
+    "designations": [
+      "W"
+    ],
+    "faculty": "Faculty of Arts and Social Sciences"
+  },
+  {
+    "code": "HIST 438W",
+    "title": "Problems in the History of the British Empire",
+    "units": 4,
+    "designations": [
+      "W"
+    ],
+    "faculty": "Faculty of Arts and Social Sciences"
+  },
+  {
+    "code": "HIST 468W",
+    "title": "Problems in the History of Religion",
+    "units": 4,
+    "designations": [
+      "W"
+    ],
+    "faculty": "Faculty of Arts and Social Sciences"
+  },
+  {
+    "code": "HIST 472W",
+    "title": "Problems in World History",
+    "units": 4,
+    "designations": [
+      "W"
+    ],
+    "faculty": "Faculty of Arts and Social Sciences"
+  },
+  {
+    "code": "HIST 479W",
+    "title": "Contentious Problems in Modern Chinese History",
+    "units": 4,
+    "designations": [
+      "W"
+    ],
+    "faculty": "Faculty of Arts and Social Sciences"
+  },
+  {
+    "code": "HSCI 120",
+    "title": "Introduction to Human Sexuality and Sexual Behaviour",
+    "units": 3,
+    "designations": [
+      "B-Soc"
+    ],
+    "faculty": "Faculty of Health Sciences"
+  },
+  {
+    "code": "HSCI 130",
+    "title": "Foundations of Health Science",
+    "units": 4,
+    "designations": [
+      "B-Soc",
+      "B-Sci"
+    ],
+    "faculty": "Faculty of Health Sciences"
+  },
+  {
+    "code": "HSCI 160",
+    "title": "Global Perspectives on Health",
+    "units": 3,
+    "designations": [
+      "B-Soc"
+    ],
+    "faculty": "Faculty of Health Sciences"
+  },
+  {
+    "code": "HSCI 319W",
+    "title": "Applied Health Ethics",
+    "units": 3,
+    "designations": [
+      "W"
+    ],
+    "faculty": "Faculty of Health Sciences"
+  },
+  {
+    "code": "HUM 101W",
+    "title": "Introduction to the Humanities",
+    "units": 3,
+    "designations": [
+      "W",
+      "B-Hum"
+    ],
+    "faculty": "Faculty of Arts and Social Sciences"
+  },
+  {
+    "code": "HUM 102W",
+    "title": "Classical Mythology",
+    "units": 3,
+    "designations": [
+      "W",
+      "B-Hum"
+    ],
+    "faculty": "Faculty of Arts and Social Sciences"
+  },
+  {
+    "code": "HUM 105",
+    "title": "Many Europes: Ancient, Medieval, Early Modern",
+    "units": 3,
+    "designations": [
+      "B-Hum"
+    ],
+    "faculty": "Faculty of Arts and Social Sciences"
+  },
+  {
+    "code": "HUM 106",
+    "title": "Art and the Humanities",
+    "units": 3,
+    "designations": [
+      "B-Hum"
+    ],
+    "faculty": "Faculty of Arts and Social Sciences"
+  },
+  {
+    "code": "HUM 110",
+    "title": "The Greek World",
+    "units": 3,
+    "designations": [
+      "B-Hum"
+    ],
+    "faculty": "Faculty of Arts and Social Sciences"
+  },
+  {
+    "code": "HUM 121",
+    "title": "Walk of Life: Migrations in Eurasia from Antiquity to the Present",
+    "units": 3,
+    "designations": [
+      "B-Hum"
+    ],
+    "faculty": "Faculty of Arts and Social Sciences"
+  },
+  {
+    "code": "HUM 130",
+    "title": "Introduction to Religious Studies",
+    "units": 3,
+    "designations": [
+      "B-Hum"
+    ],
+    "faculty": "Faculty of Arts and Social Sciences"
+  },
+  {
+    "code": "HUM 131",
+    "title": "Introduction to Religious Studies: Indigenous and Asian Religions",
+    "units": 3,
+    "designations": [
+      "B-Hum"
+    ],
+    "faculty": "Faculty of Arts and Social Sciences"
+  },
+  {
+    "code": "HUM 150",
+    "title": "Warfare in the Hellenic World: From Plato to NATO",
+    "units": 3,
+    "designations": [
+      "B-Hum",
+      "B-Soc"
+    ],
+    "faculty": "Faculty of Arts and Social Sciences"
+  },
+  {
+    "code": "HUM 151",
+    "title": "Ancient and Biblical Greek I",
+    "units": 3,
+    "designations": [
+      "B-Hum"
+    ],
+    "faculty": "Faculty of Arts and Social Sciences"
+  },
+  {
+    "code": "HUM 161",
+    "title": "Latin I",
+    "units": 3,
+    "designations": [
+      "B-Hum"
+    ],
+    "faculty": "Faculty of Arts and Social Sciences"
+  },
+  {
+    "code": "HUM 202",
+    "title": "Great Texts in the Humanities",
+    "units": 3,
+    "designations": [
+      "B-Hum"
+    ],
+    "faculty": "Faculty of Arts and Social Sciences"
+  },
+  {
+    "code": "HUM 203",
+    "title": "Great Texts: Asian Thought and Literature",
+    "units": 3,
+    "designations": [
+      "B-Hum"
+    ],
+    "faculty": "Faculty of Arts and Social Sciences"
+  },
+  {
+    "code": "HUM 204",
+    "title": "Great Religious Texts",
+    "units": 3,
+    "designations": [
+      "B-Hum"
+    ],
+    "faculty": "Faculty of Arts and Social Sciences"
+  },
+  {
+    "code": "HUM 209",
+    "title": "Heroic Greek Tales: From the Trojans to Frankenstein",
+    "units": 3,
+    "designations": [
+      "B-Hum"
+    ],
+    "faculty": "Faculty of Arts and Social Sciences"
+  },
+  {
+    "code": "HUM 211",
+    "title": "Art and Literature of the Italian Renaissance",
+    "units": 3,
+    "designations": [
+      "B-Hum"
+    ],
+    "faculty": "Faculty of Arts and Social Sciences"
+  },
+  {
+    "code": "HUM 219",
+    "title": "The Early Middle Ages",
+    "units": 3,
+    "designations": [
+      "B-Hum"
+    ],
+    "faculty": "Faculty of Arts and Social Sciences"
+  },
+  {
+    "code": "HUM 222",
+    "title": "Cross-Cultural Perspectives on Art",
+    "units": 3,
+    "designations": [
+      "B-Hum"
+    ],
+    "faculty": "Faculty of Arts and Social Sciences"
+  },
+  {
+    "code": "HUM 226",
+    "title": "War and Society",
+    "units": 3,
+    "designations": [
+      "B-Hum"
+    ],
+    "faculty": "Faculty of Arts and Social Sciences"
+  },
+  {
+    "code": "HUM 231",
+    "title": "Daily Life in Ancient Greece and Rome",
+    "units": 3,
+    "designations": [
+      "B-Hum"
+    ],
+    "faculty": "Faculty of Arts and Social Sciences"
+  },
+  {
+    "code": "HUM 232",
+    "title": "Religions of Ancient Greece and Rome",
+    "units": 3,
+    "designations": [
+      "B-Hum"
+    ],
+    "faculty": "Faculty of Arts and Social Sciences"
+  },
+  {
+    "code": "HUM 240",
+    "title": "Studies in Modern Culture",
+    "units": 3,
+    "designations": [
+      "B-Hum"
+    ],
+    "faculty": "Faculty of Arts and Social Sciences"
+  },
+  {
+    "code": "HUM 275",
+    "title": "From Alexander to the Caesers",
+    "units": 3,
+    "designations": [
+      "B-Hum"
+    ],
+    "faculty": "Faculty of Arts and Social Sciences"
+  },
+  {
+    "code": "HUM 277",
+    "title": "History of Greek Civilization",
+    "units": 3,
+    "designations": [
+      "B-Hum"
+    ],
+    "faculty": "Faculty of Arts and Social Sciences"
+  },
+  {
+    "code": "HUM 302W",
+    "title": "Athenian Democracy",
+    "units": 4,
+    "designations": [
+      "W",
+      "B-Hum"
+    ],
+    "faculty": "Faculty of Arts and Social Sciences"
+  },
+  {
+    "code": "HUM 305",
+    "title": "Medieval Studies",
+    "units": 4,
+    "designations": [
+      "B-Hum"
+    ],
+    "faculty": "Faculty of Arts and Social Sciences"
+  },
+  {
+    "code": "HUM 306",
+    "title": "Alexander the Great and the Quest for World Empire",
+    "units": 4,
+    "designations": [
+      "B-Hum"
+    ],
+    "faculty": "Faculty of Arts and Social Sciences"
+  },
+  {
+    "code": "HUM 309",
+    "title": "Literatures and the Arts Across Cultures",
+    "units": 4,
+    "designations": [
+      "B-Hum"
+    ],
+    "faculty": "Faculty of Arts and Social Sciences"
+  },
+  {
+    "code": "HUM 311",
+    "title": "Italian Renaissance Humanism",
+    "units": 4,
+    "designations": [
+      "B-Hum"
+    ],
+    "faculty": "Faculty of Arts and Social Sciences"
+  },
+  {
+    "code": "HUM 312W",
+    "title": "Renaissance Studies",
+    "units": 4,
+    "designations": [
+      "W",
+      "B-Hum"
+    ],
+    "faculty": "Faculty of Arts and Social Sciences"
+  },
+  {
+    "code": "HUM 318",
+    "title": "Heroines in Greece and Beyond: Political Representations of Women in Film and Literature",
+    "units": 4,
+    "designations": [
+      "B-Hum"
+    ],
+    "faculty": "Faculty of Arts and Social Sciences"
+  },
+  {
+    "code": "HUM 319",
+    "title": "Greeks Go Global: From Antigone to Atwood",
+    "units": 4,
+    "designations": [
+      "B-Hum"
+    ],
+    "faculty": "Faculty of Arts and Social Sciences"
+  },
+  {
+    "code": "HUM 320",
+    "title": "Cross-Cultural Philosophy in the Humanities",
+    "units": 4,
+    "designations": [
+      "B-Hum"
+    ],
+    "faculty": "Faculty of Arts and Social Sciences"
+  },
+  {
+    "code": "HUM 321W",
+    "title": "The Humanities and Critical Thinking",
+    "units": 4,
+    "designations": [
+      "W",
+      "B-Hum"
+    ],
+    "faculty": "Faculty of Arts and Social Sciences"
+  },
+  {
+    "code": "HUM 325",
+    "title": "The Humanities and the Natural World",
+    "units": 4,
+    "designations": [
+      "B-Hum"
+    ],
+    "faculty": "Faculty of Arts and Social Sciences"
+  },
+  {
+    "code": "HUM 329",
+    "title": "Health in Global Humanities",
+    "units": 4,
+    "designations": [
+      "B-Hum"
+    ],
+    "faculty": "Faculty of Arts and Social Sciences"
+  },
+  {
+    "code": "HUM 330",
+    "title": "Religion in Context",
+    "units": 4,
+    "designations": [
+      "B-Hum"
+    ],
+    "faculty": "Faculty of Arts and Social Sciences"
+  },
+  {
+    "code": "HUM 331",
+    "title": "Special Topics in Asian Religious Traditions",
+    "units": 4,
+    "designations": [
+      "B-Hum"
+    ],
+    "faculty": "Faculty of Arts and Social Sciences"
+  },
+  {
+    "code": "HUM 332",
+    "title": "Mythology in Context",
+    "units": 4,
+    "designations": [
+      "B-Hum"
+    ],
+    "faculty": "Faculty of Arts and Social Sciences"
+  },
+  {
+    "code": "HUM 333",
+    "title": "Italian Films, Italian Humanities",
+    "units": 4,
+    "designations": [
+      "W",
+      "B-Hum"
+    ],
+    "faculty": "Faculty of Arts and Social Sciences"
+  },
+  {
+    "code": "HUM 333W",
+    "title": "Italian Films, Italian Humanities",
+    "units": 4,
+    "designations": [
+      "W",
+      "B-Hum"
+    ],
+    "faculty": "Faculty of Arts and Social Sciences"
+  },
+  {
+    "code": "HUM 335",
+    "title": "Modern Italian Culture",
+    "units": 4,
+    "designations": [
+      "B-Hum"
+    ],
+    "faculty": "Faculty of Arts and Social Sciences"
+  },
+  {
+    "code": "HUM 340",
+    "title": "Great Cities in Their Time",
+    "units": 4,
+    "designations": [
+      "B-Hum"
+    ],
+    "faculty": "Faculty of Arts and Social Sciences"
+  },
+  {
+    "code": "HUM 347",
+    "title": "Religion, Culture, and Society",
+    "units": 4,
+    "designations": [
+      "B-Hum"
+    ],
+    "faculty": "Faculty of Arts and Social Sciences"
+  },
+  {
+    "code": "HUM 349",
+    "title": "Rome After Rome: the Byzantine Middle Ages from the End of Antiquity to the Crusades",
+    "units": 3,
+    "designations": [
+      "B-Hum"
+    ],
+    "faculty": "Faculty of Arts and Social Sciences"
+  },
+  {
+    "code": "HUM 350",
+    "title": "Great Figures in the Humanistic Tradition",
+    "units": 4,
+    "designations": [
+      "B-Hum"
+    ],
+    "faculty": "Faculty of Arts and Social Sciences"
+  },
+  {
+    "code": "HUM 356",
+    "title": "Thinking About War: Perspectives on Conflict from Thucydides to the Present",
+    "units": 4,
+    "designations": [
+      "B-Hum"
+    ],
+    "faculty": "Faculty of Arts and Social Sciences"
+  },
+  {
+    "code": "HUM 359",
+    "title": "Constructing the Nation State in the Balkans and the Mediterranean",
+    "units": 4,
+    "designations": [
+      "B-Hum"
+    ],
+    "faculty": "Faculty of Arts and Social Sciences"
+  },
+  {
+    "code": "HUM 360",
+    "title": "Great Themes in the Humanistic Tradition",
+    "units": 4,
+    "designations": [
+      "B-Hum"
+    ],
+    "faculty": "Faculty of Arts and Social Sciences"
+  },
+  {
+    "code": "HUM 375",
+    "title": "The Woodsworth Seminar",
+    "units": 4,
+    "designations": [
+      "B-Hum"
+    ],
+    "faculty": "Faculty of Arts and Social Sciences"
+  },
+  {
+    "code": "HUM 381",
+    "title": "Topics in Global Humanities",
+    "units": 4,
+    "designations": [
+      "B-Hum"
+    ],
+    "faculty": "Faculty of Arts and Social Sciences"
+  },
+  {
+    "code": "HUM 387",
+    "title": "Other Europes: Arts and Cultures",
+    "units": 4,
+    "designations": [
+      "B-Hum"
+    ],
+    "faculty": "Faculty of Arts and Social Sciences"
+  },
+  {
+    "code": "IAT 100",
+    "title": "Systems of Media Representation",
+    "units": 3,
+    "designations": [
+      "B-Hum"
+    ],
+    "faculty": "Faculty of Communication, Art and Technology"
+  },
+  {
+    "code": "IAT 103W",
+    "title": "Design, Communication and Collaboration",
+    "units": 3,
+    "designations": [
+      "W"
+    ],
+    "faculty": "Faculty of Communication, Art and Technology"
+  },
+  {
+    "code": "IAT 110",
+    "title": "Visual Communication Design",
+    "units": 3,
+    "designations": [
+      "B-Hum"
+    ],
+    "faculty": "Faculty of Communication, Art and Technology"
+  },
+  {
+    "code": "IAT 111",
+    "title": "Artificial Intelligence Today and Tomorrow: Systems, Applications and Ethical Challenges",
+    "units": 3,
+    "designations": [
+      "B-Soc"
+    ],
+    "faculty": "Faculty of Communication, Art and Technology"
+  },
+  {
+    "code": "IAT 202",
+    "title": "New Media Images",
+    "units": 3,
+    "designations": [
+      "B-Hum"
+    ],
+    "faculty": "Faculty of Communication, Art and Technology"
+  },
+  {
+    "code": "IAT 206W",
+    "title": "Media Across Cultures",
+    "units": 3,
+    "designations": [
+      "W",
+      "B-Hum"
+    ],
+    "faculty": "Faculty of Communication, Art and Technology"
+  },
+  {
+    "code": "IAT 210",
+    "title": "Introduction to Game Studies: Theory and Design",
+    "units": 3,
+    "designations": [
+      "B-Hum",
+      "B-Soc"
+    ],
+    "faculty": "Faculty of Communication, Art and Technology"
+  },
+  {
+    "code": "IAT 222",
+    "title": "Interactive Arts",
+    "units": 3,
+    "designations": [
+      "B-Hum"
+    ],
+    "faculty": "Faculty of Communication, Art and Technology"
+  },
+  {
+    "code": "IAT 244",
+    "title": "Digital, Virtual and AI Photography",
+    "units": 3,
+    "designations": [
+      "B-Hum"
+    ],
+    "faculty": "Faculty of Communication, Art and Technology"
+  },
+  {
+    "code": "IAT 265",
+    "title": "Multimedia Programming for Art and Design",
+    "units": 3,
+    "designations": [
+      "Q"
+    ],
+    "faculty": "Faculty of Communication, Art and Technology"
+  },
+  {
+    "code": "IAT 309W",
+    "title": "Writing Methods for Research",
+    "units": 3,
+    "designations": [
+      "W"
+    ],
+    "faculty": "Faculty of Communication, Art and Technology"
+  },
+  {
+    "code": "INDG 101",
+    "title": "Introduction to Indigenous Studies",
+    "units": 3,
+    "designations": [
+      "B-Hum",
+      "B-Soc"
+    ],
+    "faculty": "Faculty of Arts and Social Sciences"
+  },
+  {
+    "code": "INDG 110W",
+    "title": "International Indigenous Lifewriting",
+    "units": 4,
+    "designations": [
+      "W",
+      "B-Hum"
+    ],
+    "faculty": "Faculty of Arts and Social Sciences"
+  },
+  {
+    "code": "INDG 201W",
+    "title": "Indigenous Peoples' Perspectives on History",
+    "units": 3,
+    "designations": [
+      "W",
+      "B-Soc"
+    ],
+    "faculty": "Faculty of Arts and Social Sciences"
+  },
+  {
+    "code": "INDG 232",
+    "title": "Indigenous Science",
+    "units": 3,
+    "designations": [
+      "B-Sci"
+    ],
+    "faculty": "Faculty of Arts and Social Sciences"
+  },
+  {
+    "code": "INDG 332",
+    "title": "Ethnobotany of BC First Nations",
+    "units": 3,
+    "designations": [
+      "B-Sci"
+    ],
+    "faculty": "Faculty of Arts and Social Sciences"
+  },
+  {
+    "code": "INDG 402W",
+    "title": "Discourses of Indigenous Peoples",
+    "units": 3,
+    "designations": [
+      "W"
+    ],
+    "faculty": "Faculty of Arts and Social Sciences"
+  },
+  {
+    "code": "INLG 435",
+    "title": "Topics in Indigenous Language II",
+    "units": 3,
+    "designations": [
+      "B-Hum"
+    ],
+    "faculty": "Faculty of Arts and Social Sciences"
+  },
+  {
+    "code": "IS 101",
+    "title": "Global Challenges of the 21st Century: an Introduction to International Studies",
+    "units": 3,
+    "designations": [
+      "B-Hum",
+      "B-Soc"
+    ],
+    "faculty": "Faculty of Arts and Social Sciences"
+  },
+  {
+    "code": "IS 105",
+    "title": "Around the World through Film",
+    "units": 3,
+    "designations": [
+      "B-Hum"
+    ],
+    "faculty": "Faculty of Arts and Social Sciences"
+  },
+  {
+    "code": "IS 130",
+    "title": "Borders and Belonging: Global Politics of Violence and Care",
+    "units": 3,
+    "designations": [
+      "W",
+      "B-Hum",
+      "B-Soc"
+    ],
+    "faculty": "Faculty of Arts and Social Sciences"
+  },
+  {
+    "code": "IS 130W",
+    "title": "Borders and Belonging: Global Politics of Violence and Care",
+    "units": 3,
+    "designations": [
+      "W",
+      "B-Hum",
+      "B-Soc"
+    ],
+    "faculty": "Faculty of Arts and Social Sciences"
+  },
+  {
+    "code": "IS 200",
+    "title": "Security and Global Governance: Interdisciplinary Perspective",
+    "units": 3,
+    "designations": [
+      "B-Hum",
+      "B-Soc"
+    ],
+    "faculty": "Faculty of Arts and Social Sciences"
+  },
+  {
+    "code": "IS 210",
+    "title": "Comparative World Politics: Trajectories, Regimes, Challenges",
+    "units": 3,
+    "designations": [
+      "B-Hum",
+      "B-Soc"
+    ],
+    "faculty": "Faculty of Arts and Social Sciences"
+  },
+  {
+    "code": "IS 220",
+    "title": "Wealth and Poverty of Nations",
+    "units": 3,
+    "designations": [
+      "B-Soc"
+    ],
+    "faculty": "Faculty of Arts and Social Sciences"
+  },
+  {
+    "code": "IS 260",
+    "title": "Coloniality, Empire, and Anti-Imperial Struggles: Historical and Contemporary Perspectives",
+    "units": 3,
+    "designations": [
+      "B-Hum"
+    ],
+    "faculty": "Faculty of Arts and Social Sciences"
+  },
+  {
+    "code": "IS 302",
+    "title": "Humanitarian Intervention: An Introduction",
+    "units": 4,
+    "designations": [
+      "B-Hum",
+      "B-Soc"
+    ],
+    "faculty": "Faculty of Arts and Social Sciences"
+  },
+  {
+    "code": "IS 350W",
+    "title": "Seminar on Global Problems in Interdiciplinary Perspective",
+    "units": 4,
+    "designations": [
+      "W"
+    ],
+    "faculty": "Faculty of Arts and Social Sciences"
+  },
+  {
+    "code": "ITAL 100",
+    "title": "Introductory Italian I",
+    "units": 3,
+    "designations": [
+      "B-Hum"
+    ],
+    "faculty": "Faculty of Arts and Social Sciences"
+  },
+  {
+    "code": "ITAL 110",
+    "title": "Introductory Italian II",
+    "units": 3,
+    "designations": [
+      "B-Hum"
+    ],
+    "faculty": "Faculty of Arts and Social Sciences"
+  },
+  {
+    "code": "ITAL 360",
+    "title": "Italian Literature as World Literature",
+    "units": 4,
+    "designations": [
+      "B-Hum"
+    ],
+    "faculty": "Faculty of Arts and Social Sciences"
+  },
+  {
+    "code": "JAPN 100",
+    "title": "Japanese I",
+    "units": 3,
+    "designations": [
+      "B-Hum"
+    ],
+    "faculty": "Faculty of Arts and Social Sciences"
+  },
+  {
+    "code": "JAPN 110",
+    "title": "Japanese II",
+    "units": 3,
+    "designations": [
+      "B-Hum"
+    ],
+    "faculty": "Faculty of Arts and Social Sciences"
+  },
+  {
+    "code": "JAPN 360",
+    "title": "Japanese Literature as World Literature",
+    "units": 4,
+    "designations": [
+      "B-Hum"
+    ],
+    "faculty": "Faculty of Arts and Social Sciences"
+  },
+  {
+    "code": "LBST 100",
+    "title": "Equality and Inequality at Work",
+    "units": 3,
+    "designations": [
+      "B-Soc"
+    ],
+    "faculty": "Faculty of Arts and Social Sciences"
+  },
+  {
+    "code": "LBST 101",
+    "title": "Work and Worker's Rights: Introducing Labour Studies",
+    "units": 3,
+    "designations": [
+      "B-Soc"
+    ],
+    "faculty": "Faculty of Arts and Social Sciences"
+  },
+  {
+    "code": "LBST 301W",
+    "title": "Labour Movements: Contemporary Issues and Images",
+    "units": 3,
+    "designations": [
+      "W"
+    ],
+    "faculty": "Faculty of Arts and Social Sciences"
+  },
+  {
+    "code": "LBST 302",
+    "title": "Health, Illness and the Politics of Work",
+    "units": 3,
+    "designations": [
+      "B-Soc"
+    ],
+    "faculty": "Faculty of Arts and Social Sciences"
+  },
+  {
+    "code": "LBST 310",
+    "title": "The Politics of Labour",
+    "units": 3,
+    "designations": [
+      "B-Soc"
+    ],
+    "faculty": "Faculty of Arts and Social Sciences"
+  },
+  {
+    "code": "LING 100",
+    "title": "Communication and Language",
+    "units": 3,
+    "designations": [
+      "B-Soc"
+    ],
+    "faculty": "Faculty of Arts and Social Sciences"
+  },
+  {
+    "code": "LING 160",
+    "title": "Language, Culture and Society",
+    "units": 3,
+    "designations": [
+      "B-Soc"
+    ],
+    "faculty": "Faculty of Arts and Social Sciences"
+  },
+  {
+    "code": "LING 282W",
+    "title": "Writing for Linguistics",
+    "units": 3,
+    "designations": [
+      "W"
+    ],
+    "faculty": "Faculty of Arts and Social Sciences"
+  },
+  {
+    "code": "LING 301W",
+    "title": "Linguistic Argumentation",
+    "units": 3,
+    "designations": [
+      "W"
+    ],
+    "faculty": "Faculty of Arts and Social Sciences"
+  },
+  {
+    "code": "LING 309W",
+    "title": "Sociolinguistics",
+    "units": 3,
+    "designations": [
+      "W"
+    ],
+    "faculty": "Faculty of Arts and Social Sciences"
+  },
+  {
+    "code": "LING 324",
+    "title": "Semantics",
+    "units": 3,
+    "designations": [
+      "Q"
+    ],
+    "faculty": "Faculty of Arts and Social Sciences"
+  },
+  {
+    "code": "LING 400",
+    "title": "Formal Linguistics",
+    "units": 3,
+    "designations": [
+      "Q"
+    ],
+    "faculty": "Faculty of Arts and Social Sciences"
+  },
+  {
+    "code": "MACM 316",
+    "title": "Numerical Analysis l",
+    "units": 3,
+    "designations": [
+      "Q"
+    ],
+    "faculty": "Faculty of Science"
+  },
+  {
+    "code": "MATH 100",
+    "title": "Precalculus",
+    "units": 3,
+    "designations": [
+      "Q"
+    ],
+    "faculty": "Faculty of Science"
+  },
+  {
+    "code": "MATH 110",
+    "title": "Precalculus for the Life Sciences and Social Sciences",
+    "units": 3,
+    "designations": [
+      "Q"
+    ],
+    "faculty": "Faculty of Science"
+  },
+  {
+    "code": "MATH 141W",
+    "title": "Introduction to Mathematical Proofs and Combinatorics",
+    "units": 3,
+    "designations": [
+      "W"
+    ],
+    "faculty": "Faculty of Science"
+  },
+  {
+    "code": "MATH 150",
+    "title": "Calculus l with Review",
+    "units": 4,
+    "designations": [
+      "Q"
+    ],
+    "faculty": "Faculty of Science"
+  },
+  {
+    "code": "MATH 151",
+    "title": "Calculus l",
+    "units": 3,
+    "designations": [
+      "Q"
+    ],
+    "faculty": "Faculty of Science"
+  },
+  {
+    "code": "MATH 152",
+    "title": "Calculus ll",
+    "units": 3,
+    "designations": [
+      "Q"
+    ],
+    "faculty": "Faculty of Science"
+  },
+  {
+    "code": "MATH 154",
+    "title": "Calculus l for the Biological Sciences",
+    "units": 3,
+    "designations": [
+      "Q"
+    ],
+    "faculty": "Faculty of Science"
+  },
+  {
+    "code": "MATH 155",
+    "title": "Calculus ll for the Biological Sciences",
+    "units": 3,
+    "designations": [
+      "Q"
+    ],
+    "faculty": "Faculty of Science"
+  },
+  {
+    "code": "MATH 157",
+    "title": "Calculus l for the Social Sciences",
+    "units": 3,
+    "designations": [
+      "Q"
+    ],
+    "faculty": "Faculty of Science"
+  },
+  {
+    "code": "MATH 158",
+    "title": "Calculus ll for the Social Sciences",
+    "units": 3,
+    "designations": [
+      "Q"
+    ],
+    "faculty": "Faculty of Science"
+  },
+  {
+    "code": "MATH 190",
+    "title": "Principles of Mathematics for Teachers",
+    "units": 4,
+    "designations": [
+      "Q"
+    ],
+    "faculty": "Faculty of Science"
+  },
+  {
+    "code": "MATH 340",
+    "title": "Algebra II: Rings and Fields",
+    "units": 3,
+    "designations": [
+      "Q"
+    ],
+    "faculty": "Faculty of Science"
+  },
+  {
+    "code": "MATH 480W",
+    "title": "The Art and Craft of Problem Solving",
+    "units": 3,
+    "designations": [
+      "W",
+      "Q"
+    ],
+    "faculty": "Faculty of Science"
+  },
+  {
+    "code": "MATH 499W",
+    "title": "Honours Research Project",
+    "units": 5,
+    "designations": [
+      "W"
+    ],
+    "faculty": "Faculty of Science"
+  },
+  {
+    "code": "MBB 301",
+    "title": "Bioscience of Science Fiction",
+    "units": 3,
+    "designations": [
+      "B-Sci"
+    ],
+    "faculty": "Faculty of Science"
+  },
+  {
+    "code": "MBB 309W",
+    "title": "Biochemistry Laboratory",
+    "units": 3,
+    "designations": [
+      "W"
+    ],
+    "faculty": "Faculty of Science"
+  },
+  {
+    "code": "MHSS 100",
+    "title": "Interdisciplinary Approaches to Health in the Humanities and Social Sciences",
+    "units": 3,
+    "designations": [
+      "B-Hum"
+    ],
+    "faculty": "Faculty of Arts and Social Sciences"
+  },
+  {
+    "code": "MSE 101W",
+    "title": "Process, Form, and Convention in Professional Genres",
+    "units": 3,
+    "designations": [
+      "W"
+    ],
+    "faculty": "Faculty of Applied Sciences"
+  },
+  {
+    "code": "MSE 102",
+    "title": "Applied Science, Technology and Society",
+    "units": 3,
+    "designations": [
+      "B-Sci"
+    ],
+    "faculty": "Faculty of Applied Sciences"
+  },
+  {
+    "code": "MSE 250",
+    "title": "Electric Circuits",
+    "units": 3,
+    "designations": [
+      "Q"
+    ],
+    "faculty": "Faculty of Applied Sciences"
+  },
+  {
+    "code": "MSE 405W",
+    "title": "The Business of Engineering ll",
+    "units": 4,
+    "designations": [
+      "W"
+    ],
+    "faculty": "Faculty of Applied Sciences"
+  },
+  {
+    "code": "PERS 100",
+    "title": "Introductory Persian I",
+    "units": 3,
+    "designations": [
+      "B-Hum"
+    ],
+    "faculty": "Faculty of Arts and Social Sciences"
+  },
+  {
+    "code": "PERS 110",
+    "title": "Introductory Persian II",
+    "units": 3,
+    "designations": [
+      "B-Hum"
+    ],
+    "faculty": "Faculty of Arts and Social Sciences"
+  },
+  {
+    "code": "PHIL 100W",
+    "title": "Knowledge and Reality",
+    "units": 3,
+    "designations": [
+      "W",
+      "B-Hum"
+    ],
+    "faculty": "Faculty of Arts and Social Sciences"
+  },
+  {
+    "code": "PHIL 105",
+    "title": "Critical Thinking",
+    "units": 3,
+    "designations": [
+      "Q",
+      "B-Soc",
+      "B-Sci"
+    ],
+    "faculty": "Faculty of Arts and Social Sciences"
+  },
+  {
+    "code": "PHIL 110",
+    "title": "Introduction to Logic and Reasoning",
+    "units": 3,
+    "designations": [
+      "Q"
+    ],
+    "faculty": "Faculty of Arts and Social Sciences"
+  },
+  {
+    "code": "PHIL 120W",
+    "title": "Moral and Legal Problems",
+    "units": 3,
+    "designations": [
+      "W",
+      "B-Hum"
+    ],
+    "faculty": "Faculty of Arts and Social Sciences"
+  },
+  {
+    "code": "PHIL 144",
+    "title": "Introduction to the Philosophy of Science",
+    "units": 3,
+    "designations": [
+      "B-Hum",
+      "B-Soc"
+    ],
+    "faculty": "Faculty of Arts and Social Sciences"
+  },
+  {
+    "code": "PHIL 150",
+    "title": "History of Philosophy l",
+    "units": 3,
+    "designations": [
+      "B-Hum"
+    ],
+    "faculty": "Faculty of Arts and Social Sciences"
+  },
+  {
+    "code": "PHIL 270",
+    "title": "Data, Ethics and Society",
+    "units": 3,
+    "designations": [
+      "B-Soc"
+    ],
+    "faculty": "Faculty of Arts and Social Sciences"
+  },
+  {
+    "code": "PHIL 300",
+    "title": "Introduction to Philosophy",
+    "units": 3,
+    "designations": [
+      "B-Hum"
+    ],
+    "faculty": "Faculty of Arts and Social Sciences"
+  },
+  {
+    "code": "PHIL 310",
+    "title": "Logic, Proofs and Set Theory",
+    "units": 3,
+    "designations": [
+      "Q"
+    ],
+    "faculty": "Faculty of Arts and Social Sciences"
+  },
+  {
+    "code": "PHIL 315",
+    "title": "Formal Methods",
+    "units": 3,
+    "designations": [
+      "Q"
+    ],
+    "faculty": "Faculty of Arts and Social Sciences"
+  },
+  {
+    "code": "PHIL 467W",
+    "title": "Seminar ll",
+    "units": 4,
+    "designations": [
+      "W"
+    ],
+    "faculty": "Faculty of Arts and Social Sciences"
+  },
+  {
+    "code": "PHYS 101",
+    "title": "Physics for the Life Sciences l",
+    "units": 3,
+    "designations": [
+      "Q",
+      "B-Sci"
+    ],
+    "faculty": "Faculty of Science"
+  },
+  {
+    "code": "PHYS 102",
+    "title": "Physics for the Life Sciences ll",
+    "units": 3,
+    "designations": [
+      "Q",
+      "B-Sci"
+    ],
+    "faculty": "Faculty of Science"
+  },
+  {
+    "code": "PHYS 120",
+    "title": "Mechanics and Modern Physics",
+    "units": 3,
+    "designations": [
+      "Q",
+      "B-Sci"
+    ],
+    "faculty": "Faculty of Science"
+  },
+  {
+    "code": "PHYS 121",
+    "title": "Optics, Electricity and Magnetism",
+    "units": 3,
+    "designations": [
+      "Q",
+      "B-Sci"
+    ],
+    "faculty": "Faculty of Science"
+  },
+  {
+    "code": "PHYS 125",
+    "title": "Mechanics and Spatial Relativity",
+    "units": 3,
+    "designations": [
+      "Q",
+      "B-Sci"
+    ],
+    "faculty": "Faculty of Science"
+  },
+  {
+    "code": "PHYS 126",
+    "title": "Electricity, Magnetism and Light",
+    "units": 3,
+    "designations": [
+      "Q",
+      "B-Sci"
+    ],
+    "faculty": "Faculty of Science"
+  },
+  {
+    "code": "PHYS 140",
+    "title": "Studio Physics: Mechanics and Modern Physics",
+    "units": 3,
+    "designations": [
+      "Q",
+      "B-Sci"
+    ],
+    "faculty": "Faculty of Science"
+  },
+  {
+    "code": "PHYS 141",
+    "title": "Studio Physics: Optics, Electricity and Magnetism",
+    "units": 3,
+    "designations": [
+      "Q",
+      "B-Sci"
+    ],
+    "faculty": "Faculty of Science"
+  },
+  {
+    "code": "PHYS 190",
+    "title": "Introduction to Astronomy",
+    "units": 3,
+    "designations": [
+      "Q",
+      "B-Sci"
+    ],
+    "faculty": "Faculty of Science"
+  },
+  {
+    "code": "PHYS 332W",
+    "title": "Advanced Physics Laboratory I",
+    "units": 3,
+    "designations": [
+      "W",
+      "Q"
+    ],
+    "faculty": "Faculty of Science"
+  },
+  {
+    "code": "PLAN 100",
+    "title": "Introduction to Planning",
+    "units": 3,
+    "designations": [
+      "B-Soc"
+    ],
+    "faculty": "Faculty of Environment"
+  },
+  {
+    "code": "PLCY 100",
+    "title": "Public Policy in Canada and the World",
+    "units": 3,
+    "designations": [
+      "B-Soc"
+    ],
+    "faculty": "Faculty of Arts and Social Sciences"
+  },
+  {
+    "code": "PLCY 200",
+    "title": "Introduction to Public Policy",
+    "units": 3,
+    "designations": [
+      "B-Soc"
+    ],
+    "faculty": "Faculty of Arts and Social Sciences"
+  },
+  {
+    "code": "PLCY 300W",
+    "title": "Applied Public Policy Analysis",
+    "units": 4,
+    "designations": [
+      "W"
+    ],
+    "faculty": "Faculty of Arts and Social Sciences"
+  },
+  {
+    "code": "POL 100",
+    "title": "Introduction to Politics and Government",
+    "units": 3,
+    "designations": [
+      "B-Soc"
+    ],
+    "faculty": "Faculty of Arts and Social Sciences"
+  },
+  {
+    "code": "POL 132",
+    "title": "From Dictatorship to Democracy: Political Regimes in the 21st Century",
+    "units": 3,
+    "designations": [
+      "B-Soc"
+    ],
+    "faculty": "Faculty of Arts and Social Sciences"
+  },
+  {
+    "code": "POL 141",
+    "title": "International Relations",
+    "units": 3,
+    "designations": [
+      "B-Soc"
+    ],
+    "faculty": "Faculty of Arts and Social Sciences"
+  },
+  {
+    "code": "POL 150",
+    "title": "Science, Policy and Innovation",
+    "units": 3,
+    "designations": [
+      "B-Soc"
+    ],
+    "faculty": "Faculty of Arts and Social Sciences"
+  },
+  {
+    "code": "POL 200W",
+    "title": "Investigating Politics: Research Design and Qualitative Methods",
+    "units": 4,
+    "designations": [
+      "W"
+    ],
+    "faculty": "Faculty of Arts and Social Sciences"
+  },
+  {
+    "code": "POL 201",
+    "title": "Introductory Quantitative Methods in Political Science",
+    "units": 4,
+    "designations": [
+      "Q"
+    ],
+    "faculty": "Faculty of Arts and Social Sciences"
+  },
+  {
+    "code": "POL 210",
+    "title": "Introduction to Political Philosophy",
+    "units": 3,
+    "designations": [
+      "B-Hum"
+    ],
+    "faculty": "Faculty of Arts and Social Sciences"
+  },
+  {
+    "code": "POL 232",
+    "title": "US Politics",
+    "units": 3,
+    "designations": [
+      "B-Soc"
+    ],
+    "faculty": "Faculty of Arts and Social Sciences"
+  },
+  {
+    "code": "POL 253",
+    "title": "Introduction to Public Policy",
+    "units": 3,
+    "designations": [
+      "B-Soc"
+    ],
+    "faculty": "Faculty of Arts and Social Sciences"
+  },
+  {
+    "code": "POL 304",
+    "title": "The Politics of South Asia",
+    "units": 4,
+    "designations": [
+      "B-Hum"
+    ],
+    "faculty": "Faculty of Arts and Social Sciences"
+  },
+  {
+    "code": "POL 315",
+    "title": "Intermediate Quantitative Methods",
+    "units": 4,
+    "designations": [
+      "Q"
+    ],
+    "faculty": "Faculty of Arts and Social Sciences"
+  },
+  {
+    "code": "POL 330W",
+    "title": "Protecting Human Rights: Courts, Constitutions and Legislatures",
+    "units": 4,
+    "designations": [
+      "W"
+    ],
+    "faculty": "Faculty of Arts and Social Sciences"
+  },
+  {
+    "code": "POL 390",
+    "title": "Data Visualization and Political Analysis",
+    "units": 3,
+    "designations": [
+      "Q"
+    ],
+    "faculty": "Faculty of Arts and Social Sciences"
+  },
+  {
+    "code": "POL 416W",
+    "title": "Feminist Social and Political Thought",
+    "units": 4,
+    "designations": [
+      "W"
+    ],
+    "faculty": "Faculty of Arts and Social Sciences"
+  },
+  {
+    "code": "POL 421W",
+    "title": "Rights, Equality and Charter",
+    "units": 4,
+    "designations": [
+      "W"
+    ],
+    "faculty": "Faculty of Arts and Social Sciences"
+  },
+  {
+    "code": "POL 434W",
+    "title": "Nationalism and Ethnic Conflict",
+    "units": 4,
+    "designations": [
+      "W"
+    ],
+    "faculty": "Faculty of Arts and Social Sciences"
+  },
+  {
+    "code": "POL 445W",
+    "title": "American Foreign Policy",
+    "units": 4,
+    "designations": [
+      "W"
+    ],
+    "faculty": "Faculty of Arts and Social Sciences"
+  },
+  {
+    "code": "POL 446W",
+    "title": "International Relations in East Asia",
+    "units": 4,
+    "designations": [
+      "W"
+    ],
+    "faculty": "Faculty of Arts and Social Sciences"
+  },
+  {
+    "code": "POL 490W",
+    "title": "Honours Seminar",
+    "units": 5,
+    "designations": [
+      "W"
+    ],
+    "faculty": "Faculty of Arts and Social Sciences"
+  },
+  {
+    "code": "PPE 301W",
+    "title": "Seminar in Philosophy, Politics, and Economics",
+    "units": null,
+    "designations": [
+      "W"
+    ],
+    "faculty": "Faculty of Arts and Social Sciences"
+  },
+  {
+    "code": "PSYC 100",
+    "title": "Introduction to Psychology l",
+    "units": 3,
+    "designations": [
+      "B-Soc"
+    ],
+    "faculty": "Faculty of Arts and Social Sciences"
+  },
+  {
+    "code": "PSYC 102",
+    "title": "Introduction to Psychology ll",
+    "units": 3,
+    "designations": [
+      "B-Soc"
+    ],
+    "faculty": "Faculty of Arts and Social Sciences"
+  },
+  {
+    "code": "PSYC 201W",
+    "title": "Introduction to Research Methods in Psychology",
+    "units": 4,
+    "designations": [
+      "W"
+    ],
+    "faculty": "Faculty of Arts and Social Sciences"
+  },
+  {
+    "code": "PSYC 210",
+    "title": "Introduction to Data Analysis in Psychology",
+    "units": 4,
+    "designations": [
+      "Q"
+    ],
+    "faculty": "Faculty of Arts and Social Sciences"
+  },
+  {
+    "code": "PSYC 280",
+    "title": "Introduction to Biological Psychology",
+    "units": 3,
+    "designations": [
+      "B-Sci"
+    ],
+    "faculty": "Faculty of Arts and Social Sciences"
+  },
+  {
+    "code": "PSYC 300W",
+    "title": "Critical Analysis of Issues in Psychology",
+    "units": 3,
+    "designations": [
+      "W"
+    ],
+    "faculty": "Faculty of Arts and Social Sciences"
+  },
+  {
+    "code": "PSYC 301",
+    "title": "Intermediate Research Methods and Data Analysis",
+    "units": 4,
+    "designations": [
+      "Q"
+    ],
+    "faculty": "Faculty of Arts and Social Sciences"
+  },
+  {
+    "code": "PUB 210W",
+    "title": "Fundamentals of Professional Writing",
+    "units": 3,
+    "designations": [
+      "W"
+    ],
+    "faculty": "Faculty of Communication, Art and Technology"
+  },
+  {
+    "code": "PUB 355W",
+    "title": "Online Marketing for Publishers",
+    "units": 4,
+    "designations": [
+      "W"
+    ],
+    "faculty": "Faculty of Communication, Art and Technology"
+  },
+  {
+    "code": "PUB 448",
+    "title": "Publishing for Social Change: Tech, Texts and Revolution",
+    "units": 4,
+    "designations": [
+      "B-Hum"
+    ],
+    "faculty": "Faculty of Communication, Art and Technology"
+  },
+  {
+    "code": "PUNJ 100",
+    "title": "Introductory Punjabi I",
+    "units": 3,
+    "designations": [
+      "B-Hum"
+    ],
+    "faculty": "Faculty of Arts and Social Sciences"
+  },
+  {
+    "code": "PUNJ 110",
+    "title": "Introductory Punjabi II",
+    "units": 3,
+    "designations": [
+      "B-Hum"
+    ],
+    "faculty": "Faculty of Arts and Social Sciences"
+  },
+  {
+    "code": "REM 100",
+    "title": "Global Change",
+    "units": 3,
+    "designations": [
+      "B-Soc"
+    ],
+    "faculty": "Faculty of Environment"
+  },
+  {
+    "code": "REM 200",
+    "title": "Introduction to Resource and Environmental Management in Canada",
+    "units": 3,
+    "designations": [
+      "B-Soc"
+    ],
+    "faculty": "Faculty of Environment"
+  },
+  {
+    "code": "REM 202W",
+    "title": "Technical Communication for Professionals and Planners",
+    "units": 3,
+    "designations": [
+      "W"
+    ],
+    "faculty": "Faculty of Environment"
+  },
+  {
+    "code": "REM 207",
+    "title": "Indigenous Peoples and Resource Management",
+    "units": 3,
+    "designations": [
+      "B-Soc"
+    ],
+    "faculty": "Faculty of Environment"
+  },
+  {
+    "code": "REM 211",
+    "title": "Introduction to Applied Ecology",
+    "units": 3,
+    "designations": [
+      "B-Sci"
+    ],
+    "faculty": "Faculty of Environment"
+  },
+  {
+    "code": "REM 225",
+    "title": "Data, Models, and teh Environment",
+    "units": 3,
+    "designations": [
+      "Q"
+    ],
+    "faculty": "Faculty of Environment"
+  },
+  {
+    "code": "REM 311",
+    "title": "Applied Population Ecology",
+    "units": 3,
+    "designations": [
+      "Q"
+    ],
+    "faculty": "Faculty of Environment"
+  },
+  {
+    "code": "REM 320W",
+    "title": "Ethics and the Environment",
+    "units": 3,
+    "designations": [
+      "W"
+    ],
+    "faculty": "Faculty of Environment"
+  },
+  {
+    "code": "REM 321",
+    "title": "Ecological Economics",
+    "units": 4,
+    "designations": [
+      "B-Soc"
+    ],
+    "faculty": "Faculty of Environment"
+  },
+  {
+    "code": "REM 350",
+    "title": "Energy Management for a Sustainable Climate and Society",
+    "units": 4,
+    "designations": [
+      "B-Soc"
+    ],
+    "faculty": "Faculty of Environment"
+  },
+  {
+    "code": "REM 356W",
+    "title": "Environmental Policy",
+    "units": 3,
+    "designations": [
+      "W"
+    ],
+    "faculty": "Faculty of Environment"
+  },
+  {
+    "code": "REM 357",
+    "title": "Planning for Sustainable Food Systems",
+    "units": 3,
+    "designations": [
+      "B-Soc"
+    ],
+    "faculty": "Faculty of Environment"
+  },
+  {
+    "code": "RISK 101",
+    "title": "Introduction to Insurance",
+    "units": 3,
+    "designations": [
+      "Q"
+    ],
+    "faculty": "Faculty of Science"
+  },
+  {
+    "code": "RISK 102",
+    "title": "The Science of Risk: Understanding and Managing Uncertainty",
+    "units": 3,
+    "designations": [
+      "Q",
+      "B-Sci"
+    ],
+    "faculty": "Faculty of Science"
+  },
+  {
+    "code": "RISK 360W",
+    "title": "Actuarial Communication",
+    "units": 3,
+    "designations": [
+      "W"
+    ],
+    "faculty": "Faculty of Science"
+  },
+  {
+    "code": "SA 101",
+    "title": "Introduction to Anthropology (A)",
+    "units": 4,
+    "designations": [
+      "B-Soc"
+    ],
+    "faculty": "Faculty of Arts and Social Sciences"
+  },
+  {
+    "code": "SA 150",
+    "title": "Introduction to Sociology (S)",
+    "units": 4,
+    "designations": [
+      "B-Soc"
+    ],
+    "faculty": "Faculty of Arts and Social Sciences"
+  },
+  {
+    "code": "SA 200W",
+    "title": "Power, Conflict and Change in Canadian Society",
+    "units": 4,
+    "designations": [
+      "W",
+      "B-Soc"
+    ],
+    "faculty": "Faculty of Arts and Social Sciences"
+  },
+  {
+    "code": "SA 201W",
+    "title": "Anthropology and Contemporary Life",
+    "units": 4,
+    "designations": [
+      "W",
+      "B-Soc"
+    ],
+    "faculty": "Faculty of Arts and Social Sciences"
+  },
+  {
+    "code": "SA 216",
+    "title": "Sociology of Indigenous-Settler Relations (S)",
+    "units": 4,
+    "designations": [
+      "B-Soc"
+    ],
+    "faculty": "Faculty of Arts and Social Sciences"
+  },
+  {
+    "code": "SA 218",
+    "title": "Illness, Culture and Society (A)",
+    "units": 4,
+    "designations": [
+      "B-Soc"
+    ],
+    "faculty": "Faculty of Arts and Social Sciences"
+  },
+  {
+    "code": "SA 257",
+    "title": "Understanding Quantitative Research in Sociology and Anthropology",
+    "units": 4,
+    "designations": [
+      "Q"
+    ],
+    "faculty": "Faculty of Arts and Social Sciences"
+  },
+  {
+    "code": "SA 301W",
+    "title": "Contemporary Ethnography (A)",
+    "units": 4,
+    "designations": [
+      "W"
+    ],
+    "faculty": "Faculty of Arts and Social Sciences"
+  },
+  {
+    "code": "SA 302W",
+    "title": "Global Problems and the Culture of Capitalism",
+    "units": 4,
+    "designations": [
+      "W",
+      "B-Soc"
+    ],
+    "faculty": "Faculty of Arts and Social Sciences"
+  },
+  {
+    "code": "SA 355",
+    "title": "Quantitative Methods",
+    "units": 4,
+    "designations": [
+      "Q"
+    ],
+    "faculty": "Faculty of Arts and Social Sciences"
+  },
+  {
+    "code": "SCI 130",
+    "title": "Busting Science Myths: Critical Thinking in the Misinformation Age",
+    "units": 3,
+    "designations": [
+      "B-Sci"
+    ],
+    "faculty": "Faculty of Science"
+  },
+  {
+    "code": "SCI 140",
+    "title": "Genes Unzipped: The Science and Secrets of DNA",
+    "units": 3,
+    "designations": [
+      "B-Sci"
+    ],
+    "faculty": "Faculty of Science"
+  },
+  {
+    "code": "SCI 300",
+    "title": "Science and Its Impact on Society",
+    "units": 3,
+    "designations": [
+      "B-Sci"
+    ],
+    "faculty": "Faculty of Science"
+  },
+  {
+    "code": "SD 100",
+    "title": "Sustainable Futures: An Optimistic and Practical Guide",
+    "units": 3,
+    "designations": [
+      "B-Soc"
+    ],
+    "faculty": "Faculty of Environment"
+  },
+  {
+    "code": "SD 281",
+    "title": "Introduction to Sustainability",
+    "units": 3,
+    "designations": [
+      "B-Soc"
+    ],
+    "faculty": "Faculty of Environment"
+  },
+  {
+    "code": "SD 381",
+    "title": "Building Sustainable Communities",
+    "units": 4,
+    "designations": [
+      "B-Soc"
+    ],
+    "faculty": "Faculty of Environment"
+  },
+  {
+    "code": "SDA 100",
+    "title": "Data Visualization",
+    "units": 3,
+    "designations": [
+      "Q"
+    ],
+    "faculty": "Faculty of Arts and Social Sciences"
+  },
+  {
+    "code": "SDA 270",
+    "title": "Data, Ethics and Society",
+    "units": 3,
+    "designations": [
+      "B-Soc"
+    ],
+    "faculty": "Faculty of Arts and Social Sciences"
+  },
+  {
+    "code": "SEE 101W",
+    "title": "Process, Form, and Convention in Professional Genres",
+    "units": 3,
+    "designations": [
+      "W"
+    ],
+    "faculty": "Faculty of Applied Sciences"
+  },
+  {
+    "code": "SEE 402W",
+    "title": "Professional Engineering Ethics and Practice",
+    "units": 3,
+    "designations": [
+      "W"
+    ],
+    "faculty": "Faculty of Applied Sciences"
+  },
+  {
+    "code": "SPAN 100",
+    "title": "Introductory Spanish I",
+    "units": 3,
+    "designations": [
+      "B-Hum"
+    ],
+    "faculty": "Faculty of Arts and Social Sciences"
+  },
+  {
+    "code": "SPAN 110",
+    "title": "Introductory Spanish II",
+    "units": 3,
+    "designations": [
+      "B-Hum"
+    ],
+    "faculty": "Faculty of Arts and Social Sciences"
+  },
+  {
+    "code": "STAT 100",
+    "title": "Chance and Data Analysis",
+    "units": 3,
+    "designations": [
+      "Q",
+      "B-Sci"
+    ],
+    "faculty": "Faculty of Science"
+  },
+  {
+    "code": "STAT 201",
+    "title": "Statistics for the Life Sciences",
+    "units": 3,
+    "designations": [
+      "Q"
+    ],
+    "faculty": "Faculty of Science"
+  },
+  {
+    "code": "STAT 203",
+    "title": "Introduction to Statistics for Social Sciences",
+    "units": 3,
+    "designations": [
+      "Q"
+    ],
+    "faculty": "Faculty of Science"
+  },
+  {
+    "code": "STAT 240",
+    "title": "Introduction to Data Science",
+    "units": 3,
+    "designations": [
+      "Q"
+    ],
+    "faculty": "Faculty of Science"
+  },
+  {
+    "code": "STAT 270",
+    "title": "Introduction to Probability and Statistics",
+    "units": 3,
+    "designations": [
+      "Q"
+    ],
+    "faculty": "Faculty of Science"
+  },
+  {
+    "code": "STAT 300W",
+    "title": "Statistics Communication",
+    "units": 3,
+    "designations": [
+      "W",
+      "Q"
+    ],
+    "faculty": "Faculty of Science"
+  },
+  {
+    "code": "STAT 302",
+    "title": "Analysis of Experimental and Observational Data",
+    "units": 3,
+    "designations": [
+      "Q"
+    ],
+    "faculty": "Faculty of Science"
+  },
+  {
+    "code": "STAT 305",
+    "title": "Introduction to Biostatistical Methods for Health Sciences",
+    "units": 3,
+    "designations": [
+      "Q"
+    ],
+    "faculty": "Faculty of Science"
+  },
+  {
+    "code": "STAT 310",
+    "title": "Introduction to Data Science for the Social Sciences",
+    "units": 2,
+    "designations": [
+      "Q"
+    ],
+    "faculty": "Faculty of Science"
+  },
+  {
+    "code": "TEKX 101",
+    "title": "Introduction to 3D Printing and Laser Scanning Technologies",
+    "units": 3,
+    "designations": [
+      "Q",
+      "B-Sci"
+    ],
+    "faculty": "Faculty of Applied Sciences"
+  },
+  {
+    "code": "TEKX 102",
+    "title": "Engineering Made Simple: Everyday Engineering Concepts for Non-Engineers",
+    "units": 3,
+    "designations": [
+      "B-Sci"
+    ],
+    "faculty": "Faculty of Applied Sciences"
+  },
+  {
+    "code": "TEKX 103",
+    "title": "Engineering Made Simple: Understanding Basic Electrical Circuit Theory Powering Everyday Life",
+    "units": 3,
+    "designations": [
+      "B-Sci"
+    ],
+    "faculty": "Faculty of Applied Sciences"
+  },
+  {
+    "code": "URB 101",
+    "title": "What is a city?",
+    "units": 4,
+    "designations": [
+      "B-Hum",
+      "B-Soc"
+    ],
+    "faculty": "Faculty of Arts and Social Sciences"
+  },
+  {
+    "code": "URB 201",
+    "title": "Urban Inquiry and Practice",
+    "units": 3,
+    "designations": [
+      "B-Soc"
+    ],
+    "faculty": "Faculty of Arts and Social Sciences"
+  },
+  {
+    "code": "URB 413",
+    "title": "Indigenous City: Transforming Storyscapes",
+    "units": 4,
+    "designations": [
+      "B-Hum",
+      "B-Soc"
+    ],
+    "faculty": "Faculty of Arts and Social Sciences"
+  },
+  {
+    "code": "URB 460",
+    "title": "Transportation and Urban Development",
+    "units": 4,
+    "designations": [
+      "B-Soc"
+    ],
+    "faculty": "Faculty of Arts and Social Sciences"
+  },
+  {
+    "code": "URB 467",
+    "title": "Housing Studies",
+    "units": 4,
+    "designations": [
+      "B-Soc"
+    ],
+    "faculty": "Faculty of Arts and Social Sciences"
+  },
+  {
+    "code": "WL 100",
+    "title": "What is World Literature?",
+    "units": 3,
+    "designations": [
+      "B-Hum"
+    ],
+    "faculty": "Faculty of Arts and Social Sciences"
+  },
+  {
+    "code": "WL 101W",
+    "title": "Writing in World Literature",
+    "units": 3,
+    "designations": [
+      "W",
+      "B-Hum"
+    ],
+    "faculty": "Faculty of Arts and Social Sciences"
+  },
+  {
+    "code": "WL 103W",
+    "title": "Early World Literatures",
+    "units": 3,
+    "designations": [
+      "W",
+      "B-Hum"
+    ],
+    "faculty": "Faculty of Arts and Social Sciences"
+  },
+  {
+    "code": "WL 104W",
+    "title": "Modern World Literatures",
+    "units": 3,
+    "designations": [
+      "W",
+      "B-Hum"
+    ],
+    "faculty": "Faculty of Arts and Social Sciences"
+  },
+  {
+    "code": "WL 105W",
+    "title": "World Literature Lab",
+    "units": 3,
+    "designations": [
+      "W"
+    ],
+    "faculty": "Faculty of Arts and Social Sciences"
+  },
+  {
+    "code": "WL 202",
+    "title": "North/South Intersections",
+    "units": 3,
+    "designations": [
+      "B-Hum"
+    ],
+    "faculty": "Faculty of Arts and Social Sciences"
+  },
+  {
+    "code": "WL 203",
+    "title": "Subversive Genres",
+    "units": 3,
+    "designations": [
+      "B-Hum"
+    ],
+    "faculty": "Faculty of Arts and Social Sciences"
+  },
+  {
+    "code": "WL 204",
+    "title": "Rights and Activism in Literature",
+    "units": 3,
+    "designations": [
+      "B-Hum"
+    ],
+    "faculty": "Faculty of Arts and Social Sciences"
+  },
+  {
+    "code": "WL 301W",
+    "title": "Writing and Research",
+    "units": 4,
+    "designations": [
+      "W"
+    ],
+    "faculty": "Faculty of Arts and Social Sciences"
+  },
+  {
+    "code": "WL 306",
+    "title": "Transnational Literary Rebellions",
+    "units": 4,
+    "designations": [
+      "B-Hum"
+    ],
+    "faculty": "Faculty of Arts and Social Sciences"
+  },
+  {
+    "code": "WL 308",
+    "title": "Travel and Trade",
+    "units": 4,
+    "designations": [
+      "B-Hum"
+    ],
+    "faculty": "Faculty of Arts and Social Sciences"
+  },
+  {
+    "code": "WL 309",
+    "title": "Empire and Resistance",
+    "units": 4,
+    "designations": [
+      "B-Hum"
+    ],
+    "faculty": "Faculty of Arts and Social Sciences"
+  },
+  {
+    "code": "WL 360",
+    "title": "National Literature as World Literature",
+    "units": 4,
+    "designations": [
+      "B-Hum"
+    ],
+    "faculty": "Faculty of Arts and Social Sciences"
+  },
+  {
+    "code": "WL 402W",
+    "title": "Stories of Modernity",
+    "units": 4,
+    "designations": [
+      "W"
+    ],
+    "faculty": "Faculty of Arts and Social Sciences"
+  },
+  {
+    "code": "WL 404W",
+    "title": "Literature and Translation",
+    "units": 3,
+    "designations": [
+      "W"
+    ],
+    "faculty": "Faculty of Arts and Social Sciences"
+  }
+]

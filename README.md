@@ -56,12 +56,15 @@ Plans, priorities and design principles are in [ROADMAP.md](ROADMAP.md).
 
 | File | Edited by | Contents |
 |---|---|---|
-| `programs/<id>.json` | hand | One file per program: its curricula (e.g. Pre/Post-Fall 2024), each with plan templates (courses per term, co-op variants), elective groups (course codes to sync, e.g. `technical`) and concentrations |
+| `programs/<id>.json` | hand | One file per program: its curricula (e.g. Pre/Post-Fall 2024), each with degree requirements (Major, Double Degree), elective groups (e.g. `technical` Group A), concentrations (AgriTech) and plan templates (courses per term, co-op variants). Requirements are written from the local calendar copy below |
+| `calendar/` | `npm run calendar:update` | Local copy of SFU's degree requirements: `sources.json` (each page's link and copy date), `text/` (the pages' wording) and `wqb-courses.json` (WQB certified courses). The site never reads SFU's calendar directly |
 | `placeholderCourses.json` | hand | Placeholder slots (COMP ELEC 1, CO-OP, ...) |
 | `equivalencyOverrides.json` | hand | Equivalency pairs to add, or to change the type of a generated pair |
 | `generated/*.json` | `npm run sync-data` | Courses, raw SFU requirement text, and equivalencies from outline notes |
 
-Refresh once a term: run `npm run sync-data`, review `git diff src/data/generated`, then run `npm run test:dependency-graph`. If the requirement map changed on purpose, paste the new snapshot the test prints into `src/lib/requirements/dependencyGraph.snapshot.json`.
+When a new SFU calendar is published, run `npm run calendar:check` to see what changed compared with the local copy. To move to the new calendar, change the URLs in `calendar/sources.json` if needed, run `npm run calendar:update`, update the degree requirements in `programs/<id>.json` to match, and run `npm run test:requirements` (checks `programs/<id>.json` against the saved wording, and every recommended plan against its degree).
+
+Refresh once a term: run `npm run sync-data`, review `git diff src/data/generated`, then run `npm run test:dependency-graph` and `npm run test:plan-validation` (every recommended plan must pass prerequisite validation). If the requirement map changed on purpose, paste the new snapshot the test prints into `src/lib/requirements/dependencyGraph.snapshot.json`.
 
 ---
 

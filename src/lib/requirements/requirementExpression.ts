@@ -13,6 +13,13 @@ const LIST_SEPARATOR = /^(?:,\s*(?:and\s+)?|\s+and\s+)/i;
 const OR_SEPARATOR = /^\s+or\s+/i;
 const ONE_OF = /\b(?:one of|any of|either)\s+(.+)/i;
 const STARTS_WITH_ONE_OF = /^(?:one of|any of|either)\b/i;
+/**
+ * An Oxford-comma list of alternatives, "MATH 150, MATH 151, MATH 154, or MATH 157"
+ * (codes are full after department shorthand is expanded): the final ", or" makes
+ * every comma in the run an "or".
+ */
+const OXFORD_OR_LIST =
+  /[A-Z]{2,5}\s+\d{3}[A-Z]?(?:,\s*[A-Z]{2,5}\s+\d{3}[A-Z]?)+,\s*or\s+(?=[A-Z]{2,5}\s+\d{3})/g;
 
 /** Remove "(or equivalent)" style notes. */
 function cleanClause(text: string): string {
@@ -114,6 +121,7 @@ export function parsePrerequisiteExpression(
 ): PrerequisiteExpression | null {
   const cleaned = expandDepartmentShorthand(normalizeRequirementSection(text))
     .replace(GRADE_CONDITION, "")
+    .replace(OXFORD_OR_LIST, (list) => list.replace(/,\s*(?:or\s+)?/g, " or "))
     .replace(/\s*[;,]\s*or\s+/gi, " or ");
   if (!cleaned) return null;
 

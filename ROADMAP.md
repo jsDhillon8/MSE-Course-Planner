@@ -51,26 +51,36 @@ Full history in [CHANGELOG.md](CHANGELOG.md).
    - One shared course list and one shared equivalency list across all programs.
    - Start with MSE only. SEE later tests the design.
 2. **Versioned save format** ✅ Done (Nov 17, 2026)
-   - Saved plans become `{ version, programId, curriculumId, terms, swaps }`.
+   - Saved plans become `{ version, programId, curriculumId, terms, customCourses, swaps }` (`customCourses` holds swapped-in equivalents that aren't in the course list).
    - Old saves (no version) are upgraded once when loaded.
    - Plan file import/export.
-3. **Prerequisite validation**
+3. **Prerequisite validation** ✅ Done (Nov 17, 2026)
    - Warning badges on placed courses whose prerequisites aren't met in an earlier term. Corequisites are allowed in the same term.
    - The details panel explains each warning and how to fix it, e.g. "MATH 251 needs MATH 152 in an earlier term".
    - Checked against the full prerequisite rules, so alternate prerequisites work automatically.
+4. **Local backup of degree requirements** ✅ Done (Nov 17, 2026)
+   - For each program and curriculum era, store a local copy of the SFU calendar's degree requirements: required courses, elective groups and how many are needed, concentrations, and total credits.
+   - Keep both the original calendar text (for reference) and a structured version the planner reads, each with its source link and the date it was copied.
+   - The site always reads the local copy, so it keeps working if the SFU calendar changes or is unavailable, and students on an older curriculum still see the rules that apply to them.
+   - When a new calendar is published, compare it against the local copy and review the differences before updating.
+   - Phase 3 features (electives, Agritech) and the beta release check against the calendar both use this data.
 
 ## Phase 2: Course List Expansion + Equivalents
-1. **Relationship types:** add the `alt-prereq` type and give `partial` its advisor note. See [Course relationship types](README.md#course-relationship-types) in the README for what each type does.
-2. **Sync additions:** `sync-data` adds every course named in an "or" option of the prerequisite text, plus every equivalent from the outline notes, each tagged `required`, `equivalent` or `alt-prereq`.
-3. **Equivalents in the course list:** grouped under the course they replace, with the terms each is offered (MSE 220 · Fall ↳ SEE 222 · Spring). Dragging one in fills the original course's slot. The swap button stays.
-4. **Alternate prerequisite courses in the list:** can be placed, marked "doesn't count toward graduation", and their credits are shown separately.
-5. **Term-offering warnings**
+1. **Curriculum-era prerequisites:** old-curriculum students stay on the old rules and resolve conflicts by appeal, so pre-2024 plans are checked against the pre-Fall 2024 outlines.
+   - Each curriculum names an `outlineTerm` (e.g. `2024/spring`); `sync-data` stores the old rules for that curriculum's MSE courses separately. Other departments (MATH, BUS, ...) keep their current rules.
+   - Validation and relationship highlights use the plan's curriculum rules. Clears the "MSE 222 needs MSE 103" style warnings on pre-2024 plans.
+   - Where the current outline asks for more, show a soft note (not a warning), e.g. "Current SFU outline also lists MSE 252; old-curriculum students usually resolve this through a prerequisite appeal."
+2. **Relationship types:** add the `alt-prereq` type and give `partial` its advisor note. See [Course relationship types](README.md#course-relationship-types) in the README for what each type does.
+3. **Sync additions:** `sync-data` adds every course named in an "or" option of the prerequisite text, plus every equivalent from the outline notes, each tagged `required`, `equivalent` or `alt-prereq`.
+4. **Equivalents in the course list:** grouped under the course they replace, with the terms each is offered (MSE 220 · Fall ↳ SEE 222 · Spring). Dragging one in fills the original course's slot. The swap button stays.
+5. **Alternate prerequisite courses in the list:** can be placed, marked "doesn't count toward graduation", and their credits are shown separately.
+6. **Term-offering warnings**
    - When a course is placed in a term it's not usually offered, suggest an equivalent that is offered that term.
    - **New-course warning:** many new-curriculum MSE courses were first offered in Fall 2024, so the 9-term lookup wrongly flags them as "rare" or "never". When a course has no offerings before Fall 2024 (or before its first recorded offering), show a soft "new course, limited offering history" note instead of the rare/never warning.
-6. **MSE ↔ SEE equivalency data.**
-7. **Details panel polish:** group equivalents by department (SEE, ENSC, MATH, ...) and show each one's type and source.
-8. **Optional:** a grid toggle that highlights every course with an equivalent.
-9. **Semester availability filter** in the custom page's course picker: show only courses usually offered in Fall, Spring or Summer, using the same offering history as the term warnings. Helps find the equivalent that runs in the term you need.
+7. **MSE ↔ SEE equivalency data.**
+8. **Details panel polish:** group equivalents by department (SEE, ENSC, MATH, ...) and show each one's type and source.
+9. **Optional:** a grid toggle that highlights every course with an equivalent.
+10. **Semester availability filter** in the custom page's course picker: show only courses usually offered in Fall, Spring or Summer, using the same offering history as the term warnings. Helps find the equivalent that runs in the term you need.
 
 ## Phase 3: Requirement Features (built for any program)
 1. Reusable **requirement group** component plus an electives tab. Technical electives come first: Group A, at least 4 for old-curriculum students.

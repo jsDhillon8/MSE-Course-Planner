@@ -45,3 +45,8 @@
 .reset-progress-btn:hover {
   background: var(--danger-soft);
 }
+
+.extra-credits {
+  color: var(--text-muted);
+  font-size: 0.85rem;
+}

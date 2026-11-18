@@ -44,13 +44,22 @@ check(
 check(
   "MSE 381 full prerequisite chain",
   graph.getPrerequisites("mse381", true),
-  ["math150", "math151", "math152", "math232", "math251", "math260", "mse103", "mse280", "mse281"]
+  // MSE 282 replaced MSE 280 ("may not take for further credit"), so either counts.
+  ["math150", "math151", "math152", "math232", "math251", "math260", "mse103", "mse280", "mse281", "mse282"]
 );
 check("MSE 281 takes MSE 250 as a corequisite, not a prerequisite", graph.getCorequisites("mse281"), ["mse250"]);
 check(
   "Highlight roles for MSE 251 (direct)",
   [...graph.getHighlights("mse251", false).roles].map(([id, role]) => `${id}:${role}`),
-  ["mse251:selected", "mse250:prerequisite", "mse310:dependent", "mse311:dependent", "mse352:dependent", "mse353:dependent"]
+  [
+    "mse251:selected",
+    "mse250:prerequisite",
+    "mse310:dependent",
+    "mse311:dependent",
+    "mse352:dependent",
+    "mse353:dependent",
+    "mse451:dependent",
+  ]
 );
 
 // ── Snapshot ──
