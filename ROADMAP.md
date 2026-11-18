@@ -56,13 +56,26 @@ Grow the MSE Course Navigator into a planner for **all SFU engineering programs*
 6. **MSE ↔ SEE equivalency data.**
 7. **Details panel polish:** group equivalents by department (SEE, ENSC, MATH, ...) and show each one's type and source.
 8. **Optional:** a grid toggle that highlights every course with an equivalent.
+9. **Semester availability filter** in the custom page's course picker: show only courses usually offered in Fall, Spring or Summer, using the same offering history as the term warnings. Helps find the equivalent that runs in the term you need.
 
 ## Phase 3: Requirement Features (built for any program)
 1. Reusable **requirement group** component plus an electives tab. Technical electives come first: Group A, at least 4 for old-curriculum students.
 2. **Agritech concentration:** a toggle with its requirements section at the top. Rules come from the SFU calendar and get confirmed before building.
 3. **Complementary electives** using the same component, with an optional breadth filter.
 
-## Phase 4: Expanding and Later Items
+## Phase 4: Redesign
+Done after Phases 1-3 so the new design is built around the finished feature set instead of being redone as features land.
+1. **Site restructure**
+   - New **landing page**: what the planner does, and a clear starting point (choose program → curriculum → plan, or jump into a custom schedule).
+   - Rework page structure and navigation so it scales to multiple programs (MSE first, SEE and others later).
+   - A consistent visual style across all pages (layout, spacing, colours, typography) in light and dark mode.
+2. **Custom page UI/UX redesign**
+   - Rethink the layout of the term grid, course picker and details panel together.
+   - Make adding, moving and swapping courses (including equivalents) obvious without needing the welcome guide.
+   - Bring validation, offering and new-course warnings into one clear place.
+   - Usable on phones and tablets, not only desktop.
+
+## Phase 5: Expanding and Later Items
 - SEE as the second full program, then other engineering programs.
 - Calendar view (optional).
 - Touch and keyboard drag, batch move.
