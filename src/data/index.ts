@@ -5,11 +5,36 @@ import courseRequirementsJson from "./generated/courseRequirements.json";
 import generatedEquivalenciesJson from "./generated/equivalencies.json";
 import equivalencyOverridesJson from "./equivalencyOverrides.json";
 import placeholderCoursesJson from "./placeholderCourses.json";
-import templatesJson from "./templates.json";
-import { Course, CourseEquivalency, PageTemplate } from "../types";
+import mseProgramJson from "./programs/mse.json";
+import { Course, CourseEquivalency, Curriculum, PageTemplate, Program } from "../types";
 
 export const courses = [...generatedCoursesJson, ...placeholderCoursesJson] as Course[];
-export const pageTemplates = templatesJson as PageTemplate[];
+
+/** Programs → curricula → templates, elective groups, concentrations. One file per program. */
+export const programs = [mseProgramJson] as Program[];
+
+/** Every template across all programs and curricula, tagged with where it came from. */
+export const pageTemplates: PageTemplate[] = programs.flatMap((program) =>
+  program.curricula.flatMap((curriculum) =>
+    curriculum.templates.map((template) => ({
+      ...template,
+      programId: program.id,
+      curriculumId: curriculum.id,
+    }))
+  )
+);
+
+/** Used for new plans and for old saves that predate the program layer. */
+export const DEFAULT_PROGRAM_ID = programs[0].id;
+export const DEFAULT_CURRICULUM_ID = programs[0].curricula[0].id;
+
+export function getProgram(programId: string): Program | undefined {
+  return programs.find((program) => program.id === programId);
+}
+
+export function getCurriculum(programId: string, curriculumId: string): Curriculum | undefined {
+  return getProgram(programId)?.curricula.find((curriculum) => curriculum.id === curriculumId);
+}
 export const courseRequirementsById = courseRequirementsJson as Record<string, string>;
 
 /** Generated equivalencies, with hand-edited overrides replacing the type or adding pairs. */

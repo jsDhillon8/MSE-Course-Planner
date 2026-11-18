@@ -2,6 +2,61 @@
   grid-template-columns: minmax(220px, 280px) 1fr 320px;
 }
 
+/*
+ * Wide screens: the page itself doesn't scroll. Header and footer stay put and the
+ * course list, schedule grid and details panel each scroll on their own.
+ * Narrow screens keep the single-column layout with normal page scrolling.
+ */
+@media (min-width: 1001px) {
+  .custom-shell {
+    height: 100vh;
+    height: 100dvh;
+    grid-template-rows: auto minmax(0, 1fr) auto;
+  }
+
+  .custom-shell .custom-layout {
+    min-height: 0;
+    overflow: hidden;
+  }
+
+  .custom-layout > .picker-panel,
+  .custom-layout > .grid-panel,
+  .custom-layout > .details-panel {
+    min-height: 0;
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    /* Thin, theme-colored scrollbars (Firefox, Chrome/Edge 121+). */
+    scrollbar-width: thin;
+    scrollbar-color: var(--border) transparent;
+  }
+
+  /* Safari and older Chromium. */
+  .custom-layout > .picker-panel::-webkit-scrollbar,
+  .custom-layout > .grid-panel::-webkit-scrollbar,
+  .custom-layout > .details-panel::-webkit-scrollbar {
+    width: 8px;
+  }
+
+  .custom-layout > .picker-panel::-webkit-scrollbar-thumb,
+  .custom-layout > .grid-panel::-webkit-scrollbar-thumb,
+  .custom-layout > .details-panel::-webkit-scrollbar-thumb {
+    background: var(--border);
+    border-radius: 4px;
+  }
+
+  .custom-layout > .picker-panel::-webkit-scrollbar-thumb:hover,
+  .custom-layout > .grid-panel::-webkit-scrollbar-thumb:hover,
+  .custom-layout > .details-panel::-webkit-scrollbar-thumb:hover {
+    background: var(--text-subtle);
+  }
+
+  .custom-layout > .picker-panel::-webkit-scrollbar-track,
+  .custom-layout > .grid-panel::-webkit-scrollbar-track,
+  .custom-layout > .details-panel::-webkit-scrollbar-track {
+    background: transparent;
+  }
+}
+
 .custom-layout .term-column .course-list {
   min-height: 72px;
 }

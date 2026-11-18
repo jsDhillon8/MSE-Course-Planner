@@ -12,6 +12,8 @@ function App() {
       <WelcomeModal isOpen={isWelcomeOpen} onDismiss={dismissWelcome} />
       <Routes>
         <Route path="/" element={<Navigate to="/planner/post-2024-4-year" replace />} />
+        {/* The double degree was split by curriculum; keep old links working. */}
+        <Route path="/planner/double-degree" element={<Navigate to="/planner/double-degree-post-2024" replace />} />
         <Route path="/planner/:pageId" element={<PlannerPage onOpenWelcome={openWelcome} />} />
         <Route path="/custom" element={<CustomSchedulePage onOpenWelcome={openWelcome} />} />
         <Route path="*" element={<Navigate to="/" replace />} />

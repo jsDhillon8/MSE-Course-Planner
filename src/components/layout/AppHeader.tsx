@@ -59,13 +59,7 @@ export function AppHeader({
           >
             {template.availableVariants.map((option) => (
               <option key={option} value={option}>
-                {template.curriculum === "double-degree"
-                  ? option === "B"
-                    ? "Pre-Fall 2024"
-                    : option === "A"
-                      ? "Post-Fall 2024"
-                      : `Option ${option}`
-                  : `Option ${option}`}
+                Option {option}
               </option>
             ))}
           </select>

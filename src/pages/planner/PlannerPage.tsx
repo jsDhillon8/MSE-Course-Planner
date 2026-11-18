@@ -82,7 +82,7 @@ export function PlannerPage({ onOpenWelcome }: PlannerPageProps) {
           <h2>{template.title}</h2>
           <p className="meta">
             Curriculum: <b>{formatCurriculum(template)}</b> | Plan: <b>{template.planLength}</b>
-            {template.supportsVariants && template.curriculum !== "double-degree" ? (
+            {template.supportsVariants ? (
               <>
                 {" "}
                 | 5-year option:

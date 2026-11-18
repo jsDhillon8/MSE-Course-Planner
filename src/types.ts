@@ -1,4 +1,3 @@
-export type CurriculumType = "pre-2024" | "post-2024" | "double-degree";
 export type PlanLength = "4-year" | "5-year";
 export type VariantId = "A" | "B" | "C";
 export type TermName = "spring" | "summer" | "fall";
@@ -52,7 +51,7 @@ export type ThemeMode = "light" | "dark";
  *   renders as "BUS 343 OR BUEC 232").
  *
  * This keeps the recommended-schedule config purely data-driven: adding,
- * removing, or grouping courses only requires editing `templates.json`,
+ * removing, or grouping courses only requires editing `programs/*.json`,
  * never the React components that render it.
  */
 export type CourseSlot = string | string[];
@@ -63,10 +62,10 @@ export interface TermPlan {
   courseIds: CourseSlot[];
 }
 
-export interface PageTemplate {
+/** A recommended schedule as written in `programs/*.json` (inside a curriculum). */
+export interface TemplateDefinition {
   id: string;
   title: string;
-  curriculum: CurriculumType;
   planLength: PlanLength;
   supportsVariants: boolean;
   availableVariants: VariantId[];
@@ -84,6 +83,46 @@ export interface PageTemplate {
    * `getActiveTerms()` from `utils/scheduleTerms` to read the right one.
    */
   terms?: TermPlan[];
+}
+
+/** A template with the program and curriculum it belongs to (filled in by the data loader). */
+export interface PageTemplate extends TemplateDefinition {
+  programId: string;
+  curriculumId: string;
+}
+
+/** A named list of courses a student picks from (e.g. technical electives). */
+export interface ElectiveGroup {
+  id: string;
+  label: string;
+  /** SFU course codes, e.g. "MSE 450". `npm run sync-data` fetches each one. */
+  courseCodes: string[];
+}
+
+/** An optional specialization within a curriculum (e.g. Agritech). Requirements come in Phase 3. */
+export interface Concentration {
+  id: string;
+  label: string;
+}
+
+/**
+ * One curriculum era of a program (e.g. MSE Post-Fall 2024). Requirements from
+ * different curricula are never mixed.
+ */
+export interface Curriculum {
+  id: string;
+  label: string;
+  electiveGroups: ElectiveGroup[];
+  concentrations: Concentration[];
+  templates: TemplateDefinition[];
+}
+
+/** A degree program. Courses and equivalencies are shared across all programs. */
+export interface Program {
+  id: string;
+  name: string;
+  shortName: string;
+  curricula: Curriculum[];
 }
 
 export interface CourseEquivalency {
