@@ -4,6 +4,7 @@ import { courseById } from "../../data";
 import { offeringFill, offeringTooltip } from "../../api/sfuOutlines";
 import { Course, CourseHighlightRole, CourseSlot, OfferingHistory, TermName } from "../../types";
 import { slotCourseIds } from "../../lib/scheduleTerms";
+import { notOfferedRecentlyReason } from "../../lib/recentOffering";
 import { OfferingHistoryState } from "../../hooks/useOfferingHistories";
 import type { PlanRequirementWarning } from "../../lib/requirements/planValidation";
 import "./ScheduleSlotCard.css";
@@ -79,6 +80,11 @@ interface ScheduleSlotCardProps {
   requirementWarnings?: PlanRequirementWarning[];
   /** Set when this course's credits don't count toward graduation (custom schedule only). */
   notCountingReason?: string;
+  /** The course's variant group (same lecture with or without a lab or tutorial), shown as a toggle. */
+  variantIds?: string[];
+  onChooseVariant?: (fromId: string, toId: string) => void;
+  /** Variants that can't be picked, e.g. already placed elsewhere. */
+  isVariantDisabled?: (courseId: string) => boolean;
 }
 
 export function offeringWarningLevel(
@@ -114,6 +120,9 @@ export function ScheduleSlotCard({
   onUndoSwap,
   requirementWarnings = [],
   notCountingReason,
+  variantIds,
+  onChooseVariant,
+  isVariantDisabled,
 }: ScheduleSlotCardProps) {
   const courseIds = slotCourseIds(slot);
   const isChoiceGroup = courseIds.length > 1;
@@ -129,6 +138,7 @@ export function ScheduleSlotCard({
       {courseIds.map((courseId, index) => {
         const course = courseLookup[courseId];
         const isCompleted = completedCourseIds.has(courseId);
+        const notRecentReason = course ? notOfferedRecentlyReason(course, offeringHistory) : null;
         const warningClass =
           warning === "never"
             ? " offering-warning never-offered"
@@ -146,7 +156,7 @@ export function ScheduleSlotCard({
               <div
                 className={`${getCourseCardClassName(course.id, highlightRoles)}${
                   isCompleted ? " completed" : ""
-                }${draggable ? " is-draggable" : ""}${warningClass}`}
+                }${draggable ? " is-draggable" : ""}${warningClass}${notRecentReason ? " not-offered-recently" : ""}`}
                 role="button"
                 tabIndex={0}
                 draggable={draggable}
@@ -194,6 +204,37 @@ export function ScheduleSlotCard({
                 </label>
                 <strong>{course.code}</strong>
                 <span>{course.title}</span>
+                {variantIds && variantIds.length > 1 && onChooseVariant && (
+                  <div
+                    className="variant-toggle"
+                    role="group"
+                    aria-label={`${course.code}: versions of the same course`}
+                    title="Versions of the same course (e.g. with or without a lab). SFU gives credit for only one. Pick the one you're taking."
+                    onClick={(event) => event.stopPropagation()}
+                    onMouseDown={(event) => event.stopPropagation()}
+                    onKeyDown={(event) => event.stopPropagation()}
+                  >
+                    {variantIds.map((variantId) => {
+                      const variant = courseLookup[variantId];
+                      const active = variantId === course.id;
+                      return (
+                        <button
+                          key={variantId}
+                          type="button"
+                          draggable={false}
+                          className={active ? "active" : undefined}
+                          aria-pressed={active}
+                          disabled={!active && isVariantDisabled?.(variantId)}
+                          onClick={() => {
+                            if (!active) onChooseVariant(course.id, variantId);
+                          }}
+                        >
+                          {variant?.code ?? variantId} · {variant?.credits ?? "?"} cr
+                        </button>
+                      );
+                    })}
+                  </div>
+                )}
                 {requirementWarnings.length > 0 && (
                   <span
                     className="requirement-badge"
@@ -206,6 +247,12 @@ export function ScheduleSlotCard({
                     <span className="visually-hidden">
                       : {requirementWarnings.map((warning) => warning.message).join(" ")}
                     </span>
+                  </span>
+                )}
+                {notRecentReason && (
+                  <span className="not-offered-badge" title={notRecentReason}>
+                    Not offered recently
+                    <span className="visually-hidden">: {notRecentReason}</span>
                   </span>
                 )}
                 {notCountingReason && (

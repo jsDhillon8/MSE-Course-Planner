@@ -267,6 +267,15 @@ p.empty-note.historical-note {
   color: var(--success);
 }
 
+/* Faded like old courses in the course picker; the badge style comes from ScheduleSlotCard.css. */
+.equiv-box.not-offered-recently {
+  opacity: 0.65;
+}
+
+.equiv-box.not-offered-recently .not-offered-badge {
+  justify-self: start;
+}
+
 .equiv-box-title {
   font-size: 0.82rem;
   color: var(--text-muted);
@@ -384,4 +393,11 @@ p.empty-note.historical-note {
   padding-left: 18px;
   display: grid;
   gap: 4px;
+}
+
+/* "Not offered in the last 3 terms. Last offered Fall 2023." */
+.not-offered-note {
+  margin: 4px 0;
+  font-size: 0.8rem;
+  color: var(--text-muted);
 }

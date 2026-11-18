@@ -5,6 +5,7 @@ import generatedCoursesJson from "./generated/courses.json";
 import courseRequirementsJson from "./generated/courseRequirements.json";
 import courseRequirementsByOutlineTermJson from "./generated/courseRequirementsByOutlineTerm.json";
 import generatedEquivalenciesJson from "./generated/equivalencies.json";
+import skippedCoursesJson from "./generated/skippedCourses.json";
 import placeholderCoursesJson from "./placeholderCourses.json";
 import mseProgramJson from "./programs/mse.json";
 import calendarSourcesJson from "./calendar/sources.json";
@@ -109,5 +110,11 @@ export function getRequirementTextsForOutlineTerm(outlineTerm: string | null): R
 }
 
 export const courseEquivalencies = generatedEquivalenciesJson as CourseEquivalency[];
+
+/**
+ * Equivalents and "or" options `sync-data` left out of the course list because SFU has no
+ * outline for them in the last 6 terms (e.g. CMPT 128), by id ("cmpt128").
+ */
+export const skippedCourseIds = new Set((skippedCoursesJson as { id: string }[]).map((course) => course.id));
 
 export const courseById: Record<string, Course> = Object.fromEntries(courses.map((course) => [course.id, course]));

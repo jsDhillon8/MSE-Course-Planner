@@ -7,12 +7,27 @@ import { Course, OfferedSection, SharedOutlineFields } from "../../types";
 import { buildCourseCodeIndex, isPlaceholderCourse, normalizeCourseCode } from "../../lib/courseCodes";
 import { parseEquivalents } from "../../lib/parseEquivalents";
 import type { PlanRequirementNote, PlanRequirementWarning } from "../../lib/requirements/planValidation";
+import { notOfferedRecentlyReason, skippedCourseReason } from "../../lib/recentOffering";
 
 const courseIdByCode = buildCourseCodeIndex(courses);
 
+/**
+ * Why an equivalent counts as not offered recently, or null. Courses outside the course list
+ * are marked when the sync left them out for having no recent SFU outline (CMPT 128).
+ */
+function equivalentNotRecentReason(code: string): string | null {
+  const normalized = normalizeCourseCode(code);
+  const id = courseIdByCode.get(normalized) ?? courseIdByCode.get(normalized.replace(/\s+/g, ""));
+  const course = id ? courseById[id] : undefined;
+  if (course) return notOfferedRecentlyReason(course);
+  return skippedCourseReason(normalized.replace(/\s+/g, "").toLowerCase());
+}
+
 /** Equivalent course codes listed in the SFU outline notes (seed equivalencies excluded). */
 function outlineEquivalentCodes(notes: string | undefined, selfCode: string): string[] {
-  return parseEquivalents(notes, selfCode).map((item) => item.code);
+  return parseEquivalents(notes, selfCode)
+    .filter((item) => !item.orderRuleOnly)
+    .map((item) => item.code);
 }
 
 interface LiveOutlineBlockProps {
@@ -46,9 +61,10 @@ function EquivalentBoxCard({
   swapBusy,
   onSwapIntoPlan,
 }: EquivalentBoxCardProps) {
+  const notRecentReason = equivalentNotRecentReason(box.code);
   return (
     <div
-      className={`equiv-box${isActive ? " active" : ""}`}
+      className={`equiv-box${isActive ? " active" : ""}${notRecentReason ? " not-offered-recently" : ""}`}
       role="button"
       tabIndex={0}
       aria-pressed={isActive}
@@ -68,6 +84,12 @@ function EquivalentBoxCard({
         </span>
       </div>
       {box.title && <span className="equiv-box-title">{box.title}</span>}
+      {notRecentReason && (
+        <span className="not-offered-badge" title={notRecentReason}>
+          Not offered recently
+          <span className="visually-hidden">: {notRecentReason}</span>
+        </span>
+      )}
       {swapEnabled && (
         <button
           type="button"
@@ -307,6 +329,9 @@ export function CourseDetailsPanel({
 
     for (const item of courseEquivalencies) {
       if (item.sourceCourseId !== selectedCourse.id) continue;
+      // alt-prereq courses (MACM 101 in MATH 232's "MATH 151 or MACM 101") only count in some
+      // prerequisites and never fill the slot, so they aren't equivalents and can't be swapped in.
+      if (item.equivalencyType === "alt-prereq") continue;
       const equivalentCourse = courseById[item.equivalentCourseId];
       if (!equivalentCourse) continue;
 
@@ -327,7 +352,10 @@ export function CourseDetailsPanel({
 
     const sharedOutline = liveData.sharedOutline;
     if (sharedOutline?.notes) {
-      const parsed = parseEquivalents(sharedOutline.notes, selectedCourse.code);
+      // Order rules ("taken CMPT 125 first may not then take") aren't equivalents.
+      const parsed = parseEquivalents(sharedOutline.notes, selectedCourse.code).filter(
+        (item) => !item.orderRuleOnly
+      );
       for (const item of parsed) {
         const normalized = normalizeCourseCode(item.code);
         const existing = byCode.get(normalized);
@@ -349,7 +377,15 @@ export function CourseDetailsPanel({
       }
     }
 
-    return [...byCode.values()].sort((a, b) => a.code.localeCompare(b.code));
+    // Current courses first, then old ones that still have course data, then courses with
+    // no data in the planner (only named in SFU's notes, e.g. retired CMPT 128) at the very bottom.
+    const rank = (box: EquivalentBox) => {
+      const normalized = normalizeCourseCode(box.code);
+      const known = courseIdByCode.has(normalized) || courseIdByCode.has(normalized.replace(/\s+/g, ""));
+      if (!known) return 2;
+      return equivalentNotRecentReason(box.code) ? 1 : 0;
+    };
+    return [...byCode.values()].sort((a, b) => rank(a) - rank(b) || a.code.localeCompare(b.code));
   }, [selectedCourse, liveData.sharedOutline]);
 
   const handleSwap = async (box: EquivalentBox) => {
@@ -370,6 +406,9 @@ export function CourseDetailsPanel({
           <h3>{selectedCourse.code}</h3>
           <p className="course-title-text">{selectedCourse.title}</p>
           <p>Credits: {selectedCourse.credits}</p>
+          {notOfferedRecentlyReason(selectedCourse) && (
+            <p className="not-offered-note">{notOfferedRecentlyReason(selectedCourse)}</p>
+          )}
 
           {requirementWarnings.length > 0 && (
             <section className="requirement-warnings" aria-label="Prerequisite warnings">

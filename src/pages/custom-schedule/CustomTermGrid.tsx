@@ -7,9 +7,12 @@ import {
   CustomPlan,
   findSwapForCourse,
   placeCourse,
+  placedCourseIds,
   removeCourseFromPlan,
+  switchVariantInPlan,
   termNameFromLabel,
 } from "../../lib/customPlan";
+import { variantGroup } from "../../lib/equivalence";
 import { useOfferingHistories } from "../../hooks/useOfferingHistories";
 import type { PlanRequirementWarning } from "../../lib/requirements/planValidation";
 import { groupTermsByYear } from "../../lib/scheduleTerms";
@@ -42,6 +45,7 @@ export function CustomTermGrid({
   const { dragging, hoverTarget, setHoverTarget, keepDrag, dropOnTerm, termDropState, beginDrag, endDrag } = drag;
   const lookup = cardProps.courseLookup ?? {};
   const termsByYear = useMemo(() => groupTermsByYear(plan.terms), [plan.terms]);
+  const placed = useMemo(() => placedCourseIds(plan), [plan]);
 
   return (
     <div className="year-grid">
@@ -126,6 +130,11 @@ export function CustomTermGrid({
                           onUndoSwap={swap ? onUndoSwap : undefined}
                           requirementWarnings={requirementWarnings.get(courseId)}
                           notCountingReason={notCountingReasons.get(courseId)}
+                          variantIds={variantGroup(courseId)}
+                          onChooseVariant={(fromId, toId) =>
+                            setPlan((current) => switchVariantInPlan(current, fromId, toId))
+                          }
+                          isVariantDisabled={(id) => placed.has(id)}
                         />
                       );
                     })}

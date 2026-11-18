@@ -70,9 +70,23 @@ Full history in [CHANGELOG.md](CHANGELOG.md).
    - Each curriculum names an `outlineTerm` (e.g. `2024/spring`); `sync-data` stores the old rules for that curriculum's MSE courses separately. Other departments (MATH, BUS, ...) keep their current rules.
    - Validation and relationship highlights use the plan's curriculum rules. Clears the "MSE 222 needs MSE 103" style warnings on pre-2024 plans.
    - Where the current outline asks for more, show a soft note (not a warning), e.g. "Current SFU outline also lists MSE 252; old-curriculum students usually resolve this through a prerequisite appeal."
-2. **Relationship types:** add the `alt-prereq` type and give `partial` its advisor note. See [Course relationship types](README.md#course-relationship-types) in the README for what each type does.
-3. **Sync additions:** `sync-data` adds every course named in an "or" option of the prerequisite text, plus every equivalent from the outline notes, each tagged `required`, `equivalent` or `alt-prereq`.
-4. **Equivalents in the course list:** grouped under the course they replace, with the terms each is offered (MSE 220 · Fall ↳ SEE 222 · Spring). Dragging one in fills the original course's slot. The swap button stays.
+2. **Relationship types** ✅ Done (Nov 17, 2026): reduce to three types: `full`, `variant` and `alt-prereq`. See [Course relationship types](README.md#course-relationship-types) in the README for what each type does.
+   - Add `alt-prereq`: satisfies prerequisites only where SFU's prerequisite text lists it, never fills a graduation slot (e.g. MATH 260 for MSE 281's dependents).
+   - Add `variant`: the same lecture with or without a lab or tutorial (MATH 150/151, CHEM 120/121). Fills the slot and satisfies prerequisites; credits differ. Shown as one course card with a with/without lab or tutorial toggle that updates the credit counter.
+   - Remove `partial` and `elective-only`: no real cases (SFU's "may not take for further credit" notes mean full overlap, and elective groups in Phase 3 handle elective-only). Can be added back if a real case appears, e.g. transfer credit.
+   - Re-tag MATH 150/151 and CHEM 120/121 as `variant` (also fixes CHEM being `partial` one way and `full` the other).
+   - **Detect variants automatically** by combining two signals:
+
+     | Calendar "one of" group | SFU "may not take for further credit" note | Result |
+     | :--- | :--- | :--- |
+     | Yes | Yes | `variant` (MATH 150/151, CHEM 120/121) |
+     | Yes | No | Choice slot (e.g. BUS 374 / BUS 381) |
+     | No | Yes | `full` equivalent (e.g. SEE 222 ↔ MSE 220) |
+
+     The "one of" groups come from the local degree-requirements backup (Phase 1, step 4), so that step comes first. Outline notes are already synced. No overrides file: fix a wrong result in the calendar copy or the sync rule instead.
+   - Update the README relationship table once this ships.
+3. **Sync additions** ✅ Done (Nov 18, 2026): `sync-data` adds every course named in an "or" option of the prerequisite text, plus every equivalent from the outline notes, each tagged `required`, `equivalent` or `alt-prereq`.
+4. **Equivalents in the course list** ✅ Done (Nov 18, 2026): grouped under the course they replace, with the terms each is offered (MSE 220 · Fall ↳ SEE 222 · Spring). Dragging one in fills the original course's slot. The swap button stays.
 5. **Alternate prerequisite courses in the list:** can be placed, marked "doesn't count toward graduation", and their credits are shown separately.
 6. **Term-offering warnings**
    - When a course is placed in a term it's not usually offered, suggest an equivalent that is offered that term.

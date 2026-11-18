@@ -28,7 +28,10 @@ function splitSfuRequirementsSection(combinedText: string): SplitRequirementsTex
   if (!body) return { ...EMPTY };
 
   body = body.replace(/^Prerequisites:\s*/i, "");
-  const match = body.match(/([\s\S]*?)(?:Corequisites?:\s*)([\s\S]*)/i);
+  // Corequisites start at a "Corequisite(s):" heading that begins a line or sentence. Not
+  // "Recommended Corequisite: PHYS 132" (advice), and not "... and corequisite: BUS 202" in the
+  // middle of a sentence, which belongs to that sentence's route.
+  const match = body.match(/([\s\S]*?)(?<=^|[.;\n]\s*)Corequisites?:\s*([\s\S]*)/);
 
   if (match) {
     return {
@@ -61,13 +64,15 @@ function extractLabeledSection(description: string, label: "Prerequisite" | "Cor
 
 /**
  * Move "X may be taken concurrently" phrases from the prerequisite text to corequisites.
- * X is everything back to the previous sentence break or comma, e.g. "MSE 281 (or MATH 260)".
+ * X is everything back to the previous sentence break or comma, e.g. "MSE 281 (or MATH 260)",
+ * or a whole "MATH 150, MATH 151, MATH 154, or MATH 157" list. A trailing "with ECON 233"
+ * (the course itself) is dropped.
  */
 function extractConcurrentCorequisites(text: string): SplitRequirementsText {
   const corequisites: string[] = [];
 
   let prerequisiteText = text.replace(
-    /([^.;,]*?)\s+may be taken concurrently\.?/gi,
+    /((?:[A-Z]{2,5}\s+\d{3}[A-Z]?,\s*)+or\s+[^.;,]*?|[^.;,]*?)\s+may be taken concurrently(?:\s+with\s+[A-Z]{2,5}\s+\d{3}[A-Z]?)?\.?/gi,
     (_match, courses: string) => {
       corequisites.push(courses.trim());
       return "";

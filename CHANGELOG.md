@@ -4,10 +4,19 @@ What's new in the SFU MSE Course Navigator, newest first. Upcoming work is in [R
 
 ---
 
-## November 17, 2026 - Unreleased
+## November 18, 2026 - Unreleased (0.1.8)
 - **Pre-Fall 2024 plans are checked against the old MSE prerequisites** (the Spring 2024 outlines), so old-curriculum plans no longer show warnings like "MSE 222 needs MSE 103". Courses from other departments (MATH, PHYS, BUS, ...) still use their current rules.
 - Where the current SFU outline asks for more than the old one, the course details panel shows a soft note instead of a warning, e.g. "Current SFU outline also lists MSE 252; old-curriculum students usually resolve this through a prerequisite appeal."
 - Relationship highlights also follow your curriculum's prerequisites.
+- **"Not offered recently" badge:** courses with no sections this term, next term or the 3 terms before are marked, with the last term they ran in the tooltip and the course details panel. In the course picker they're faded and listed last in their department, but can still be found and added (e.g. older courses on the pre-Fall 2024 curriculum). The same goes for the equivalent courses listed in the course details panel, including retired ones that are no longer in the course list (e.g. CMPT 128 and CMPT 166 under CMPT 130). That list shows current courses first, then older ones, then courses the planner has no details for.
+- **Equivalents are grouped in the course picker:** SEE, ENSC and other courses that replace a required course (e.g. SEE 222 for MSE 220) now sit under that course. Open the group to see which terms each one is usually offered. Dragging an equivalent onto the schedule takes the place of the original course if it's already in your plan, and "Undo swap" brings the original back. Searching for an equivalent opens its group.
+- **More courses in the course list:** every equivalent named in a course's SFU outline (e.g. SEE courses that replace MSE ones) and every "or" option in a prerequisite (e.g. MATH 154 and MATH 157 for MATH 152) can now be found and placed.
+- **Fewer false prerequisite warnings:** prerequisites that can be met without an SFU course (e.g. Chemistry 12 for CHEM 120) or by a separate route for your program (e.g. double degree students for BUS 360W) no longer ask for a course. Notes like "must not be taken concurrently with MSE 493" and recommendations are no longer read as prerequisites, and MATH 251 now accepts MATH 158 or MATH 154 + 155 as well as MATH 152.
+- Courses that are only another option in a prerequisite (e.g. MACM 101 in MATH 232's "MATH 150 or 151 or MACM 101") are no longer shown as equivalents in the course details panel, and can't be swapped into a slot.
+- **ECON 103 / ECON 113 and ECON 105 / ECON 115** now share one card with the version toggle, like MATH 150 / 151, and count as the same course. SFU's "taken X first may not then take this course" notes are only used together with a calendar "one of" choice, so a follow-up course like CMPT 125 isn't treated as the same as CMPT 130.
+- The recommended plan pages now work like the custom page on wide screens: the schedule and the course details panel **scroll independently** with slim scrollbars, and the header and progress footer stay in place.
+- **Reverted:** the Curriculum Relationships legend is no longer pinned while you scroll (added in 0.1.6). It now stays in place above the schedule and scrolls away with it.
+- **Lab and tutorial versions share one card:** MATH 150 / MATH 151 and CHEM 120 / CHEM 121 (the same lecture with or without a lab or tutorial) now appear as one course in the custom schedule, with a toggle to pick the one you're taking. Term credits and the progress footer update to match. The toggle is on the recommended plans too.
 
 ## November 17, 2026 - Prerequisite checks and degree requirements (0.1.7)
 - **Degree requirements from the SFU calendar** are now kept in the planner: required courses, "one of" choices, technical electives (Group A), complementary and business electives, and the AgriTech concentration, for both curricula and for the Major and the Double Degree. Each comes with its source link and the date it was copied.

@@ -161,6 +161,72 @@ body {
   color: var(--text-subtle);
 }
 
+/*
+ * Wide screens, every page: the page itself doesn't scroll. Header and footer stay put and
+ * each panel (course picker, schedule grid, details panel) scrolls on its own.
+ * Narrow screens keep the single-column layout with normal page scrolling.
+ */
+@media (min-width: 1001px) {
+  .app-shell {
+    height: 100vh;
+    height: 100dvh;
+    grid-template-rows: auto minmax(0, 1fr) auto;
+  }
+
+  .app-shell .planner-layout {
+    min-height: 0;
+    overflow: hidden;
+  }
+
+  .planner-layout .picker-panel,
+  .planner-layout > .grid-panel,
+  .planner-layout .details-panel {
+    min-height: 0;
+    overflow-y: auto;
+    overscroll-behavior: contain;
+  }
+}
+
+/* Thin, theme-colored scrollbars for the panels and the term grid (Firefox, Chrome/Edge 121+). */
+.planner-layout .picker-panel,
+.planner-layout > .grid-panel,
+.planner-layout .details-panel,
+.term-grid {
+  scrollbar-width: thin;
+  scrollbar-color: var(--border) transparent;
+}
+
+/* Safari and older Chromium. */
+.planner-layout .picker-panel::-webkit-scrollbar,
+.planner-layout > .grid-panel::-webkit-scrollbar,
+.planner-layout .details-panel::-webkit-scrollbar,
+.term-grid::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+.planner-layout .picker-panel::-webkit-scrollbar-thumb,
+.planner-layout > .grid-panel::-webkit-scrollbar-thumb,
+.planner-layout .details-panel::-webkit-scrollbar-thumb,
+.term-grid::-webkit-scrollbar-thumb {
+  background: var(--border);
+  border-radius: 4px;
+}
+
+.planner-layout .picker-panel::-webkit-scrollbar-thumb:hover,
+.planner-layout > .grid-panel::-webkit-scrollbar-thumb:hover,
+.planner-layout .details-panel::-webkit-scrollbar-thumb:hover,
+.term-grid::-webkit-scrollbar-thumb:hover {
+  background: var(--text-subtle);
+}
+
+.planner-layout .picker-panel::-webkit-scrollbar-track,
+.planner-layout > .grid-panel::-webkit-scrollbar-track,
+.planner-layout .details-panel::-webkit-scrollbar-track,
+.term-grid::-webkit-scrollbar-track {
+  background: transparent;
+}
+
 @media (max-width: 1000px) {
   .planner-layout {
     grid-template-columns: 1fr;
