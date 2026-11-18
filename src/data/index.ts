@@ -35,6 +35,31 @@ export function getProgram(programId: string): Program | undefined {
 export function getCurriculum(programId: string, curriculumId: string): Curriculum | undefined {
   return getProgram(programId)?.curricula.find((curriculum) => curriculum.id === curriculumId);
 }
+
+/**
+ * Course ids that can count toward graduation in a curriculum: every course in
+ * its templates (including each "choose one of" option and placeholder slots)
+ * plus its elective groups.
+ */
+export function getCurriculumCourseIds(programId: string, curriculumId: string): Set<string> {
+  const ids = new Set<string>();
+  const curriculum = getCurriculum(programId, curriculumId);
+  if (!curriculum) return ids;
+  for (const template of curriculum.templates) {
+    const termLists = template.terms ? [template.terms] : Object.values(template.termsByVariant ?? {});
+    for (const terms of termLists) {
+      for (const term of terms) {
+        for (const slot of term.courseIds) {
+          for (const id of Array.isArray(slot) ? slot : [slot]) ids.add(id);
+        }
+      }
+    }
+  }
+  for (const group of curriculum.electiveGroups) {
+    for (const code of group.courseCodes) ids.add(code.toLowerCase().replace(/\s+/g, ""));
+  }
+  return ids;
+}
 export const courseRequirementsById = courseRequirementsJson as Record<string, string>;
 
 /** Generated equivalencies, with hand-edited overrides replacing the type or adding pairs. */

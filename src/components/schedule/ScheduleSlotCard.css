@@ -202,3 +202,28 @@
   line-height: 1.35;
   color: var(--text-subtle);
 }
+
+/* ── Prerequisite / corequisite warning ── */
+.requirement-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+  padding: 1px 6px;
+  border: 1px solid var(--danger);
+  border-radius: 999px;
+  background: var(--danger-soft);
+  color: var(--danger);
+  font-size: 0.68rem;
+  font-weight: 700;
+}
+
+/* ── Credits that don't count toward graduation ── */
+.not-counting-badge {
+  display: inline-flex;
+  padding: 1px 6px;
+  border: 1px dashed var(--border);
+  border-radius: 999px;
+  color: var(--text-muted);
+  font-size: 0.68rem;
+  font-weight: 600;
+}

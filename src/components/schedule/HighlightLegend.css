@@ -12,10 +12,7 @@
 }
 
 .highlight-legend {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: 6px 16px;
+  display: block;
   margin: 12px 0 0;
   padding: 10px 12px;
   border: 1px solid var(--border-subtle);
@@ -28,10 +25,18 @@
   z-index: 5;
 }
 
-.highlight-legend h4 {
-  margin: 0;
-  width: 100%;
+.highlight-legend summary {
   font-size: 0.85rem;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.highlight-legend-body {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px 16px;
+  margin-top: 6px;
 }
 
 .legend-item {

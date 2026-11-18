@@ -3,10 +3,5 @@
     "sourceCourseId": "chem120",
     "equivalentCourseId": "chem121",
     "equivalencyType": "partial"
-  },
-  {
-    "sourceCourseId": "bus343",
-    "equivalentCourseId": "buec232",
-    "equivalencyType": "full"
   }
 ]

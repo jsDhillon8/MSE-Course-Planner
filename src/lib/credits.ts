@@ -76,6 +76,79 @@ export function computeCompletedCredits(
   return total;
 }
 
+export interface PlanCreditSummary {
+  /** Credits of placed courses that count toward graduation. */
+  graduationCredits: number;
+  /** Of those, credits for courses marked completed. */
+  completedGraduationCredits: number;
+  /** Credits of placed courses that don't count (outside the curriculum, or a repeat of an equivalent). */
+  extraCredits: number;
+  /** Why each non-counting placed course doesn't count, by course id. */
+  notCountingReasons: Map<string, string>;
+}
+
+/**
+ * Graduation credits for a custom plan. A placed course counts when it (or the
+ * course it was swapped in for, or an equivalent of either) is part of the
+ * curriculum. Equivalent courses ("may not take for further credit") count once:
+ * the earliest placed one counts. Term workload totals are unaffected.
+ */
+export function summarizePlanCredits(
+  terms: { courseIds: string[] }[],
+  swaps: { replacementId: string; originalCourseId: string }[],
+  completedCourseIds: Set<string>,
+  lookup: Record<string, Course>,
+  curriculumCourseIds: Set<string>,
+  equivalentsById: Map<string, Set<string>>
+): PlanCreditSummary {
+  const swapOriginalById = new Map(swaps.map((swap) => [swap.replacementId, swap.originalCourseId]));
+  const summary: PlanCreditSummary = {
+    graduationCredits: 0,
+    completedGraduationCredits: 0,
+    extraCredits: 0,
+    notCountingReasons: new Map(),
+  };
+  /** Ids already credited (each counted course plus its equivalents), with the course that took the credit. */
+  const creditedBy = new Map<string, string>();
+
+  for (const term of terms) {
+    for (const courseId of term.courseIds) {
+      const course = lookup[courseId];
+      if (!course || !course.credits) continue;
+
+      const original = swapOriginalById.get(courseId);
+      const sameAs = new Set([courseId, ...(equivalentsById.get(courseId) ?? [])]);
+      if (original) {
+        sameAs.add(original);
+        for (const id of equivalentsById.get(original) ?? []) sameAs.add(id);
+      }
+
+      const repeatOf = [...sameAs].map((id) => creditedBy.get(id)).find(Boolean);
+      const inCurriculum = [...sameAs].some((id) => curriculumCourseIds.has(id));
+
+      if (repeatOf) {
+        summary.extraCredits += course.credits;
+        summary.notCountingReasons.set(
+          courseId,
+          `Equivalent to ${lookup[repeatOf]?.code ?? repeatOf}, which already counts. SFU only gives credit for one of them.`
+        );
+        continue;
+      }
+      if (!inCurriculum) {
+        summary.extraCredits += course.credits;
+        summary.notCountingReasons.set(courseId, "Not part of this plan's curriculum, so it doesn't count toward graduation.");
+        continue;
+      }
+
+      for (const id of sameAs) creditedBy.set(id, courseId);
+      summary.graduationCredits += course.credits;
+      if (completedCourseIds.has(courseId)) summary.completedGraduationCredits += course.credits;
+    }
+  }
+
+  return summary;
+}
+
 export const TERM_CREDIT_WARN_THRESHOLD = 18;
 
 export function computeTermCredits(

@@ -37,10 +37,10 @@
   "bus232": {"pre":[],"co":["math150","math151"]},
   "bus254": {"pre":["bus251"],"co":[]},
   "bus311": {"pre":["bus251"],"co":[]},
-  "bus312": {"pre":["buec232","bus232","bus254","bus343"],"co":[]},
-  "bus336": {"pre":["buec232","bus232","bus343","math150","math151"],"co":[]},
+  "bus312": {"pre":["buec232","bus232","bus254"],"co":[]},
+  "bus336": {"pre":["buec232","bus232","math150","math151"],"co":[]},
   "bus374": {"pre":["bus272"],"co":[]},
   "bus381": {"pre":["bus272"],"co":[]},
-  "bus478": {"pre":["buec232","bus207","bus312","bus343","bus360w","bus374","bus381","econ201"],"co":[]},
+  "bus478": {"pre":["bus207","bus312","bus343","bus360w","bus374","bus381","econ201"],"co":[]},
   "econ201": {"pre":["econ103","econ105","econ113","econ115","math150","math151"],"co":[]}
 }

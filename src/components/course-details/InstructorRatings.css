@@ -171,6 +171,25 @@
   color: var(--text-subtle);
 }
 
+.rmp-comments-dropdown summary {
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--text-muted);
+  cursor: pointer;
+}
+
+.rmp-comments-dropdown summary:hover {
+  color: var(--text);
+}
+
+.rmp-comments-dropdown[open] summary {
+  margin-bottom: 6px;
+}
+
+.rmp-comments-dropdown .rmp-note {
+  margin-bottom: 6px;
+}
+
 .rmp-comments {
   list-style: none;
   margin: 0;

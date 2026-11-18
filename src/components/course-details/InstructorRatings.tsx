@@ -167,14 +167,16 @@ function InstructorRatingItem({ name, courseCode, equivalentCodes }: InstructorR
               View on RateMyProfessors ↗
             </a>
 
-            {data.note && <p className="rmp-note">{data.note}</p>}
-
             {data.comments.length > 0 ? (
-              <ul className="rmp-comments">
-                {data.comments.slice(0, MAX_COMMENTS).map((comment) => (
-                  <RmpCommentItem key={comment.id} comment={comment} />
-                ))}
-              </ul>
+              <details className="rmp-comments-dropdown">
+                <summary>Comments ({Math.min(data.comments.length, MAX_COMMENTS)})</summary>
+                {data.note && <p className="rmp-note">{data.note}</p>}
+                <ul className="rmp-comments">
+                  {data.comments.slice(0, MAX_COMMENTS).map((comment) => (
+                    <RmpCommentItem key={comment.id} comment={comment} />
+                  ))}
+                </ul>
+              </details>
             ) : (
               <p className="empty-note">No written comments yet.</p>
             )}

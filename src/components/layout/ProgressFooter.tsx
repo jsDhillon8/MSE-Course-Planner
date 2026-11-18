@@ -7,6 +7,8 @@ interface ProgressFooterProps {
   totalCompleted: number;
   totalCurriculumCredits: number;
   completionPercent: number;
+  /** Planned credits that don't count toward graduation (custom schedule). */
+  extraCredits?: number;
   onTransferCreditsChange: (event: ChangeEvent<HTMLInputElement>) => void;
   onTransferCreditsKeyDown: (event: KeyboardEvent<HTMLInputElement>) => void;
   onResetProgress: () => void;
@@ -18,6 +20,7 @@ export function ProgressFooter({
   totalCompleted,
   totalCurriculumCredits,
   completionPercent,
+  extraCredits = 0,
   onTransferCreditsChange,
   onTransferCreditsKeyDown,
   onResetProgress,
@@ -43,6 +46,14 @@ export function ProgressFooter({
         <span>
           Progress: {totalCompleted} / {totalCurriculumCredits} Credits ({completionPercent}%)
         </span>
+        {extraCredits > 0 && (
+          <span
+            className="extra-credits"
+            title="Courses in your plan that are outside your curriculum, or equivalent to a course that already counts. They're left out of Progress."
+          >
+            +{extraCredits} credits not toward graduation
+          </span>
+        )}
         <button type="button" className="reset-progress-btn" onClick={onResetProgress}>
           Reset Progress
         </button>

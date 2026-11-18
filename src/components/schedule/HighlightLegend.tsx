@@ -26,33 +26,35 @@ export function HighlightLegend({
   const hasSelection = roles.size > 0;
 
   return (
-    <div className="highlight-legend" role="group" aria-label="Course relationship legend">
-      <h4>Curriculum Relationships</h4>
-      <div className="legend-item">
-        <span className="legend-swatch selected" aria-hidden="true" />
-        Selected course
-      </div>
-      <div className="legend-item">
-        <span className="legend-swatch prerequisite" aria-hidden="true" />
-        Prerequisites{hasSelection && ` (${counts.prerequisite})`}
-      </div>
-      <div className="legend-item">
-        <span className="legend-swatch corequisite" aria-hidden="true" />
-        Corequisites{hasSelection && ` (${counts.corequisite})`}
-      </div>
-      <div className="legend-item">
-        <span className="legend-swatch dependent" aria-hidden="true" />
-        Dependent courses{hasSelection && ` (${counts.dependent})`}
-      </div>
+    <details className="highlight-legend" open>
+      <summary>Curriculum Relationships</summary>
+      <div className="highlight-legend-body" role="group" aria-label="Course relationship legend">
+        <div className="legend-item">
+          <span className="legend-swatch selected" aria-hidden="true" />
+          Selected course
+        </div>
+        <div className="legend-item">
+          <span className="legend-swatch prerequisite" aria-hidden="true" />
+          Prerequisites{hasSelection && ` (${counts.prerequisite})`}
+        </div>
+        <div className="legend-item">
+          <span className="legend-swatch corequisite" aria-hidden="true" />
+          Corequisites{hasSelection && ` (${counts.corequisite})`}
+        </div>
+        <div className="legend-item">
+          <span className="legend-swatch dependent" aria-hidden="true" />
+          Dependent courses{hasSelection && ` (${counts.dependent})`}
+        </div>
 
-      <label className="recursive-toggle">
-        <input
-          type="checkbox"
-          checked={recursiveHighlights}
-          onChange={(event) => onToggleRecursive(event.target.checked)}
-        />
-        Recursive highlights
-      </label>
-    </div>
+        <label className="recursive-toggle">
+          <input
+            type="checkbox"
+            checked={recursiveHighlights}
+            onChange={(event) => onToggleRecursive(event.target.checked)}
+          />
+          Recursive highlights
+        </label>
+      </div>
+    </details>
   );
 }

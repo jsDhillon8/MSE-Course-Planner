@@ -5,6 +5,7 @@ import { offeringFill, offeringTooltip } from "../../api/sfuOutlines";
 import { Course, CourseHighlightRole, CourseSlot, OfferingHistory, TermName } from "../../types";
 import { slotCourseIds } from "../../lib/scheduleTerms";
 import { OfferingHistoryState } from "../../hooks/useOfferingHistories";
+import type { PlanRequirementWarning } from "../../lib/requirements/planValidation";
 import "./ScheduleSlotCard.css";
 
 export function getCourseCardClassName(
@@ -74,6 +75,10 @@ interface ScheduleSlotCardProps {
   termSeason?: TermName | null;
   swappedFromCode?: string;
   onUndoSwap?: (courseId: string) => void;
+  /** Unmet prerequisites/corequisites for this placement (custom schedule only). */
+  requirementWarnings?: PlanRequirementWarning[];
+  /** Set when this course's credits don't count toward graduation (custom schedule only). */
+  notCountingReason?: string;
 }
 
 export function offeringWarningLevel(
@@ -107,6 +112,8 @@ export function ScheduleSlotCard({
   termSeason = null,
   swappedFromCode,
   onUndoSwap,
+  requirementWarnings = [],
+  notCountingReason,
 }: ScheduleSlotCardProps) {
   const courseIds = slotCourseIds(slot);
   const isChoiceGroup = courseIds.length > 1;
@@ -187,6 +194,26 @@ export function ScheduleSlotCard({
                 </label>
                 <strong>{course.code}</strong>
                 <span>{course.title}</span>
+                {requirementWarnings.length > 0 && (
+                  <span
+                    className="requirement-badge"
+                    title={`${requirementWarnings.map((warning) => warning.message).join("\n")}\nSelect the course for how to fix it.`}
+                  >
+                    <span aria-hidden="true">⚠</span>{" "}
+                    {requirementWarnings.length === 1
+                      ? "Prereq warning"
+                      : `${requirementWarnings.length} prereq warnings`}
+                    <span className="visually-hidden">
+                      : {requirementWarnings.map((warning) => warning.message).join(" ")}
+                    </span>
+                  </span>
+                )}
+                {notCountingReason && (
+                  <span className="not-counting-badge" title={notCountingReason}>
+                    Doesn't count toward graduation
+                    <span className="visually-hidden">: {notCountingReason}</span>
+                  </span>
+                )}
                 {showOfferingBadges && <OfferingBadges history={offeringHistory} />}
                 {swappedFromCode && (
                   <div className="swap-meta">

@@ -6,6 +6,7 @@ import { InstructorRatings } from "./InstructorRatings";
 import { Course, OfferedSection, SharedOutlineFields } from "../../types";
 import { buildCourseCodeIndex, isPlaceholderCourse, normalizeCourseCode } from "../../lib/courseCodes";
 import { parseEquivalents } from "../../lib/parseEquivalents";
+import type { PlanRequirementWarning } from "../../lib/requirements/planValidation";
 
 const courseIdByCode = buildCourseCodeIndex(courses);
 
@@ -266,12 +267,15 @@ interface CourseDetailsPanelProps {
   selectedCourse: Course | null;
   swapEnabled?: boolean;
   onSwapIntoPlan?: (box: EquivalentBox) => void | Promise<void>;
+  /** Unmet prerequisites/corequisites of the selected course where it sits in the plan. */
+  requirementWarnings?: PlanRequirementWarning[];
 }
 
 export function CourseDetailsPanel({
   selectedCourse,
   swapEnabled = false,
   onSwapIntoPlan,
+  requirementWarnings = [],
 }: CourseDetailsPanelProps) {
   const [selectedEquivalentCode, setSelectedEquivalentCode] = useState<string | null>(null);
   const [swapBusyCode, setSwapBusyCode] = useState<string | null>(null);
@@ -363,6 +367,20 @@ export function CourseDetailsPanel({
           <h3>{selectedCourse.code}</h3>
           <p className="course-title-text">{selectedCourse.title}</p>
           <p>Credits: {selectedCourse.credits}</p>
+
+          {requirementWarnings.length > 0 && (
+            <section className="requirement-warnings" aria-label="Prerequisite warnings">
+              <h4>Prerequisite warnings</h4>
+              <ul>
+                {requirementWarnings.map((warning) => (
+                  <li key={warning.message}>
+                    <strong>{warning.message}</strong>
+                    <span>{warning.fix}</span>
+                  </li>
+                ))}
+              </ul>
+            </section>
+          )}
 
           <div className="live-section">
             {isPlaceholder ? (
