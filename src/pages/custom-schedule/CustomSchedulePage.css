@@ -93,60 +93,7 @@
   }
 }
 
-/*
- * Wide screens: the page itself doesn't scroll. Header and footer stay put and the
- * course list, schedule grid and details panel each scroll on their own.
- * Narrow screens keep the single-column layout with normal page scrolling.
- */
-@media (min-width: 1001px) {
-  .custom-shell {
-    height: 100vh;
-    height: 100dvh;
-    grid-template-rows: auto minmax(0, 1fr) auto;
-  }
-
-  .custom-shell .custom-layout {
-    min-height: 0;
-    overflow: hidden;
-  }
-
-  .custom-layout .picker-panel,
-  .custom-layout > .grid-panel,
-  .custom-layout .details-panel {
-    min-height: 0;
-    overflow-y: auto;
-    overscroll-behavior: contain;
-    /* Thin, theme-colored scrollbars (Firefox, Chrome/Edge 121+). */
-    scrollbar-width: thin;
-    scrollbar-color: var(--border) transparent;
-  }
-
-  /* Safari and older Chromium. */
-  .custom-layout .picker-panel::-webkit-scrollbar,
-  .custom-layout > .grid-panel::-webkit-scrollbar,
-  .custom-layout .details-panel::-webkit-scrollbar {
-    width: 8px;
-  }
-
-  .custom-layout .picker-panel::-webkit-scrollbar-thumb,
-  .custom-layout > .grid-panel::-webkit-scrollbar-thumb,
-  .custom-layout .details-panel::-webkit-scrollbar-thumb {
-    background: var(--border);
-    border-radius: 4px;
-  }
-
-  .custom-layout .picker-panel::-webkit-scrollbar-thumb:hover,
-  .custom-layout > .grid-panel::-webkit-scrollbar-thumb:hover,
-  .custom-layout .details-panel::-webkit-scrollbar-thumb:hover {
-    background: var(--text-subtle);
-  }
-
-  .custom-layout .picker-panel::-webkit-scrollbar-track,
-  .custom-layout > .grid-panel::-webkit-scrollbar-track,
-  .custom-layout .details-panel::-webkit-scrollbar-track {
-    background: transparent;
-  }
-}
+/* Wide screens: each panel scrolls on its own (shared rules in src/styles.css). */
 
 .custom-layout .term-column .course-list {
   min-height: 72px;
@@ -186,6 +133,49 @@
   display: grid;
   gap: 14px;
   margin-top: 8px;
+}
+
+/* ── Equivalents grouped under the course they replace ── */
+.picker-entry {
+  display: grid;
+  gap: 4px;
+}
+
+.equivalent-parent-placed {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  align-items: baseline;
+  padding: 6px 10px;
+  border: 1px dashed var(--border);
+  border-radius: 8px;
+  font-size: 0.8rem;
+  color: var(--text-muted);
+}
+
+.equivalent-group {
+  display: grid;
+  gap: 4px;
+  margin-left: 12px;
+  padding-left: 10px;
+  border-left: 2px solid var(--border);
+}
+
+.equivalent-toggle {
+  justify-self: start;
+  padding: 2px 8px;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  background: var(--surface);
+  color: var(--text-muted);
+  font-size: 0.72rem;
+  cursor: pointer;
+}
+
+.equivalent-note {
+  margin: 0;
+  font-size: 0.72rem;
+  color: var(--text-muted);
 }
 
 .picker-group h3 {

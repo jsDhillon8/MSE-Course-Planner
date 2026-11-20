@@ -8,10 +8,29 @@ import { ScheduleSlotCard } from "../../components/schedule/ScheduleSlotCard";
 import { courseById, pageTemplates } from "../../data";
 import { useCourseProgress } from "../../hooks/useCourseProgress";
 import { computeCompletedCredits, computeTotalCurriculumCredits } from "../../lib/credits";
-import { courseDependencyGraph } from "../../lib/requirements/dependencyGraph";
+import { variantGroup } from "../../lib/equivalence";
+import { getCourseDependencyGraph } from "../../lib/requirements/dependencyGraph";
 import { formatCurriculum } from "../../lib/formatCurriculum";
 import { getActiveTerms, groupTermsByYear } from "../../lib/scheduleTerms";
 import { Course, TermPlan, VariantId } from "../../types";
+
+const VARIANT_CHOICES_STORAGE_KEY = "mse-planner:variant-choices";
+
+/** Saved variant picks, keeping only known courses so old or edited saves can't break the plan. */
+function loadVariantChoices(): Record<string, string> {
+  try {
+    const parsed: unknown = JSON.parse(localStorage.getItem(VARIANT_CHOICES_STORAGE_KEY) ?? "{}");
+    if (!parsed || typeof parsed !== "object") return {};
+    return Object.fromEntries(
+      Object.entries(parsed as Record<string, unknown>).filter(
+        (entry): entry is [string, string] =>
+          typeof entry[1] === "string" && variantGroup(entry[0])[0] === entry[0] && variantGroup(entry[0]).includes(entry[1])
+      )
+    );
+  } catch {
+    return {};
+  }
+}
 
 interface PlannerPageProps {
   onOpenWelcome: () => void;
@@ -23,6 +42,16 @@ export function PlannerPage({ onOpenWelcome }: PlannerPageProps) {
   const [variant, setVariant] = useState<VariantId>("A" as VariantId);
   const [selectedCourse, setSelectedCourse] = useState<Course | null>(null);
   const [recursiveHighlights, setRecursiveHighlights] = useState(true);
+  /** Variant group (keyed by its first id) → the version picked with the toggle (MATH 150 vs MATH 151). */
+  const [chosenVariant, setChosenVariant] = useState<Record<string, string>>(loadVariantChoices);
+
+  useEffect(() => {
+    try {
+      localStorage.setItem(VARIANT_CHOICES_STORAGE_KEY, JSON.stringify(chosenVariant));
+    } catch {
+      // Storage blocked or full: the choice still works for this visit.
+    }
+  }, [chosenVariant]);
 
   const {
     completedCourseIds,
@@ -46,12 +75,33 @@ export function PlannerPage({ onOpenWelcome }: PlannerPageProps) {
   }, []);
 
   const relationshipHighlights = useMemo(
-    () => courseDependencyGraph.getHighlights(selectedCourse?.id ?? null, recursiveHighlights),
-    [selectedCourse?.id, recursiveHighlights]
+    () =>
+      getCourseDependencyGraph(template.programId, template.curriculumId).getHighlights(
+        selectedCourse?.id ?? null,
+        recursiveHighlights
+      ),
+    [selectedCourse?.id, recursiveHighlights, template.programId, template.curriculumId]
   );
 
-  const terms = useMemo<TermPlan[]>(() => getActiveTerms(template, variant), [template, variant]);
+  const templateTerms = useMemo<TermPlan[]>(() => getActiveTerms(template, variant), [template, variant]);
+
+  /** The template's terms with each course swapped for the version picked with the variant toggle. */
+  const terms = useMemo<TermPlan[]>(() => {
+    const pick = (id: string) => {
+      const group = variantGroup(id);
+      return group.length > 1 ? chosenVariant[group[0]] ?? id : id;
+    };
+    return templateTerms.map((term) => ({
+      ...term,
+      courseIds: term.courseIds.map((slot) => (Array.isArray(slot) ? slot.map(pick) : pick(slot))),
+    }));
+  }, [templateTerms, chosenVariant]);
   const termsByYear = useMemo(() => groupTermsByYear(terms), [terms]);
+
+  const handleChooseVariant = (fromId: string, toId: string) => {
+    setChosenVariant((current) => ({ ...current, [variantGroup(toId)[0]]: toId }));
+    setSelectedCourse((current) => (current?.id === fromId ? courseById[toId] ?? current : current));
+  };
 
   const totalCurriculumCredits = useMemo(
     () => computeTotalCurriculumCredits(terms, courseById),
@@ -117,6 +167,8 @@ export function PlannerPage({ onOpenWelcome }: PlannerPageProps) {
                             completedCourseIds={completedCourseIds}
                             onToggleCompleted={toggleCourseCompleted}
                             onSelect={handleCourseSelect}
+                            variantIds={Array.isArray(slot) ? undefined : variantGroup(slot)}
+                            onChooseVariant={handleChooseVariant}
                           />
                         ))}
                       </div>

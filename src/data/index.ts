@@ -3,8 +3,9 @@
 // the files next to this one are hand-edited.
 import generatedCoursesJson from "./generated/courses.json";
 import courseRequirementsJson from "./generated/courseRequirements.json";
+import courseRequirementsByOutlineTermJson from "./generated/courseRequirementsByOutlineTerm.json";
 import generatedEquivalenciesJson from "./generated/equivalencies.json";
-import equivalencyOverridesJson from "./equivalencyOverrides.json";
+import skippedCoursesJson from "./generated/skippedCourses.json";
 import placeholderCoursesJson from "./placeholderCourses.json";
 import mseProgramJson from "./programs/mse.json";
 import calendarSourcesJson from "./calendar/sources.json";
@@ -91,13 +92,29 @@ export function getCurriculumCourseIds(programId: string, curriculumId: string):
 }
 export const courseRequirementsById = courseRequirementsJson as Record<string, string>;
 
-/** Generated equivalencies, with hand-edited overrides replacing the type or adding pairs. */
-export const courseEquivalencies: CourseEquivalency[] = (() => {
-  const key = (eq: CourseEquivalency) => `${eq.sourceCourseId}>${eq.equivalentCourseId}`;
-  const merged = new Map<string, CourseEquivalency>();
-  for (const eq of generatedEquivalenciesJson as CourseEquivalency[]) merged.set(key(eq), eq);
-  for (const eq of equivalencyOverridesJson as CourseEquivalency[]) merged.set(key(eq), eq);
-  return [...merged.values()];
-})();
+/** Older outline rules, by outline term ("2024/spring") then course id. Written by `npm run sync-data`. */
+const courseRequirementsByOutlineTerm = courseRequirementsByOutlineTermJson as Record<string, Record<string, string>>;
+
+/** The outline term whose rules a curriculum uses, or null for current outlines. */
+export function getOutlineTerm(programId: string, curriculumId: string): string | null {
+  return getCurriculum(programId, curriculumId)?.outlineTerm ?? null;
+}
+
+/**
+ * Requirement text per course for a curriculum: the older outline's rules where the
+ * curriculum names an `outlineTerm` and that outline was found, current rules otherwise.
+ */
+export function getRequirementTextsForOutlineTerm(outlineTerm: string | null): Record<string, string> {
+  const older = outlineTerm ? courseRequirementsByOutlineTerm[outlineTerm] : undefined;
+  return older ? { ...courseRequirementsById, ...older } : courseRequirementsById;
+}
+
+export const courseEquivalencies = generatedEquivalenciesJson as CourseEquivalency[];
+
+/**
+ * Equivalents and "or" options `sync-data` left out of the course list because SFU has no
+ * outline for them in the last 6 terms (e.g. CMPT 128), by id ("cmpt128").
+ */
+export const skippedCourseIds = new Set((skippedCoursesJson as { id: string }[]).map((course) => course.id));
 
 export const courseById: Record<string, Course> = Object.fromEntries(courses.map((course) => [course.id, course]));

@@ -1,9 +1,15 @@
 // Checks a plan's prerequisites and corequisites term by term, using the full
 // and/or requirement trees (so "MATH 150 or MATH 151" is met by either one).
-import { courseEquivalencies, courseRequirementsById, courses } from "../../data";
+import {
+  courseEquivalencies,
+  courseRequirementsById,
+  courses,
+  getOutlineTerm,
+  getRequirementTextsForOutlineTerm,
+} from "../../data";
 import { Course, PrerequisiteExpression } from "../../types";
 import { equivalentsById } from "../equivalence";
-import { buildCourseRequirementsIndex } from "./requirementNormalizer";
+import { buildCourseRequirementsIndex, type CourseRequirementsIndex } from "./requirementNormalizer";
 
 export interface PlanTermInput {
   id: string;
@@ -25,9 +31,33 @@ export interface PlanRequirementWarning {
   message: string;
   /** e.g. "MATH 152 is in Year 1 - Summer. Move it to an earlier term, or move MATH 251 later." */
   fix: string;
+  /** The unmet part on its own, e.g. "MATH 152" or "MATH 150 or MATH 151". */
+  requirement: string;
 }
 
-const requirementsIndex = buildCourseRequirementsIndex(courses, courseRequirementsById, courseEquivalencies);
+/** A soft note (not a warning), e.g. a rule the current outline adds for an old-curriculum student. */
+export interface PlanRequirementNote {
+  courseId: string;
+  termId: string;
+  message: string;
+}
+
+export interface PlanRequirementCheck {
+  warnings: Map<string, PlanRequirementWarning[]>;
+  notes: Map<string, PlanRequirementNote[]>;
+}
+
+const currentRequirementsIndex = buildCourseRequirementsIndex(courses, courseRequirementsById, courseEquivalencies);
+const indexesByOutlineTerm = new Map<string, CourseRequirementsIndex>();
+
+function requirementsIndexFor(outlineTerm: string): CourseRequirementsIndex {
+  let index = indexesByOutlineTerm.get(outlineTerm);
+  if (!index) {
+    index = buildCourseRequirementsIndex(courses, getRequirementTextsForOutlineTerm(outlineTerm), courseEquivalencies);
+    indexesByOutlineTerm.set(outlineTerm, index);
+  }
+  return index;
+}
 
 /** Every requirement id a placed course can satisfy: itself, its equivalents, and what it was swapped in for. */
 function creditedIds(courseId: string, swapOriginal: string | undefined): string[] {
@@ -61,11 +91,13 @@ function courseIdsIn(node: PrerequisiteExpression): string[] {
  * Validates every placed course. `terms` must be in chronological order.
  * Swapped-in equivalents count as the course they replaced; courses without
  * requirement data (placeholders, custom equivalents) are not checked themselves.
+ * Uses current outline rules unless another `requirementsIndex` is given.
  */
 export function validatePlanRequirements(
   terms: PlanTermInput[],
   swaps: PlanSwapInput[],
-  lookup: Record<string, Course>
+  lookup: Record<string, Course>,
+  requirementsIndex: CourseRequirementsIndex = currentRequirementsIndex
 ): Map<string, PlanRequirementWarning[]> {
   const swapOriginalById = new Map(swaps.map((swap) => [swap.replacementId, swap.originalCourseId]));
 
@@ -148,6 +180,7 @@ export function validatePlanRequirements(
             kind,
             message: `${course.code} needs ${describe(node)} ${when}.`,
             fix,
+            requirement: describe(node),
           };
         })
         // SFU text sometimes repeats a requirement (e.g. BUS 312's two identical options).
@@ -162,4 +195,41 @@ export function validatePlanRequirements(
   });
 
   return warnings;
+}
+
+/**
+ * Checks a plan against its curriculum's rules. A curriculum with an `outlineTerm`
+ * (pre-Fall 2024) is checked against that older outline; anything the current outline
+ * asks for on top of it becomes a soft note, since old-curriculum students resolve
+ * those through a prerequisite appeal.
+ */
+export function checkPlanRequirements(
+  terms: PlanTermInput[],
+  swaps: PlanSwapInput[],
+  lookup: Record<string, Course>,
+  programId: string,
+  curriculumId: string
+): PlanRequirementCheck {
+  const outlineTerm = getOutlineTerm(programId, curriculumId);
+  const current = validatePlanRequirements(terms, swaps, lookup);
+  if (!outlineTerm) return { warnings: current, notes: new Map() };
+
+  const warnings = validatePlanRequirements(terms, swaps, lookup, requirementsIndexFor(outlineTerm));
+  const notes = new Map<string, PlanRequirementNote[]>();
+  for (const [courseId, currentWarnings] of current) {
+    const shown = new Set((warnings.get(courseId) ?? []).map((warning) => warning.message));
+    const extra = currentWarnings.filter((warning) => !shown.has(warning.message));
+    if (!extra.length) continue;
+    notes.set(
+      courseId,
+      extra.map((warning) => ({
+        courseId,
+        termId: warning.termId,
+        message: `Current SFU outline also lists ${warning.requirement}${
+          warning.kind === "corequisite" ? " as a corequisite" : ""
+        }; old-curriculum students usually resolve this through a prerequisite appeal.`,
+      }))
+    );
+  }
+  return { warnings, notes };
 }

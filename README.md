@@ -48,9 +48,10 @@ Plans, priorities and design principles are in [ROADMAP.md](ROADMAP.md).
 | Type | Fills graduation slot | Satisfies prerequisites | Example |
 | :--- | :--- | :--- | :--- |
 | `full` | Yes | Yes | SEE 222 ↔ MSE 220 |
-| `partial` | Yes, with an advisor note | Yes | CHEM 121 for CHEM 120 |
-| `elective-only` | No, counts as an elective | No | — |
+| `variant` | Yes (same lecture with or without a lab or tutorial; credits differ) | Yes | MATH 150 / MATH 151, CHEM 120 / CHEM 121 |
 | `alt-prereq` | No | Only where SFU's prerequisite text lists it | MATH 260 for MSE 281's dependents |
+
+`sync-data` tags each "may not take for further credit" pair from the outline notes: `variant` when the two courses are also a "one of" choice in the local calendar copy, `full` otherwise. A "one of" choice without that note (BUS 374 / BUS 381) is just a choice slot, not an equivalency.
 
 ### Course data files (`src/data/`)
 
@@ -59,8 +60,7 @@ Plans, priorities and design principles are in [ROADMAP.md](ROADMAP.md).
 | `programs/<id>.json` | hand | One file per program: its curricula (e.g. Pre/Post-Fall 2024), each with degree requirements (Major, Double Degree), elective groups (e.g. `technical` Group A), concentrations (AgriTech) and plan templates (courses per term, co-op variants). Requirements are written from the local calendar copy below |
 | `calendar/` | `npm run calendar:update` | Local copy of SFU's degree requirements: `sources.json` (each page's link and copy date), `text/` (the pages' wording) and `wqb-courses.json` (WQB certified courses). The site never reads SFU's calendar directly |
 | `placeholderCourses.json` | hand | Placeholder slots (COMP ELEC 1, CO-OP, ...) |
-| `equivalencyOverrides.json` | hand | Equivalency pairs to add, or to change the type of a generated pair |
-| `generated/*.json` | `npm run sync-data` | Courses, raw SFU requirement text, and equivalencies from outline notes |
+| `generated/*.json` | `npm run sync-data` | Courses, raw SFU requirement text, and equivalencies from outline notes. Each course records `lastOffered`, the newest term with sections (next term, the current term, then up to 6 back; `null` if none), so the planner can mark courses not offered in the last 3 terms. Each course is tagged `listedAs`: `required` (named by a program), `equivalent` (in a required course's "may not take for further credit" notes) or `alt-prereq` (an "or" option in a required course's prerequisites); added courses are one level deep and need an SFU outline from the last 6 terms. Ones left out for that reason are listed in `skippedCourses.json` (e.g. CMPT 128), so they can still be marked "Not offered recently" where SFU's notes name them. `courseRequirementsByOutlineTerm.json` holds older MSE rules for curricula with an `outlineTerm` (pre-Fall 2024 uses `2024/spring`), so those plans are checked against the outlines that applied to them |
 
 When a new SFU calendar is published, run `npm run calendar:check` to see what changed compared with the local copy. To move to the new calendar, change the URLs in `calendar/sources.json` if needed, run `npm run calendar:update`, update the degree requirements in `programs/<id>.json` to match, and run `npm run test:requirements` (checks `programs/<id>.json` against the saved wording, and every recommended plan against its degree).
 

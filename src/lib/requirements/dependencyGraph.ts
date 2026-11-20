@@ -1,4 +1,10 @@
-import { courseEquivalencies, courseRequirementsById, courses } from "../../data";
+import {
+  courseEquivalencies,
+  courseRequirementsById,
+  courses,
+  getOutlineTerm,
+  getRequirementTextsForOutlineTerm,
+} from "../../data";
 import { Course, CourseHighlightRole, CourseRelationshipHighlights } from "../../types";
 import { buildCourseRequirementsIndex } from "./requirementNormalizer";
 
@@ -28,12 +34,11 @@ function transitiveClosure(
   return visited;
 }
 
-export function buildCourseDependencyGraph(courseList: Course[] = courses): CourseDependencyGraph {
-  const requirementsIndex = buildCourseRequirementsIndex(
-    courseList,
-    courseRequirementsById,
-    courseEquivalencies
-  );
+export function buildCourseDependencyGraph(
+  courseList: Course[] = courses,
+  requirementTexts: Record<string, string> = courseRequirementsById
+): CourseDependencyGraph {
+  const requirementsIndex = buildCourseRequirementsIndex(courseList, requirementTexts, courseEquivalencies);
 
   const prerequisiteMap = new Map<string, Set<string>>();
   const corequisiteMap = new Map<string, Set<string>>();
@@ -108,6 +113,20 @@ export function buildCourseDependencyGraph(courseList: Course[] = courses): Cour
   };
 }
 
-/** Singleton graph — built once at module load. */
+/** Singleton graph using current outline rules, built once at module load. */
 export const courseDependencyGraph = buildCourseDependencyGraph();
+
+const graphsByOutlineTerm = new Map<string, CourseDependencyGraph>();
+
+/** The graph for a curriculum: its `outlineTerm` rules (e.g. pre-Fall 2024), or current rules. Cached. */
+export function getCourseDependencyGraph(programId: string, curriculumId: string): CourseDependencyGraph {
+  const outlineTerm = getOutlineTerm(programId, curriculumId);
+  if (!outlineTerm) return courseDependencyGraph;
+  let graph = graphsByOutlineTerm.get(outlineTerm);
+  if (!graph) {
+    graph = buildCourseDependencyGraph(courses, getRequirementTextsForOutlineTerm(outlineTerm));
+    graphsByOutlineTerm.set(outlineTerm, graph);
+  }
+  return graph;
+}
 

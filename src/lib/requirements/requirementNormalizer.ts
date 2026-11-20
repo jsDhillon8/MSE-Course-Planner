@@ -39,7 +39,8 @@ function expandWithEquivalencies(ids: Set<string>, equivalencies: CourseEquivale
   const expanded = new Set(ids);
 
   for (const eq of equivalencies) {
-    if (eq.equivalencyType === "elective-only") continue;
+    // alt-prereq courses already appear in the text where they count; don't spread them further.
+    if (eq.equivalencyType === "alt-prereq") continue;
     if (expanded.has(eq.sourceCourseId)) expanded.add(eq.equivalentCourseId);
     if (expanded.has(eq.equivalentCourseId)) expanded.add(eq.sourceCourseId);
   }

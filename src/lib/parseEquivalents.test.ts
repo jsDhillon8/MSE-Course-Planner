@@ -23,6 +23,12 @@ for (const fixture of PARSE_EQUIVALENTS_FIXTURES) {
     : extractCourseCodes(fixture.input).map((item) => item.code);
 
   assertCodes(result, [...fixture.expected]);
+  if (fixture.selfCode) {
+    const flagged = parseEquivalents(fixture.input, fixture.selfCode)
+      .filter((item) => item.orderRuleOnly)
+      .map((item) => item.code);
+    assertCodes(flagged, [...(fixture.orderRuleOnly ?? [])]);
+  }
   passed += 1;
   console.log(`✓ ${fixture.input}`);
 }

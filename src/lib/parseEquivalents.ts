@@ -4,6 +4,13 @@ export interface ParsedEquivalent {
   code: string;
   dept: string;
   number: string;
+  /**
+   * Only named in an order rule, "Students who have taken CMPT 125 first may not then take
+   * this course for further credit": you can't take this course after that one, which
+   * doesn't make them the same course (CMPT 125 is the follow-up to CMPT 130). Callers
+   * should only trust it with other evidence, e.g. a calendar "one of" choice (ECON 103 / 113).
+   */
+  orderRuleOnly?: boolean;
 }
 
 const DEPT_STOPLIST = new Set([
@@ -32,7 +39,8 @@ const CONNECTORS = new Set([",", "or", "and", "/", "&"]);
 
 const EQUIVALENCE_PATTERNS = [
   /equivalent\s+to/i,
-  /may\s+not\s+take\b.*?\bfor\s+further\s+credit/i,
+  // Also "may not then take" (ECON 113: "Students who have taken ECON 103 first may not then take this course ...").
+  /may\s+not\s+(?:then\s+)?take\b.*?\bfor\s+further\s+credit/i,
   /received\s+credit\s+for/i,
   /(?:students\s+)?with\s+credit\s+for/i,
   /duplicate\s+credit/i,
@@ -41,6 +49,9 @@ const EQUIVALENCE_PATTERNS = [
   /not\s+eligible\s+for\s+credit/i,
   /students\s+who\s+have\s+(?:received\s+)?credit\s+for/i,
 ];
+
+/** "... taken X first may not then take this course for further credit": an order rule. */
+const ORDER_RULE = /\bfirst\b[\s\S]*?\bmay\s+not\s+then\s+take\b/i;
 
 const EXCLUDE_PATTERNS = [
   /\bprerequisites?\b/i,
@@ -217,17 +228,21 @@ export function parseEquivalents(
     if (!notes?.trim()) return [];
 
     const selfNormalized = selfCode ? normalizeCourseCode(selfCode) : null;
-    const relevantText = splitSentences(notes)
+    const relevant = splitSentences(notes)
       .filter((sentence) => !isExcludedSentence(sentence))
-      .filter((sentence) => isEquivalenceSentence(sentence))
-      .join(". ");
+      .filter((sentence) => isEquivalenceSentence(sentence));
+    const equivalenceText = relevant.filter((sentence) => !ORDER_RULE.test(sentence)).join(". ");
+    const orderRuleText = relevant.filter((sentence) => ORDER_RULE.test(sentence)).join(". ");
 
-    if (!relevantText.trim()) return [];
-
+    // A code in a real equivalence sentence wins over the same code in an order rule.
     const deduped = new Map<string, ParsedEquivalent>();
-    for (const item of extractCourseCodes(relevantText)) {
+    for (const item of extractCourseCodes(equivalenceText)) {
       if (selfNormalized && item.code === selfNormalized) continue;
       deduped.set(item.code, item);
+    }
+    for (const item of extractCourseCodes(orderRuleText)) {
+      if ((selfNormalized && item.code === selfNormalized) || deduped.has(item.code)) continue;
+      deduped.set(item.code, { ...item, orderRuleOnly: true });
     }
 
     return Array.from(deduped.values());

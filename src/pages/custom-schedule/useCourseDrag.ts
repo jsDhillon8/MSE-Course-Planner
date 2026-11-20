@@ -1,7 +1,7 @@
 import { useState } from "react";
 import type { Dispatch, DragEvent, SetStateAction } from "react";
 import { courseById } from "../../data";
-import { canPlaceCourse, CourseDragPayload, CustomPlan, placeCourse, removeCourseFromPlan } from "../../lib/customPlan";
+import { addCourseToPlan, canPlaceCourse, CourseDragPayload, CustomPlan, removeCourseFromPlan } from "../../lib/customPlan";
 
 const DRAG_MIME = "application/x-mse-course";
 
@@ -43,7 +43,7 @@ export function useCourseDrag(plan: CustomPlan, setPlan: Dispatch<SetStateAction
     const payload = dragging ?? parseDragPayload(event);
     endDrag();
     if (!payload) return;
-    setPlan((current) => placeCourse(current, payload.courseId, destTermId, payload.fromTermId));
+    setPlan((current) => addCourseToPlan(current, payload.courseId, destTermId, payload.fromTermId));
   };
 
   const dropOnPicker = (event: DragEvent) => {

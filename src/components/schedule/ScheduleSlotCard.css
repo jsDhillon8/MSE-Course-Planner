@@ -203,6 +203,40 @@
   color: var(--text-subtle);
 }
 
+/* ── Variant toggle: same lecture with or without a lab or tutorial ── */
+.variant-toggle {
+  display: inline-flex;
+  margin-top: 2px;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  overflow: hidden;
+}
+
+.variant-toggle button {
+  padding: 2px 8px;
+  border: 0;
+  background: var(--surface);
+  color: var(--text-muted);
+  font-size: 0.7rem;
+  cursor: pointer;
+}
+
+.variant-toggle button + button {
+  border-left: 1px solid var(--border);
+}
+
+.variant-toggle button.active {
+  background: var(--primary-soft);
+  color: var(--primary);
+  font-weight: 700;
+  cursor: default;
+}
+
+.variant-toggle button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
 /* ── Prerequisite / corequisite warning ── */
 .requirement-badge {
   display: inline-flex;
@@ -215,6 +249,22 @@
   color: var(--danger);
   font-size: 0.68rem;
   font-weight: 700;
+}
+
+/* ── Not offered in the last 3 terms ── */
+.not-offered-badge {
+  display: inline-flex;
+  padding: 1px 6px;
+  border: 1px dashed var(--border);
+  border-radius: 999px;
+  color: var(--text-muted);
+  font-size: 0.68rem;
+  font-weight: 600;
+}
+
+/* Faded in the picker only; placed courses keep full contrast. */
+.picker-panel .course-card.not-offered-recently {
+  opacity: 0.65;
 }
 
 /* ── Credits that don't count toward graduation ── */

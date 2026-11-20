@@ -419,6 +419,8 @@ export async function getOfferingHistory(
 
     if (result.kind === "ok" && enrollmentSections(result).length > 0) {
       season.offered += 1;
+      // getPastTerms is newest first, so the first offered term is the most recent.
+      history.lastOffered ??= `${tuple.year}/${tuple.term}`;
     }
   }
 

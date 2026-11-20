@@ -29,31 +29,49 @@ function check(name: string, actual: Iterable<string>, expected: string[]): void
 }
 
 // ── Spot checks ──
-check("MATH 152 needs MATH 150 or 151", graph.getPrerequisites("math152", false), ["math150", "math151"]);
+// Prerequisites include every "or" option and every equivalent of a listed course
+// (e.g. PHYS 141 ↔ PHYS 102/121/126, MSE 250 ↔ SEE 230/ENSC 220).
 check(
-  "MSE 210 needs PHYS 141, MATH 150, MATH 151",
+  "MATH 152 needs MATH 150, 151, 154 or 157",
+  graph.getPrerequisites("math152", false),
+  ["math150", "math151", "math154", "math157"]
+);
+check(
+  "MSE 210 needs PHYS 141 (or an equivalent) and MATH 150 or 151 (or an equivalent)",
   graph.getPrerequisites("mse210", false),
-  ["math150", "math151", "phys141"]
+  ["math150", "math151", "math154", "math157", "phys102", "phys121", "phys126", "phys141"]
 );
 check("MSE 320 has corequisite MSE 212", graph.getCorequisites("mse320"), ["mse212"]);
 check(
-  "MATH 151 unlocks MATH 152, MATH 232, MSE 210, BUS 336, ECON 201",
+  "MATH 151 unlocks MATH 152, MATH 232, MSE 210, BUS 207, BUS 336, ECON 201 and the other calculus routes",
   graph.getDependents("math151", false),
-  ["bus336", "econ201", "math152", "math232", "mse210"]
+  ["bus207", "bus336", "econ201", "math152", "math155", "math158", "math232", "math240", "math251", "mse210", "phys102"]
 );
 check(
   "MSE 381 full prerequisite chain",
   graph.getPrerequisites("mse381", true),
-  // MSE 282 replaced MSE 280 ("may not take for further credit"), so either counts.
-  ["math150", "math151", "math152", "math232", "math251", "math260", "mse103", "mse280", "mse281", "mse282"]
+  // MSE 282 replaced MSE 280 ("may not take for further credit"), so either counts; ENSC/SEE equivalents too.
+  [
+    "ensc220", "ensc380", "macm101", "math150", "math151", "math152", "math154", "math155", "math157", "math158",
+    "math232", "math240", "math251", "math260", "mse103", "mse211", "mse250", "mse280", "mse281", "mse282",
+    "phys101", "phys102", "phys120", "phys121", "phys125", "phys126", "phys140", "phys141", "see230", "see242", "see341",
+  ]
 );
-check("MSE 281 takes MSE 250 as a corequisite, not a prerequisite", graph.getCorequisites("mse281"), ["mse250"]);
+check(
+  "MSE 281 takes MSE 250 (or an equivalent) as a corequisite, not a prerequisite",
+  graph.getCorequisites("mse281"),
+  ["ensc220", "mse250", "see230"]
+);
 check(
   "Highlight roles for MSE 251 (direct)",
   [...graph.getHighlights("mse251", false).roles].map(([id, role]) => `${id}:${role}`),
   [
     "mse251:selected",
     "mse250:prerequisite",
+    "ensc220:prerequisite",
+    "see230:prerequisite",
+    "ensc325:dependent",
+    "see331:dependent",
     "mse310:dependent",
     "mse311:dependent",
     "mse352:dependent",

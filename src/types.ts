@@ -2,12 +2,27 @@ export type PlanLength = "4-year" | "5-year";
 export type VariantId = "A" | "B" | "C";
 export type TermName = "spring" | "summer" | "fall";
 
+/**
+ * Why a course is in the course list (set by `npm run sync-data`):
+ * - `required`: named by a program (degree requirements, elective groups, concentrations, plans).
+ * - `equivalent`: a "may not take for further credit" equivalent of a required course (SEE 222).
+ * - `alt-prereq`: an "or" option in a required course's prerequisites (MATH 154 for MATH 152).
+ */
+export type CourseListedAs = "required" | "equivalent" | "alt-prereq";
+
 export interface Course {
   id: string;
   code: string;
   title: string;
   credits: number;
   description: string;
+  /** Unset for placeholders and custom courses. */
+  listedAs?: CourseListedAs;
+  /**
+   * Newest term with sections when `npm run sync-data` last ran, e.g. "2026/summer"
+   * (checks next term, the current term and the 6 before it). null = none found; unset = not checked.
+   */
+  lastOffered?: string | null;
 }
 
 /** Catalog-like course stored on a custom plan when the equivalent is not in courses.json. */
@@ -161,6 +176,11 @@ export interface DegreeRequirements {
 export interface Curriculum {
   id: string;
   label: string;
+  /**
+   * SFU outline term whose prerequisite rules apply to this curriculum's program courses
+   * (e.g. "2024/spring" for pre-Fall 2024 students). Unset = current outlines.
+   */
+  outlineTerm?: string;
   electiveGroups: ElectiveGroup[];
   concentrations: Concentration[];
   /** Degrees in this curriculum (e.g. Major, Double Degree), each with its calendar requirements. */
@@ -188,10 +208,20 @@ export interface Program {
   curricula: Curriculum[];
 }
 
+/**
+ * How one course stands in for another (see "Course relationship types" in the README):
+ * - `full`: same course, different code (SEE 222 ↔ MSE 220). Fills the slot, satisfies prerequisites.
+ * - `variant`: same lecture with or without a lab or tutorial (MATH 150/151, CHEM 120/121).
+ *   Fills the slot and satisfies prerequisites; credits differ.
+ * - `alt-prereq`: satisfies prerequisites only where SFU's prerequisite text lists it;
+ *   never fills a graduation slot (MATH 260 for MSE 281's dependents).
+ */
+export type EquivalencyType = "full" | "variant" | "alt-prereq";
+
 export interface CourseEquivalency {
   sourceCourseId: string;
   equivalentCourseId: string;
-  equivalencyType: "full" | "partial" | "elective-only";
+  equivalencyType: EquivalencyType;
 }
 
 export interface TermTuple {
@@ -237,6 +267,8 @@ export interface OfferingHistory {
   fall: SeasonOfferingStats;
   spring: SeasonOfferingStats;
   summer: SeasonOfferingStats;
+  /** Newest checked past term with sections, e.g. "2026/summer"; unset when none. */
+  lastOffered?: string;
 }
 
 export type OfferingFill = "full" | "half" | "empty" | "unknown";

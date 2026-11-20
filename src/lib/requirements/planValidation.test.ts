@@ -61,7 +61,8 @@ const messagesFor = (terms: PlanTermInput[], courseId: string, swaps = [] as { r
   const messages = messagesFor([term(1, "math251"), term(2, "math152")], "math251");
   check(
     "Prerequisite in a later term is flagged",
-    messages.join() === "MATH 251 needs MATH 152 in an earlier term.",
+    // MATH 251 also accepts MATH 158, or MATH 154 and 155 for life sciences students.
+    messages.join() === "MATH 251 needs MATH 152 or MATH 158 or (MATH 154 and MATH 155) in an earlier term.",
     messages.join(" | ")
   );
 }
@@ -79,7 +80,7 @@ const messagesFor = (terms: PlanTermInput[], courseId: string, swaps = [] as { r
   const missing = messagesFor([term(1, "math152")], "math152");
   check(
     "Unmet 'or' names all options",
-    missing.join() === "MATH 152 needs MATH 150 or MATH 151 in an earlier term.",
+    missing.join() === "MATH 152 needs MATH 150 or MATH 151 or MATH 154 or MATH 157 in an earlier term.",
     missing.join(" | ")
   );
 }
@@ -95,11 +96,11 @@ const messagesFor = (terms: PlanTermInput[], courseId: string, swaps = [] as { r
   );
 }
 {
-  // PHYS 141 has corequisite MATH 152.
+  // PHYS 141 has corequisite MATH 152 or MATH 155.
   const missing = messagesFor([term(1, "mse103"), term(2, "phys141"), term(3, "math152")], "phys141");
   check(
     "Corequisite in a later term is flagged",
-    missing.join() === "PHYS 141 needs MATH 152 in the same or an earlier term.",
+    missing.join() === "PHYS 141 needs MATH 152 or MATH 155 in the same or an earlier term.",
     missing.join(" | ")
   );
 }

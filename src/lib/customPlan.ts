@@ -9,6 +9,7 @@ import {
   VariantId,
 } from "../types";
 import { normalizeCourseCode } from "./courseCodes";
+import { replacedCoursesById, variantGroup } from "./equivalence";
 import { getActiveTerms, slotCourseIds } from "./scheduleTerms";
 
 export const CUSTOM_PLAN_STORAGE_KEY = "mse-planner:custom-plan";
@@ -437,6 +438,31 @@ export function placeCourse(
   return next;
 }
 
+/**
+ * Add a course from the picker (or move one between terms). An equivalent-only course
+ * (SEE 222) whose original (MSE 220) is already placed fills the original's slot: it's
+ * swapped in (so Undo swap brings MSE 220 back), then moved to `destTermId` if that's
+ * a different term.
+ */
+export function addCourseToPlan(
+  plan: CustomPlan,
+  courseId: string,
+  destTermId: string,
+  fromTermId: string | null
+): CustomPlan {
+  if (fromTermId === null) {
+    const course = resolvePlanCourse(plan, courseId);
+    const placed = placedCourseIds(plan);
+    const original = (replacedCoursesById.get(courseId) ?? []).find((id) => placed.has(id));
+    const originalTermId = original ? findCoursePlacement(plan, original)?.termId : undefined;
+    if (course && original && originalTermId && !placed.has(courseId)) {
+      const swapped = swapCourseIntoPlan(plan, original, course);
+      return originalTermId === destTermId ? swapped : placeCourse(swapped, courseId, destTermId, originalTermId);
+    }
+  }
+  return placeCourse(plan, courseId, destTermId, fromTermId);
+}
+
 export function removeCourseFromPlan(plan: CustomPlan, courseId: string, fromTermId?: string): CustomPlan {
   const next = cloneCustomPlan(plan);
   for (const term of next.terms) {
@@ -503,6 +529,22 @@ export function swapCourseIntoPlan(plan: CustomPlan, originalCourseId: string, r
   });
 
   pruneUnusedCustomCourses(next);
+  return next;
+}
+
+/**
+ * Switch a placed course to another variant of the same lecture (MATH 150 ↔ MATH 151)
+ * in the same term and position. Does nothing if `toId` isn't a variant or is already placed.
+ */
+export function switchVariantInPlan(plan: CustomPlan, fromId: string, toId: string): CustomPlan {
+  if (fromId === toId || !variantGroup(fromId).includes(toId)) return plan;
+  if (placedCourseIds(plan).has(toId)) return plan;
+
+  const next = cloneCustomPlan(plan);
+  for (const term of next.terms) {
+    term.courseIds = term.courseIds.map((id) => (id === fromId ? toId : id));
+  }
+  next.swaps = next.swaps.map((swap) => (swap.replacementId === fromId ? { ...swap, replacementId: toId } : swap));
   return next;
 }
 
